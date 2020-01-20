@@ -84,6 +84,16 @@ void NetWorkUnit::RunMesList(void)
 	_sendMesList.clear();
 }
 
+void NetWorkUnit::StartGame(void)
+{
+	TYPE_INF tmpInf = {
+		static_cast<unsigned char>(MES_TYPE::GAMEMODE)
+	};
+	MES tmpMes;
+	tmpMes.check = tmpInf;
+	AddSendMesList(tmpMes);
+}
+
 bool NetWorkUnit::GetData(void)
 {
 	while (CheckData(_plNum))

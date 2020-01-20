@@ -71,8 +71,14 @@ void Host::Connect(void)
 	{
 		// ipｱﾄﾞﾚｽ獲得&接続したよﾃﾞｰﾀ送信
 		ConnectCheck();
+		auto checkMes=[&](){
+			for (PlNum num = PlNum::PL_01; num < GetPlNum(); ++num)
+			{
+				return static_cast<MES_TYPE>(GetMes(num, MES_TYPE::GAMEMODE).check.type)!=MES_TYPE::NON;
+			}
+		};
 		// 4人いる？
-		if (_plNum == PlNum::PL_02/*PlNum::PL_MAX*/)
+		if (_plNum == PlNum::PL_02/*PlNum::PL_MAX*/ || checkMes())
 		{
 			// 4人接続完了で接続終了
 			StartGame();

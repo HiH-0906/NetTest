@@ -73,6 +73,7 @@ public:
 	virtual int netWorkHandle(PlNum num) = 0;			// netWorkHandleŠl“¾
 	virtual void Connect(void) = 0;						// Î½Ä/¹Ş½Ä‚Æ‚ÌÚ‘±
 	virtual void RunMesList(void);						// Ø½Ä‚ÌÃŞ°À‘—M
+	virtual void StartGame(void);							// ¹Ş°Ñ½À°ÄÒ¯¾°¼Şì¬ŠÖ”
 	virtual void Update(void) = 0;
 	virtual bool GetData(void);							// Buf‚©‚ç‚ÌÃŞ°Àæ“¾
 	bool DataSend(int handle, int mes);					// ÃŞ°À‘—M

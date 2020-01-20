@@ -1,0 +1,18 @@
+#pragma once
+
+enum class FOLLOWER_TYPE
+{
+	OCTOPUS,
+	BEE,
+	DAEMON,
+	GHOST,
+	MUSH,
+	MAX
+};
+
+
+FOLLOWER_TYPE begin(FOLLOWER_TYPE);
+FOLLOWER_TYPE end(FOLLOWER_TYPE);
+
+FOLLOWER_TYPE operator++(FOLLOWER_TYPE type);
+FOLLOWER_TYPE operator*(FOLLOWER_TYPE type);

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{6A349869-7EE7-46E1-A33F-4669831C439E}</ProjectGuid>
+    <RootNamespace>Alchemy</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(DX_LIB);$(SolutionDir);$(SolutionDir)\common;$(SolutionDir)\_debug;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DX_LIB);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(DX_LIB);$(SolutionDir);$(SolutionDir)\common;$(SolutionDir)\_debug;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DX_LIB);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(DX_LIB);$(SolutionDir);$(SolutionDir)\common;$(SolutionDir)\_debug;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DX_LIB);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(DX_LIB);$(SolutionDir);$(SolutionDir)\common;$(SolutionDir)\_debug;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DX_LIB);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>NotSet</SubSystem>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="object\func\BatAttack.cpp" />
+    <ClCompile Include="object\Follower_Init\BeeInit.cpp" />
+    <ClCompile Include="object\Follower_Init\FollowDemonInit.cpp" />
+    <ClCompile Include="object\Follower_Init\FollowGhostInit.cpp" />
+    <ClCompile Include="object\Follower_Init\FollowMushInit.cpp" />
+    <ClCompile Include="object\Follower_Init\OctpusInit.cpp" />
+    <ClCompile Include="Input\AI\RunAway.cpp" />
+    <ClCompile Include="scene\func\FuncIntoPot.cpp" />
+    <ClCompile Include="Input\NetState.cpp" />
+    <ClCompile Include="object\Enemy_Init\BatInit.cpp" />
+    <ClCompile Include="object\Enemy_Init\DemonInit.cpp" />
+    <ClCompile Include="object\Enemy_Init\GhostInit.cpp" />
+    <ClCompile Include="Input\Follower_AI\Bee.cpp" />
+    <ClCompile Include="common\DIR.cpp" />
+    <ClCompile Include="common\EffectMng.cpp" />
+    <ClCompile Include="common\EFFECT.cpp" />
+    <ClCompile Include="Input\Enemy_AI\Ghost.cpp" />
+    <ClCompile Include="Input\Enemy_AI\Demon.cpp" />
+    <ClCompile Include="Input\AI\AttackTarget.cpp" />
+    <ClCompile Include="Input\AI\HeadPot.cpp" />
+    <ClCompile Include="Input\Enemy_AI\Bat.cpp" />
+    <ClCompile Include="Input\Enemy_AI\Mushroom.cpp" />
+    <ClCompile Include="Input\Follower_AI\FollowDemon.cpp" />
+    <ClCompile Include="Input\Follower_AI\FollowGhost.cpp" />
+    <ClCompile Include="Input\Follower_AI\FollowMushroom.cpp" />
+    <ClCompile Include="object\Enemy_Init\MushroomInit.cpp" />
+    <ClCompile Include="object\func\Mix_Enemy.cpp" />
+    <ClCompile Include="object\func\Mix_Follower.cpp" />
+    <ClCompile Include="object\func\Mix_Player.cpp" />
+    <ClCompile Include="object\Enemy_Init\SlimeInit.cpp" />
+    <ClCompile Include="object\FOLLOWER_TYPE.cpp" />
+    <ClCompile Include="object\Follower.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="object\ENEMY_TYPE.cpp" />
+    <ClCompile Include="object\Pot.cpp" />
+    <ClCompile Include="Input\Follower_AI\Octpus.cpp" />
+    <ClCompile Include="object\func\PlayerHold.cpp" />
+    <ClCompile Include="object\func\PlayerNormal.cpp" />
+    <ClCompile Include="object\func\PlayerThrow.cpp" />
+    <ClCompile Include="object\func\PotHold.cpp" />
+    <ClCompile Include="object\func\PotNormal.cpp" />
+    <ClCompile Include="object\func\PotThrow.cpp" />
+    <ClCompile Include="scene\func\FuncThrow.cpp" />
+    <ClCompile Include="object\func\HoldenUpdate.cpp" />
+    <ClCompile Include="Input\AI\AimTarget.cpp" />
+    <ClCompile Include="Input\AI_Ctl.cpp" />
+    <ClCompile Include="common\ImageMng.cpp" />
+    <ClCompile Include="Input\AI\enemyAI.cpp" />
+    <ClCompile Include="Input\InputState.cpp" />
+    <ClCompile Include="Input\INPUT_ID.cpp" />
+    <ClCompile Include="NetWork\Gest.cpp" />
+    <ClCompile Include="NetWork\Host.cpp" />
+    <ClCompile Include="NetWork\NetWork.cpp" />
+    <ClCompile Include="NetWork\NetWorkUnit.cpp" />
+    <ClCompile Include="object\Enemy.cpp" />
+    <ClCompile Include="object\Obj.cpp" />
+    <ClCompile Include="Input\PadState.cpp" />
+    <ClCompile Include="object\Player.cpp" />
+    <ClCompile Include="object\PlNum.cpp" />
+    <ClCompile Include="scene\EntryScene.cpp" />
+    <ClCompile Include="scene\func\FuncHold.cpp" />
+    <ClCompile Include="scene\ResultScene.cpp" />
+    <ClCompile Include="scene\LAYER.cpp" />
+    <ClCompile Include="scene\GameScene.cpp" />
+    <ClCompile Include="scene\BaseScene.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="scene\SceneMng.cpp" />
+    <ClCompile Include="scene\TitleScene.cpp" />
+    <ClCompile Include="common\SoundMng.cpp" />
+    <ClCompile Include="Input\AI\TargetDec.cpp" />
+    <ClCompile Include="Input\AI\wait.cpp" />
+    <ClCompile Include="object\func\ThrownUpdate.cpp" />
+    <ClCompile Include="object\func\TestEnemyUpdate.cpp" />
+    <ClCompile Include="Input\Enemy_AI\Slime.cpp" />
+    <ClCompile Include="object\UNIT_ID.cpp" />
+    <ClCompile Include="object\STATE.cpp" />
+    <ClCompile Include="_debug\_DebugConOut.cpp" />
+    <ClCompile Include="_debug\_DebugDispOut.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="object\func\BatAttack.h" />
+    <ClInclude Include="object\Follower_Init\BeeInit.h" />
+    <ClInclude Include="object\Follower_Init\FollowDemonInit.h" />
+    <ClInclude Include="object\Follower_Init\FollowGhostInit.h" />
+    <ClInclude Include="object\Follower_Init\FollowMushInit.h" />
+    <ClInclude Include="object\Follower_Init\OctpusInit.h" />
+    <ClInclude Include="Input\AI\RunAway.h" />
+    <ClInclude Include="scene\func\FuncIntoPot.h" />
+    <ClInclude Include="Input\NetState.h" />
+    <ClInclude Include="object\Enemy_Init\BatInit.h" />
+    <ClInclude Include="object\Enemy_Init\DemonInit.h" />
+    <ClInclude Include="object\Enemy_Init\GhostInit.h" />
+    <ClInclude Include="Input\Follower_AI\Bee.h" />
+    <ClInclude Include="common\DIR.h" />
+    <ClInclude Include="common\EffectMng.h" />
+    <ClInclude Include="common\EFFECT.h" />
+    <ClInclude Include="Input\Enemy_AI\Ghost.h" />
+    <ClInclude Include="Input\Enemy_AI\Demon.h" />
+    <ClInclude Include="Input\AI\AttackTarget.h" />
+    <ClInclude Include="Input\AI\HeadPot.h" />
+    <ClInclude Include="Input\Enemy_AI\Bat.h" />
+    <ClInclude Include="Input\Enemy_AI\Mushroom.h" />
+    <ClInclude Include="Input\Follower_AI\FollowDemon.h" />
+    <ClInclude Include="Input\Follower_AI\FollowGhost.h" />
+    <ClInclude Include="Input\Follower_AI\FollowMushroom.h" />
+    <ClInclude Include="object\Enemy_Init\MushroomInit.h" />
+    <ClInclude Include="object\func\Mix_Enemy.h" />
+    <ClInclude Include="object\func\Mix_Follower.h" />
+    <ClInclude Include="object\func\Mix_Player.h" />
+    <ClInclude Include="object\Enemy_Init\SlimeInit.h" />
+    <ClInclude Include="object\FOLLOWER_TYPE.h" />
+    <ClInclude Include="object\Follower.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="object\ENEMY_TYPE.h" />
+    <ClInclude Include="object\Pot.h" />
+    <ClInclude Include="Input\Follower_AI\Octpus.h" />
+    <ClInclude Include="object\func\PlayerHold.h" />
+    <ClInclude Include="object\func\PlayerNormal.h" />
+    <ClInclude Include="object\func\PlayerThrow.h" />
+    <ClInclude Include="object\func\PotHold.h" />
+    <ClInclude Include="object\func\PotNormal.h" />
+    <ClInclude Include="object\func\PotThrow.h" />
+    <ClInclude Include="scene\func\FuncThrow.h" />
+    <ClInclude Include="object\func\HoldenUpdate.h" />
+    <ClInclude Include="Input\AI\AimTarget.h" />
+    <ClInclude Include="Input\AI_Ctl.h" />
+    <ClInclude Include="common\detail\Vector2.h" />
+    <ClInclude Include="common\Vector2.h" />
+    <ClInclude Include="common\ImageMng.h" />
+    <ClInclude Include="Input\AI\enemyAI.h" />
+    <ClInclude Include="Input\InputState.h" />
+    <ClInclude Include="Input\INPUT_ID.h" />
+    <ClInclude Include="NetWork\Gest.h" />
+    <ClInclude Include="NetWork\Host.h" />
+    <ClInclude Include="NetWork\NetWork.h" />
+    <ClInclude Include="NetWork\NetWorkUnit.h" />
+    <ClInclude Include="object\Enemy.h" />
+    <ClInclude Include="object\Obj.h" />
+    <ClInclude Include="Input\PadState.h" />
+    <ClInclude Include="object\Player.h" />
+    <ClInclude Include="object\PlNum.h" />
+    <ClInclude Include="scene\EntryScene.h" />
+    <ClInclude Include="scene\func\FuncHold.h" />
+    <ClInclude Include="scene\ResultScene.h" />
+    <ClInclude Include="scene\LAYER.h" />
+    <ClInclude Include="scene\GameScene.h" />
+    <ClInclude Include="scene\BaseScene.h" />
+    <ClInclude Include="scene\SceneMng.h" />
+    <ClInclude Include="scene\TitleScene.h" />
+    <ClInclude Include="common\SoundMng.h" />
+    <ClInclude Include="Input\AI\TargetDec.h" />
+    <ClInclude Include="Input\AI\wait.h" />
+    <ClInclude Include="object\func\ThrownUpdate.h" />
+    <ClInclude Include="object\func\TestEnemyUpdate.h" />
+    <ClInclude Include="Input\Enemy_AI\Slime.h" />
+    <ClInclude Include="object\UNIT_ID.h" />
+    <ClInclude Include="object\STATE.h" />
+    <ClInclude Include="_debug\_DebugConOut.h" />
+    <ClInclude Include="_debug\_DebugDispOut.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

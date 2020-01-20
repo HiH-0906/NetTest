@@ -21,14 +21,14 @@ void SceneMng::Run(void)
 		lpNetWork.Connect();
 		_drawList.clear();
 		_effectList.clear();
-		//lpNetWork.UpDate();
+		lpNetWork.UpDate();
 
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		(*_activeScene).RunInstanceQue(std::move(_instanceList));
 		(*_activeScene).RunActQue(std::move(_actList));
 		Draw();
 		_flameCnt++;
-		//lpNetWork.ReSetRecMes();
+		lpNetWork.ReSetRecMes();
 	}
 }
 

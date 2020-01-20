@@ -12,7 +12,7 @@ Host::~Host()
 {
 	if (_netWorkHandle.size())
 	{
-		for (PlNum num;num<_plNum;++num)
+		for (PlNum num = PlNum::PL_01;num<_plNum;++num)
 		{
 			CloseNetWork(netWorkHandle(num));
 		}
@@ -21,7 +21,7 @@ Host::~Host()
 
 bool Host::GetData(void)
 {
-	for (PlNum num; num < _plNum; ++num)
+	for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
 	{
 		while (CheckData(num))
 		{
@@ -86,7 +86,7 @@ bool Host::CheckDisConnect(void)
 	// Ø’f‚µ‚½‚â‚Â‚ª‚¢‚é‚©
 	int DisCnHandle = GetLostNetWork();
 	auto specificPlayer = [&]() {
-		for (PlNum num; num < _plNum; ++num)
+		for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
 		{
 			if (netWorkHandle(num) == DisCnHandle)
 			{
@@ -128,7 +128,7 @@ void Host::RunMesList(void)
 		return;
 	}
 	// ŠeHandle‚É‘—M
-	for (PlNum num; num < _plNum; ++num)
+	for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
 	{
 		for (unsigned int i = 0; i < _sendMesList.size(); i++)
 		{

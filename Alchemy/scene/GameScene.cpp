@@ -25,7 +25,7 @@ GameScene::GameScene()
 
 	potObj = _objList[0];
 
-	_objList.emplace_back(new Player(PlNum::PL_01, {100.0,100.0}, DX_INPUT_PAD1,potObj));
+	_objList.emplace_back(new Player(PlNum::PL_01, {100.0,100.0},potObj));
 	/*_objList.emplace_back(new Enemy({ ENEMY_TYPE::BAD, { 500.0, 500.0 },{0,0},0.0 }, potObj));
 	_objList.emplace_back(new Enemy({ ENEMY_TYPE::BAD,{ 600.0, 500.0 },{ 0,0},0.0 }, potObj));*/
 

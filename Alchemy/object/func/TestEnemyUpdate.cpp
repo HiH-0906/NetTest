@@ -14,7 +14,7 @@ void TestEnemyUpdate::operator()(Obj& obj, std::vector<sharedObj>& objList)
 	if ((*obj._input).LStickState().first.isInput)
 	{
 		obj._rad = RAD(static_cast<double>((*obj._input).LStickState().first.angle));
-		obj._pos += {2.0 * cos(obj._rad), 2.0 * sin(obj._rad)};
+		obj._pos += {obj._speed * cos(obj._rad), obj._speed * sin(obj._rad)};
 
 		obj.dir((*obj._input).LStickState().first.dir);
 	}

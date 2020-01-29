@@ -5,7 +5,6 @@
 #include<Input/InputState.h>
 #include<Input/INPUT_ID.h>
 #include"GameScene.h"
-#include"TitleScene.h"
 #include<object/PlNum.h>
 
 EntryScene::EntryScene()
@@ -18,6 +17,7 @@ EntryScene::EntryScene()
 		_entrnum[i] = 0;
 	}
 	TRACE("ê⁄ë±PADêîÇÕ%dÇ≈Ç∑\n", _padnum);
+	DrawInit();
 	Init();
 }
 
@@ -35,20 +35,16 @@ UniqueBase EntryScene::Update(UniqueBase own)
 		{
 			return std::make_unique<GameScene>();
 		}
-		//if (static_cast<PlNum>(lpSceneMng.GetPlayerListSize()) >= PlNum::PL_MAX)
-		//{
-		//	if (((*_input[i]).btnState(INPUT_ID::BTN_A).first))
-		//	{
-		//		return std::make_unique<GameScene>();
-		//	}
-		//}
-		//else
-		//{
-			if (((*_input[i]).btnState(INPUT_ID::BTN_B).first))
-			{
-				//return std::make_unique<TitleScene>();
-			}
-		//}
+
+		if (_entrnum[i] == 0)
+		{
+			//lpSceneMng.AddDrawQue({ _padImage[i],(320 * (i + 1)) - 160,332.0,0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+		}
+		else
+		{
+			//lpSceneMng.AddDrawQue({ _entryImage[_entrnum[i] - 1],(320 * (i + 1)) - 160,332.0,0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+		}
+
 		if ((*_input[i]).btnState(INPUT_ID::BTN_START).first)
 		{
 			auto instancedata = [&]() {
@@ -74,6 +70,8 @@ UniqueBase EntryScene::Update(UniqueBase own)
 
 	}
 
+	lpSceneMng.AddDrawQue({ _entryBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+
 
 	return std::move(own);
 }
@@ -84,4 +82,14 @@ void EntryScene::Init(void)
 	_input[1] = std::make_unique<PadState>(DX_INPUT_PAD2);
 	_input[2] = std::make_unique<PadState>(DX_INPUT_PAD3);
 	_input[3] = std::make_unique<PadState>(DX_INPUT_PAD4);
+}
+
+void EntryScene::DrawInit(void)
+{
+	_entryBG = LoadGraph("image/EntryBG.png");
+	//for (int i = 0; i < _padnum; i++)
+	//{
+	//	_padImage[i] = LoadGraph("image/PAD_2.png");
+	//	LoadDivGraph("image/Entrycolor.png",4,4,1,265,250, _entryImage);
+	//}
 }

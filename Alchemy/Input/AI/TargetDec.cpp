@@ -1,25 +1,39 @@
+#include <algorithm>
 #include "TargetDec.h"
 #include <DIR.h>
 
 bool TargetDec::operator()(Obj & master, std::vector<sharedObj>& objList, InputState & input)
 {
 	TEAM_TAG tageTeam = (master.teamTag() == TEAM_TAG::ENEMY_TEAM ? TEAM_TAG::ALLY_TEAM : TEAM_TAG::ENEMY_TEAM);
-	for (auto obj : objList)
+	if (master.tageObj().expired())
 	{
-		if (tageTeam == (*obj).teamTag())
+		// é©ï™Ç©ÇÁÇÃãóó£Ç™ãﬂÇ¢èáÇ…objListÇÉ\Å[Ég
+		std::sort(objList.begin(), objList.end(),
+			[&](sharedObj objA, sharedObj objB) {
+			return LengthSquare((*objA).pos(), master.pos()) < LengthSquare((*objB).pos(), master.pos());
+		});
+
+		for (auto obj : objList)
 		{
 			if ((master.searchRange() * master.searchRange()) > LengthSquare(master.pos(), (*obj).pos()))
 			{
-				if (master.tageObj().expired())
+				if (tageTeam == (*obj).teamTag())
 				{
-					StickState state;
-					state.isInput = true;
-					state.angle = static_cast<short>DEG(atan2((*obj).pos().y - master.pos().y, (*obj).pos().x - master.pos().x));
-					state.dir = convToDir(state.angle);
-					input.LStickState(state);
-					master.SetTageObj(obj);
-					return true;
+					if ((*obj).state() <= STATE::ATTACK)
+					{
+						StickState state;
+						state.isInput = true;
+						state.angle = static_cast<short>DEG(atan2((*obj).pos().y - master.pos().y, (*obj).pos().x - master.pos().x));
+						state.dir = convToDir(state.angle);
+						input.LStickState(state);
+						master.SetTageObj(obj);
+						return true;
+					}
 				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 	}

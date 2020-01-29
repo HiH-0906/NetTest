@@ -5,11 +5,11 @@
 
 enum class SOUND
 {
-	BGM,
-	SE,
+	THROW
 };
 
-#define lpSoundMng 
+#define lpSoundMng SoundMng::GetInstance()
+#define SOUND_KEY(KEY) (SoundMng::GetInstance().GetID(KEY))
 
 class SoundMng
 {

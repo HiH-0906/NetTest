@@ -2,11 +2,11 @@
 
 enum class FOLLOWER_TYPE
 {
-	OCTOPUS,
-	BEE,
-	DAEMON,
-	GHOST,
-	MUSH,
+	OCTOPUS = 1,		// ‚½‚±
+	BEE = 2,		// ‚Í‚¿
+	GHOST = 4,		// ‚¨‚Î‚¯
+	MUSH = 8,		// ‚«‚Ì‚±
+	DAEMON = 16,		// ÃÞ°ÓÝ
 	MAX
 };
 

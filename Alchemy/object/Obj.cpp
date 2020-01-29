@@ -4,6 +4,9 @@
 #include <_DebugConOut.h>
 #include "Camera.h"
 
+int Obj::_hpBarImg[2] = {0,0};
+int Obj::_shadowImg = 0;
+
 Obj::Obj()
 {
 	_alive = true;
@@ -12,11 +15,19 @@ Obj::Obj()
 	_animFrame = 0;
 	_animCount = 0;
 	_speed = 0.0;
+	_size = { 100,100 };
 	_rad = 0.0;
 	_zOrder = 0;
 	_height = 0;
 	_holdFlag = false;
 	_effectFlg = false;
+	_damageCnt = 0;
+	_hpMax = 0;
+	_hp = 0;
+	_hpID = MakeScreen(64, 8, false);
+	_coolCnt = 0;
+	_state = STATE::NORMAL;
+	_dir = DIR::DOWN;
 }
 
 void Obj::Draw(void)
@@ -57,10 +68,10 @@ void Obj::Draw(void)
 
 	//// 現在のコマの画像を描画キューに追加
 
-	if ((_pos.x >= lpCamera.pos().x - lpCamera.size().x) &&
-		(_pos.x <= lpCamera.pos().x + lpCamera.size().x) &&
-		(_pos.y >= lpCamera.pos().y - lpCamera.size().y) &&
-		(_pos.y <= lpCamera.pos().y + lpCamera.size().y)
+	if ((_pos.x >= lpCamera.pos().x - lpCamera.size().x - _size.x) &&
+		(_pos.x <= lpCamera.pos().x + lpCamera.size().x + _size.x) &&
+		(_pos.y >= lpCamera.pos().y - lpCamera.size().y - _size.y) &&
+		(_pos.y <= lpCamera.pos().y + lpCamera.size().y + _size.y)
 		)
 	{
 		// 現在のコマの画像を描画キューに追加
@@ -68,11 +79,14 @@ void Obj::Draw(void)
 			_pos.x - lpCamera.OfSet().x,
 			_pos.y - _height - lpCamera.OfSet().y,
 			0.0,
+			1.2,
 			_zOrder,
 			LAYER::CHAR ,
 			DX_BLENDMODE_NOBLEND,
 			255 });
 
+		// HPバー
+		DrawHP();
 	}
 
 	// エフェクトをかける
@@ -87,9 +101,26 @@ void Obj::Draw(void)
 		GraphFilter(_glowID, DX_GRAPH_FILTER_TWO_COLOR, 10, 0, 0, 0xffffff, 255);
 		lpSceneMng.AddDrawQue({ _glowID,_pos.x - lpCamera.OfSet().x,
 			_pos.y - _height - lpCamera.OfSet().y,
-			0.0,_zOrder - 1,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
+			0.0,1.2,_zOrder - 1,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
 
 		_glowFlag = false;
+	}
+	else
+	{
+		// 影も描写
+		// 高さによって大きさを変えたりするかも
+		if (static_cast<int>(_state) < static_cast<int>(STATE::HOLDEN))
+		{
+			lpSceneMng.AddDrawQue({ _shadowImg,
+			_pos.x - lpCamera.OfSet().x,
+			_pos.y + _size.y / 2.0 - lpCamera.OfSet().y,
+			0.0,
+			1.2,
+			-5,
+			LAYER::CHAR ,
+			DX_BLENDMODE_NOBLEND,
+			255 });
+		}
 	}
 
 }
@@ -100,6 +131,7 @@ void Obj::Draw(int id)
 							_pos.x,
 					        _pos.y - _height,
 					        _rad,
+							1.2,
 							_zOrder,
 							LAYER::CHAR, 
 							DX_BLENDMODE_NOBLEND, 
@@ -261,6 +293,26 @@ const double & Obj::attackRange(void)
 	return _attackRange;
 }
 
+void Obj::DoDamage(int power)
+{
+	_hp -= power;
+	if (_hp > _hpMax)
+	{
+		_hp = _hpMax;
+	}
+	_damageCnt = 180;
+}
+
+const int & Obj::hp(void)
+{
+	return _hp;
+}
+
+const int & Obj::hpMax(void)
+{
+	return _hpMax;
+}
+
 bool Obj::isAnimEnd(void)
 {
 	// ---------- 範囲チェック
@@ -298,6 +350,16 @@ bool Obj::SetAnim(const AnimKey key, AnimVector& data)
 	return false;*/
 }
 
+// オブジェで共通で使う画像を読み込む
+// GameSceneのInitで壺オブジェから呼び出す
+void Obj::LoadStaticImg(void)
+{
+	_hpBarImg[0] = lpImageMng.GetID({ IMG::HP_R ,STATE::NORMAL }, "image/unitHP_R.png")[0];
+	_hpBarImg[1] = lpImageMng.GetID({ IMG::HP_G ,STATE::NORMAL }, "image/unitHP_G.png")[0];
+
+	_shadowImg = lpImageMng.GetID({ IMG::SHADOW,STATE::NORMAL }, "image/shadow.png")[0];
+}
+
 // 生存状態確認,死亡状態設定
 bool Obj::DestroyProc(void)
 {
@@ -305,6 +367,14 @@ bool Obj::DestroyProc(void)
 	{
 		return false;
 	}
+	else
+	{
+		if (_state != STATE::DEATH)
+		{
+			state(STATE::DEATH);
+		}
+	}
+
 
 	if (isAnimEnd())
 	{
@@ -312,4 +382,34 @@ bool Obj::DestroyProc(void)
 	}
 
 	return true;
+}
+
+void Obj::DrawHP(void)
+{
+	// まず下に赤いバーを描画し、上に緑のバーをRectGraphで残りHPに従って描画
+	/*if (_damageCnt > 0)
+	{*/
+		if (_hpMax != 0)
+		{
+			SetDrawScreen(_hpID);
+			DrawGraph(0, 0, _hpBarImg[0], false);
+			DrawRectGraph(0, 0, 0, 0, 64 * _hp / _hpMax, 8, _hpBarImg[1], false, false);
+			SetDrawScreen(DX_SCREEN_BACK);
+
+			lpSceneMng.AddDrawQue({ _hpID,
+				_pos.x - lpCamera.OfSet().x,
+				_pos.y - _height - lpCamera.OfSet().y - 48,
+				0.0,
+				1.0,
+				_zOrder + 1,
+				LAYER::UI ,
+				DX_BLENDMODE_NOBLEND,
+				255 });
+			_damageCnt--;
+		}
+		else
+		{
+			//AST();
+		}
+	//}
 }

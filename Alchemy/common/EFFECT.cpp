@@ -4,7 +4,7 @@
 
 EFFECT begin(EFFECT)
 {
-	return EFFECT::DASH;
+	return EFFECT::AT_BITE;
 }
 
 EFFECT end(EFFECT)

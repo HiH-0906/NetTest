@@ -16,13 +16,21 @@ public:
 	void Update(std::vector<sharedObj>& objList) override;
 	PlNum plNum(void);
 	int holdWeightMax(void);
+	bool throwPot(void);
+	void throwPot(bool throwMode);
+
 	~Player();
 private:
 	friend FuncHold;
 	friend FuncThrow;
 	void Init(void);
+	void DrawHP(void)override;
+
+	bool _throwPot;					// 持ってるときに壺をターゲットにするかどうか
 	int _holdWeightMax;				// 持てる重さ上限
 	double _throwRange;				// 投げの距離
+	int _playerHPImg[2];				// プレイヤー用のHP画像
+	int _heartImg;
 	PlNum _plNum;
 	std::vector<sharedObj> _holdList;			// 現在持っているオブジェクト
 

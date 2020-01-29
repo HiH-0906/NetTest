@@ -13,14 +13,18 @@ TitleScene::TitleScene()
 	TRACE("ﾀｲﾄﾙｼｰﾝ\n");
 	_padnum = GetJoypadNum();
 	TRACE("接続PAD数は%dです\n", _padnum);
-	_selectnum = 0;
-	_selectFlag = false;
-	startFlag = false;
-	endFlag = false;
-	_cursorPos.x = 0.0;
-	_cursorPos.y = 0.0;
+	_selectnum = SELECTMENU::START;
+	_cursorPos.x =  lpSceneMng.ScreenCenter.x - 200.0;
+	_cursorPos.y = lpSceneMng.ScreenCenter.y + 115.0;
+	T_logoPos.x = lpSceneMng.ScreenCenter.x;
+	T_logoPos.y = -65.0;
+	_fallSpeed = 2.0;
+	_fadespeed = 25;
+	_cnt = 0;
 	DrawInit();
 	Init();
+
+	func = { &TitleScene::TitleNormal };
 }
 
 
@@ -30,45 +34,19 @@ TitleScene::~TitleScene()
 
 UniqueBase TitleScene::Update(UniqueBase own)
 {
-	if (!endFlag)
-	{
-		(*_input[0]).Update(_objList);
+	(*_input[0]).Update(_objList);
 
-		if (((*_input[0]).btnState(INPUT_ID::BTN_START).first) && (!_selectFlag))
-		{
-			_selectFlag = true;
-			_selectnum = 1;
-			TRACE("タイトルセレクト開始\n");
-		}
-	}
-	if (_selectFlag)
+	if ((func == &TitleScene::NEXT) && (_cnt <= 0))
 	{
-		TitleSelect();
-		lpSceneMng.AddDrawQue({ _cursor,_cursorPos.x,_cursorPos.y,0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
-		lpSceneMng.AddDrawQue({ _selectTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y+200,0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+		//return std::make_unique<GameScene>();
+		return std::make_unique<EntryScene>();
 	}
-	else
-	{
-		if ((!startFlag)&&(!endFlag))
-		{
-			lpSceneMng.AddDrawQue({ _titleTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 200,0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
-		}
-	}
-	if (startFlag)
-	{
-		return std::make_unique<GameScene>();
-		//return std::make_unique<EntryScene>();
-	}
-	if (endFlag)
-	{
-		TRACE("ゲーム終了\n");
-		lpSceneMng.AddDrawQue({ _endBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
 
-	}
-	else
-	{
-		lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
-	}
+	lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _titleLogo,lpSceneMng.ScreenCenter.x,T_logoPos.y,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+
+	(this->*func)();
+
 	return std::move(own);
 }
 
@@ -79,76 +57,94 @@ void TitleScene::Init(void)
 
 void TitleScene::TitleSelect(void)
 {
+		
+	lpSceneMng.AddDrawQue({ _selectTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 150.0,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 
-	_cursorPos.x = 350;
+	lpSceneMng.AddDrawQue({ _cursor,_cursorPos.x,_cursorPos.y,0.0,1.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+	
 	(*_input[0]).Update(_objList);
 	if (((*_input[0]).LStickState().first.isInput))
 	{
 		if ((*_input[0]).LStickState().first.dir == DIR::DOWN)
 		{
-			if (_selectnum < 2)
-			{
-				_selectnum += 1;
-			}
-			else
-			{
-				_selectnum = 2;
-			}
+			_selectnum = SELECTMENU::END;
 		}
 		else if ((*_input[0]).LStickState().first.dir == DIR::UP)
 		{
-			if (_selectnum > 1)
-			{
-				_selectnum -= 1;
-			}
-			else
-			{
-				_selectnum = 1;
-			}
+			_selectnum = SELECTMENU::START;
 		}
 	}
 	else
 	{
 		DIR::LEFT;
 	}
-	if (_selectnum == 1)
+	if (_selectnum == SELECTMENU::START)
 	{
-		_cursorPos.y = lpSceneMng.ScreenCenter.y + 150.0;
+		_cursorPos.y = lpSceneMng.ScreenCenter.y + 115.0;
 	}
-	if (_selectnum == 2)
+	if (_selectnum == SELECTMENU::END)
 	{
-		_cursorPos.y = lpSceneMng.ScreenCenter.y + 275.0;
+		_cursorPos.y = lpSceneMng.ScreenCenter.y + 185.0;
 	}
-	TRACE("今の選択肢は%d番目です\n", _selectnum);
 	if (((*_input[0]).btnState(INPUT_ID::BTN_A).first))
 	{
-		if (_selectnum == 1)
+		if (_selectnum == SELECTMENU::END)
 		{
-			startFlag = true;
+			func = &TitleScene::TitleEnd;
 		}
-		if (_selectnum == 2)
+		else
 		{
-			endFlag = true;
+			func = &TitleScene::NEXT;
 		}
-		_selectFlag = false;
-		_selectnum = 0;
-		TRACE("タイトルセレクト終了\n");
 	}
 	if (((*_input[0]).btnState(INPUT_ID::BTN_B).first))
 	{
-		_selectFlag = false;
-		_selectnum = 0;
+		func = &TitleScene::TitleNormal;
 		TRACE("タイトルセレクト終了\n");
 	}
+}
+void TitleScene::TitleEnd(void)
+{
+	func = &TitleScene::TitleNormal;
+}
+
+void TitleScene::TitleNormal(void)
+{
+	if (T_logoPos.y < lpSceneMng.ScreenCenter.y - 100.0)
+	{
+		T_logoPos.y += _fallSpeed;
+	}
+	if (((*_input[0]).btnState(INPUT_ID::BTN_START).first))
+	{
+		_cnt = 0;
+
+		T_logoPos.y = (lpSceneMng.ScreenCenter.y - 100.0);
+		func = &TitleScene::TitleSelect;
+		_selectnum = SELECTMENU::START;
+		TRACE("タイトルセレクト開始\n");
+	}
+	else
+	{
+		if ((_cnt / 45) % 2 == 0)
+		{
+			lpSceneMng.AddDrawQue({ _titleTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 200.0,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+		}
+
+		_cnt++;
+	}
+}
+
+void TitleScene::NEXT(void)
+{
+
 }
 
 void TitleScene::DrawInit(void)
 {
 	//ImageMng::GetInstance().GetID( "TitleBG", "image/TitleBG.png");
-	_titleBG = LoadGraph("image/TitleBG.png");
-	_endBG = LoadGraph("image/END.png");
-	_cursor = LoadGraph("image/cursor.png");
+	_titleBG   = LoadGraph("image/TitleBG.png");
+	_cursor    = LoadGraph("image/selector.png");
 	_selectTex = LoadGraph("image/TitleSelect.png");
-	_titleTex = LoadGraph("image/start_button.png");
-
+	_titleTex  = LoadGraph("image/start_button.png");
+	_titleLogo = LoadGraph("image/TitleLogo.png");
 }

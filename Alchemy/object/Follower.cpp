@@ -11,6 +11,8 @@
 #include "Follower_Init/FollowDemonInit.h"
 #include "Follower_Init/FollowGhostInit.h"
 #include "Follower_Init/FollowMushInit.h"
+#include "../Map.h"
+#include "PlNum.h"
 
 std::map<FOLLOWER_TYPE, std::function<bool(Obj&)>> Follower::followerInitMap = { 
 	{FOLLOWER_TYPE::OCTOPUS, OctpusInit()} , 
@@ -34,23 +36,34 @@ Follower::Follower(FollowerState followerState, sharedObj potObj)
 
 void Follower::Update(std::vector<sharedObj>& objList)
 {
-	// 自分からの距離が近い順にobjListをソート
-	std::sort(objList.begin(), objList.end(),
-		[&](sharedObj objA, sharedObj objB) {
-		return LengthSquare((*objA).pos(), _pos) < LengthSquare((*objB).pos(), _pos);
-	});
+	if (DestroyProc())
+	{
+		return;
+	}
 
-	(*_input).SetOld();
-	(*_input).StateReset();
 
 	if (state() == STATE::NORMAL)
 	{
-		(*_input).Update(objList);
-	}
+		if (lpSceneMng.frameCnt() % 2)
+		{
+			//// 自分からの距離が近い順にobjListをソート
+			//std::sort(objList.begin(), objList.end(),
+			//	[&](sharedObj objA, sharedObj objB) {
+			//	return LengthSquare((*objA).pos(), _pos) < LengthSquare((*objB).pos(), _pos);
+			//});
+			//
+			(*_input).SetOld();
+			(*_input).StateReset();
 
-	if ((*_input).btnState(INPUT_ID::BTN_B).first && !(*_input).btnState(INPUT_ID::BTN_B).second)
-	{
-
+			(*_input).Update(objList);
+			if ((*_input).btnState(INPUT_ID::BTN_B).first)
+			{
+				_effectFlg = false;
+				state(STATE::ATTACK);
+			}
+		}
+		
+		
 	}
 
 	try
@@ -60,6 +73,13 @@ void Follower::Update(std::vector<sharedObj>& objList)
 	catch (...)
 	{
 		AST();
+	}
+	lpMap.ChangeChip(_pos, _rad, 2);
+
+	// 死亡
+	if (_hp <= 0)
+	{
+		alive(false);
 	}
 }
 
@@ -83,6 +103,22 @@ void Follower::Init(void)
 		AST();
 	}
 
+	// ----------アニメーション登録開始
+	AnimVector data;
+	ImageKey death = { IMG::BLAST,STATE::DEATH };
+
+	// 死んだとき
+	for (auto dir = DIR::LEFT; dir != DIR::MAX; dir = static_cast<DIR>(static_cast<int>(dir) + 1))
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			data.emplace_back(IMAGE_ID(death)[i], i * 3);
+		}
+		data.emplace_back(-1, 33);
+		SetAnim({ STATE::DEATH,dir }, data);
+	}
+
+	_hp = _hpMax;
 	_unitID = UNIT_ID::FOLLOWER;
 	_team = TEAM_TAG::ALLY_TEAM;
 	_glowID = MakeScreen(_size.x * 2, _size.y * 2, true);

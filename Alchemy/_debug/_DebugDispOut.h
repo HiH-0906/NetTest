@@ -19,6 +19,8 @@
 #define _dbgDrawFormatString(fmt, ...) 	_DebugDispOut::GetInstance().SetScreen(); \
 										DxLib::DrawFormatString(fmt, __VA_ARGS__);\
 										_DebugDispOut::GetInstance().RevScreen()
+#define _dbgStartFPS()	_DebugDispOut::GetInstance().StartFPS()
+#define _dbgDrawFPS()	_DebugDispOut::GetInstance().DrawFPS()
 
 
 using ChronoSysClock = std::chrono::system_clock::time_point;
@@ -37,6 +39,8 @@ public:
 	int DrawLine(int x1, int y1, int x2, int y2, unsigned int Color);
 	int DrawCircle(int x, int y, int r, unsigned int Color, int FillFlag);
 	int DrawPixel(int x, int y, unsigned int Color);	
+	void StartFPS(void);
+	void DrawFPS(void);
 	bool StartDrawDebug(void);
 	bool AddDrawDebug(void);
 	bool SetAlpha(int alpha);
@@ -61,9 +65,16 @@ private:
 	int _alpha;
 	ChronoSysClock  _startTime;
 	ChronoSysClock  _endTime;
+	ChronoSysClock  _fpsStartTime;
+	ChronoSysClock  _fpsEndTime;
+	int _fpsCount;
+	int _fps;
+
 	double _waitTime;
 	bool dispFlag;
 	int ghBefor;
+	bool clsFlag;
+	int endKey[2];
 };
 #else
 
@@ -73,5 +84,7 @@ private:
 #define _dbgAddDraw()
 #define _dbgDrawGraph(fmt, ...)
 #define _dbgDrawBox(fmt, ...)
+#define _dbgStartFPS()	
+#define _dbgDrawFPS()
 
 #endif	// _DEBUG

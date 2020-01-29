@@ -5,9 +5,9 @@ enum class STATE
 	NORMAL,		// ’Êí
 	HOLD,		// Ž‚Á‚Ä‚¢‚é
 	THROW,		// “Š‚°
-	HOLDEN,		// Ž‚½‚ê‚Ä‚¢‚é
-	THROWN,		// “Š‚°‚ç‚ê‚Ä‚¢‚é
 	ATTACK,		// UŒ‚
+	THROWN,		// “Š‚°‚ç‚ê‚Ä‚¢‚é
+	HOLDEN,		// Ž‚½‚ê‚Ä‚¢‚é
 	DEATH,		// Ž€
 	MAX,
 };

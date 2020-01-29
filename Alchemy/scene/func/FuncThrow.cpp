@@ -47,6 +47,7 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 		(*thrownObj)._gravity = 2 * ((*thrownObj)._height + vel.y * THROW_CNT_MAX) / (THROW_CNT_MAX * THROW_CNT_MAX);
 
 		(*thrownObj)._holdPlayer.reset();
+		(*thrownObj)._zOrder = 0;
 		player._holdList.erase(player._holdList.begin());
 		player.state(STATE::THROW);
 		return true;

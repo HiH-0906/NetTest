@@ -6,6 +6,7 @@
 #include "../func/TestEnemyUpdate.h"
 #include "../func/HoldenUpdate.h"
 #include "../func/ThrownUpdate.h"
+#include "../func/Heal.h"
 
 bool MushroomInit::operator()(Obj & obj)
 {
@@ -13,6 +14,7 @@ bool MushroomInit::operator()(Obj & obj)
 	AnimVector data;
 
 	ImageKey key = { IMG::ENEMY_MUSH,STATE::NORMAL };
+	ImageKey death = { IMG::BLAST,STATE::DEATH };
 
 	for (auto dir = DIR::LEFT; dir != DIR::MAX; dir = static_cast<DIR>(static_cast<int>(dir) + 1))
 	{
@@ -41,16 +43,40 @@ bool MushroomInit::operator()(Obj & obj)
 		obj.SetAnim({ STATE::THROWN,dir }, data);
 	}
 
+	for (auto dir = DIR::LEFT; dir != DIR::MAX; dir = static_cast<DIR>(static_cast<int>(dir) + 1))
+	{
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4], 10);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 1], 20);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 2], 30);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 3], 40);
+		obj.SetAnim({ STATE::ATTACK,dir }, data);
+	}
+
+	// 攻撃用ダミー画像
+	for (auto dir = DIR::LEFT; dir != DIR::MAX; dir = static_cast<DIR>(static_cast<int>(dir) + 1))
+	{
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4], 10);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 1], 20);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 2], 30);
+		data.emplace_back(IMAGE_ID(key)[static_cast<int>(dir) * 4 + 3], 40);
+		obj.SetAnim({ STATE::ATTACK,dir }, data);
+	}
 
 	//_input = std::make_unique<PadState>(DX_INPUT_PAD1);
 	obj._input = std::make_unique<Mushroom>(obj);
 
-	obj._searchRange = 150.0;
-	obj._attackRange = 40.0;
+	obj._searchRange = 200.0;
+	obj._attackRange = 100.0;
 
 	obj._size = { 48,48 };
-	obj._speed = 2.0;
-	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() } };
+
+	obj._speed = 1.5;
+	obj._hpMax = 20;
+	obj._coolCntMax = 40;
+	obj._power = 4;
+
+
+	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() }, {STATE::ATTACK,Heal()} };
 
 
 	return true;

@@ -30,27 +30,48 @@ Vector2Dbl Camera::size(void)
 	return _size;
 }
 
+void Camera::exMoveFlag(bool exMove)
+{
+	_exMoveFlag = exMove;
+}
+
+bool Camera::exMoveFlag(void)
+{
+	return _exMoveFlag;
+}
+
 
 
 void Camera::UpDate(void)
 {
-	_pos = (*_plObj.lock()).pos();
-	// Õﬁ¿∂ﬁ∑ÇµÇΩÇ≠Ç»Ç¢ä¥ñûç⁄
-	if (lpSceneMng.WorldSize.x < _pos.x + _size.x)
+	if (_exMoveFlag)
 	{
-		_pos.x = lpSceneMng.WorldSize.x - _size.x;
+		if (_moveCnt <= CAMERA_MOVE_CNT)
+		{
+			_pos += _unitVel * (_b + _a * static_cast<double>((_moveCnt - CAMERA_MOVE_CNT / 2) * (_moveCnt - CAMERA_MOVE_CNT / 2)));
+			_moveCnt++;
+		}
 	}
-	if (0 > _pos.x - _size.x)
+	else
 	{
-		_pos.x =  _size.x;
-	}
-	if (lpSceneMng.WorldSize.y < _pos.y + _size.y)
-	{
-		_pos.y = lpSceneMng.WorldSize.y - _size.y;
-	}
-	if (0 > _pos.y - _size.y)
-	{
-		_pos.y = _size.y;
+		_pos = (*_plObj.lock()).pos();
+		// Õﬁ¿∂ﬁ∑ÇµÇΩÇ≠Ç»Ç¢ä¥ñûç⁄
+		if (lpSceneMng.WorldSize.x < _pos.x + _size.x)
+		{
+			_pos.x = lpSceneMng.WorldSize.x - _size.x;
+		}
+		if (0 > _pos.x - _size.x)
+		{
+			_pos.x = _size.x;
+		}
+		if (lpSceneMng.WorldSize.y < _pos.y + _size.y)
+		{
+			_pos.y = lpSceneMng.WorldSize.y - _size.y;
+		}
+		if (0 > _pos.y - _size.y)
+		{
+			_pos.y = _size.y;
+		}
 	}
 }
 
@@ -68,4 +89,16 @@ void Camera::SearchObj(std::vector<sharedObj> List)
 			}
 		}
 	}
+}
+
+void Camera::SetMoveData(Vector2Dbl aimPos)
+{
+	double length = sqrt(LengthSquare(aimPos, _pos));
+
+	_a = -6.0 * length / static_cast<double>(CAMERA_MOVE_CNT * CAMERA_MOVE_CNT * CAMERA_MOVE_CNT);
+	_b = -static_cast<double>(CAMERA_MOVE_CNT / 2 * CAMERA_MOVE_CNT / 2) * _a;
+
+	/*_b = length / 20.0;
+	_a = -_b / static_cast<double>(CAMERA_MOVE_CNT /2  * CAMERA_MOVE_CNT / 2);*/
+	_unitVel = (aimPos - _pos) / length;
 }

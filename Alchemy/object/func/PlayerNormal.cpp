@@ -17,7 +17,8 @@ void PlayerNormal::operator()(Obj& player, std::vector<sharedObj>& objList)
 			break;
 		}
 
-		if ((*obj).weight() > ((Player&)player).holdWeightMax() || (*obj).state() == STATE::HOLDEN || (*obj).state() == STATE::THROWN)
+		// holden,thrwon,deathÇÃéûÇÕéùÇƒÇ»Ç¢
+		if ((*obj).weight() > ((Player&)player).holdWeightMax() || static_cast<int>((*obj).state()) >= static_cast<int>(STATE::THROWN))
 		{
 			continue;
 		}
@@ -27,7 +28,7 @@ void PlayerNormal::operator()(Obj& player, std::vector<sharedObj>& objList)
 	}
 
 	// éùÇ¬
-	if (!(player._tageObj.expired()) && (*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second)
+	if (!(player._tageObj.expired()) && (((*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second) || ((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second)))
 	{
 		lpSceneMng.AddActQue({ ACT_QUE::HOLD,player });
 	}

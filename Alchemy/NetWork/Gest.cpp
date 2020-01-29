@@ -44,30 +44,37 @@ void Guest::Connect(void)
 	if (netWorkHandle(PlNum::PL_NON) == 0)
 	{
 		// true‚Å‹A‚Á‚Ä‚«‚½‚çÚ‘±Š®—¹
-		if (!SetnetWorkHandle(ConnectNetWork(ip(_plNum), _port)))
+		if (!SetNetWorkHandle(ConnectNetWork(ip(_plNum), _port)))
 		{
 			return;
 		}
 		return;
 	}
 	// MesSize•ªÃŞ°À‚ªÊŞ¯Ì§‚É—­‚Á‚Ä‚¢‚é‚©Áª¯¸
-	if (!CheckData(_plNum))
-	{
-		return;
-	}
-	if (static_cast<MES_TYPE>(_mes.check.type) == MES_TYPE::CONNECT)
+	GetData();
+	if (static_cast<MES_TYPE>(GetMes(_plNum,MES_TYPE::CONNECT).check.type) != MES_TYPE::NON)
 	{
 		_plNum = static_cast <PlNum>(_mes.key.plNum);
 		TRACE("‚ ‚È‚½‚Íplayer[%d]‚Å‚·\n", (static_cast<int>(_plNum) + 1));
 	}
-	else if (static_cast<MES_TYPE>(_mes.check.type) == MES_TYPE::GAMEMODE)
+	else if (static_cast<MES_TYPE>(GetMes(_plNum, MES_TYPE::GAMEMODE).check.type) != MES_TYPE::NON)
 	{
-		LinkFlag(true);
+		_linkFlag = true;
 	}
 	else
 	{
+		// ‚±‚Ì’iŠK‚ÅCONNECT‚©GAMEMODEˆÈŠO‚ÌÒ¯¾°¼Ş‚Í‚¨‚©‚µ‚¢‚Ì‚ÅAST
 		AST();
 	}
+}
+
+bool Guest::GetData(void)
+{
+	while (CheckData(PlNum::PL_NON))
+	{
+		AddRecMesList(_mes);
+	}
+	return true;
 }
 PlNum Guest::GetPlNum(void)
 {

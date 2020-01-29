@@ -4,7 +4,6 @@ AI_Ctl::AI_Ctl(Obj & obj,InputState& input):_masterObj(obj),_masterInput(input)
 {
 }
 
-
 AI_Ctl::~AI_Ctl()
 {
 }

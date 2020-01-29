@@ -15,6 +15,14 @@ public:
 private:
 
 	void Init(void);
+	void DrawInit(void);
+
+	int _resultBG;							// ”wŒi
+	int _resultLogo;
+	int _resultTex;							// PLEES START
+
+	int _cnt;								// ÌÚ°Ñ¶³İÄ
+
 	std::shared_ptr<InputState> _input;		// “ü—ÍŠÇ—ƒNƒ‰ƒX
 };
 

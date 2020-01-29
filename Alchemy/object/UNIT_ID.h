@@ -6,6 +6,7 @@ enum class UNIT_ID
 	NON,
 	PLAYER,
 	ENEMY,
+	ITEM,
 	POT,
 	FOLLOWER
 };

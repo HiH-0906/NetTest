@@ -17,15 +17,19 @@ public:
 
 private:
 	void Init(void);
+	void DrawInit(void);
 
-	int _padnum;								 //接続中のpad数
-	int _entryPadnum;							 //ｴﾝﾄﾘｰしたpad数
+	int _padnum;								 // 接続中のpad数
+	int _entryPadnum;							 // エントリーしたpad数
 
-	int _entrnum[4];							//エントリーした番号を保存するや～つ
+	int _entrnum[4];							// エントリーした番号を保存するや～つ
+
+	int _entryBG;								// エントリー背景
+	int _padImage[4];							// 接続済み未登録のPAD
+	int _entryImage[4];							// 操作キャラの色を表す画像
+
 
 	std::shared_ptr<InputState> _input[4];		// 入力管理クラス
-
-	bool _entryFlag[4];
 
 	/*std::vector<std::shared_ptr<InputState>> _input;*/
 };

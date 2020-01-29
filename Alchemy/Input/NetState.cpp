@@ -4,6 +4,7 @@
 NetState::NetState(PlNum plNum)
 {
 	_plNum = plNum;
+	_num = 0;
 }
 
 NetState::~NetState()
@@ -20,6 +21,11 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	// æ“¾‚µ‚½Ò¯¾°¼Ş‚ªKeyî•ñ‚©‚Ç‚¤‚©
 	if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::KEY)
 	{
+		if (mes.key.num!=_num)
+		{
+			AST();
+		}
+		_num++;
 		btnState(INPUT_ID::BTN_A,mes.key.a);
 		btnState(INPUT_ID::BTN_B, mes.key.b);
 		btnState(INPUT_ID::BTN_Y, mes.key.y);

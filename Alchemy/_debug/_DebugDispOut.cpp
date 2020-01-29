@@ -3,12 +3,15 @@
 #include <DxLib.h>
 #include <scene/SceneMng.h>
 #include "_DebugDispOut.h"
+#include "_DebugConOut.h"
 
 std::unique_ptr<_DebugDispOut, _DebugDispOut::_DebugDispOutDeleter> _DebugDispOut::s_Instance(new _DebugDispOut);
 _DebugDispOut::_DebugDispOut()
 {
 	_DbgScreen = -1;
 	_waitTime  = 0;
+	clsFlag = true;
+	StartFPS();
 }
 
 _DebugDispOut::~_DebugDispOut()
@@ -71,6 +74,12 @@ void _DebugDispOut::WaitMode(void)
 			_endTime = std::chrono::system_clock::now();
 		} while (std::chrono::duration_cast<std::chrono::milliseconds>(_endTime - _startTime).count() < _waitTime);
 	}
+	endKey[1] = endKey[0];
+	endKey[0] = CheckHitKey(KEY_INPUT_END);
+	if (endKey[0] && !endKey[1])
+	{
+		clsFlag ^= 1;
+	}
 }
 
 int _DebugDispOut::DrawGraph(int x, int y, int GrHandle, int TransFlag)
@@ -132,12 +141,37 @@ int _DebugDispOut::DrawPixel(int x, int y, unsigned int Color)
 	return rtnFlag;
 }
 
+void _DebugDispOut::StartFPS(void)
+{
+	_fpsStartTime = std::chrono::system_clock::now();
+	_fpsCount = 0;
+}
+
+void _DebugDispOut::DrawFPS(void)
+{
+	_fpsEndTime = std::chrono::system_clock::now();
+	if (std::chrono::duration_cast<std::chrono::milliseconds>(_fpsEndTime - _fpsStartTime).count() < 1000)
+	{
+		_fpsCount++;
+	}
+	else
+	{
+		_fps = _fpsCount;
+		StartFPS();
+	}
+	DrawFormatString(0, 0, 0xffff, "FPS:%d", _fps);
+	TRACE("FPS:%d\n", _fps);
+}
+
 bool _DebugDispOut::StartDrawDebug(void)
 {
 	int ghBefor;
 	ghBefor = GetDrawScreen();
 	SetDrawScreen(_DbgScreen);
-	ClsDrawScreen();
+	if (clsFlag)
+	{
+		ClsDrawScreen();
+	}
 	SetDrawScreen(ghBefor);
 	return true;
 }
@@ -154,7 +188,7 @@ bool _DebugDispOut::AddDrawDebug(void)
 	}
 	if (dispFlag)
 	{
-		lpSceneMng.AddDrawQue({ _DbgScreen,lpSceneMng.ScreenSize.x/2,lpSceneMng.ScreenSize.y / 2,0 ,INT_MAX,LAYER::UI, DX_BLENDMODE_NOBLEND, 255 });
+		lpSceneMng.AddDrawQue({ _DbgScreen,lpSceneMng.ScreenSize.x/2,lpSceneMng.ScreenSize.y / 2,0.0,1.0,INT_MAX,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 	}
 	WaitMode();
 	return true;
@@ -171,7 +205,7 @@ bool _DebugDispOut::Setup(int alpha)
 {
 	if (_DbgScreen == -1)
 	{
-		_DbgScreen = MakeScreen(lpSceneMng.ScreenSize.x, lpSceneMng.ScreenSize.y, true);
+		_DbgScreen = MakeScreen(static_cast<int>(lpSceneMng.ScreenSize.x), static_cast<int>(lpSceneMng.ScreenSize.y), true);
 	}
 	SetAlpha(alpha);
 	return false;

@@ -10,19 +10,13 @@ NetWorkUnit::~NetWorkUnit()
 {
 }
 
-bool NetWorkUnit::LinkFlag(bool flag)
-{
-	_linkFlag = flag;
-	return true;
-}
-
 const bool NetWorkUnit::LinkFlag(void) const
 {
 	return _linkFlag;
 }
 
 
-bool NetWorkUnit::SetnetWorkHandle(int handle)
+bool NetWorkUnit::SetNetWorkHandle(int handle)
 {
 	if (handle == -1)
 	{
@@ -38,7 +32,7 @@ bool NetWorkUnit::SetnetWorkHandle(int handle)
 
 bool NetWorkUnit::AddSendMesList(MES mes)
 {
-	_sendMesList.emplace_back(mes.data);
+	_sendMesList.emplace_back(mes);
 	return true;
 }
 
@@ -94,16 +88,7 @@ void NetWorkUnit::StartGame(void)
 	AddSendMesList(tmpMes);
 }
 
-bool NetWorkUnit::GetData(void)
-{
-	while (CheckData(_plNum))
-	{
-		AddRecMesList(_mes);
-	}
-	return true;
-}
-
-bool NetWorkUnit::DataSend(int handle, int mes)
+bool NetWorkUnit::DataSend(int handle, MES mes)
 {
 	if (NetWorkSend(handle, &mes, MES_SIZE) != -1)
 	{

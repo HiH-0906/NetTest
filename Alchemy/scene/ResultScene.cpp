@@ -11,7 +11,8 @@
 ResultScene::ResultScene()
 {
 	TRACE("Ø»ÞÙÄ¼°Ý\n");
-
+	_cnt = 0;
+	DrawInit();
 	Init();
 }
 
@@ -26,9 +27,21 @@ UniqueBase ResultScene::Update(UniqueBase own)
 
 	if ((*_input).btnState(INPUT_ID::BTN_A).first)
 	{
+		SetDrawBright(255, 255, 255);
 		return std::make_unique<TitleScene>();
 	}
 
+
+
+	SetDrawBright(_cnt, _cnt, _cnt);
+	//lpSceneMng.AddDrawQue({ _resultBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _resultLogo,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y-50.0,0.0,1.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+	if (_cnt >= 300)
+	{
+		lpSceneMng.AddDrawQue({ _resultTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenSize.y - 100,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+	}
+
+	_cnt += 2;
 
 	return std::move(own);
 }
@@ -36,4 +49,11 @@ UniqueBase ResultScene::Update(UniqueBase own)
 void ResultScene::Init(void)
 {
 	_input = std::make_unique<PadState>(DX_INPUT_PAD1);
+}
+
+void ResultScene::DrawInit(void)
+{
+	//_resultBG = LoadGraph("image/ResultBG.png");
+	_resultLogo = LoadGraph("image/ResultLogo.png");
+	_resultTex = LoadGraph("image/end_button.png");
 }

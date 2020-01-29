@@ -9,6 +9,7 @@ public:
 	~NetState();
 	void Update(std::vector<sharedObj>& objList)override;
 private:
+	unsigned char _num;
 	PlNum _plNum;
 };
 

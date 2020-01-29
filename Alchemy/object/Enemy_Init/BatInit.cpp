@@ -13,7 +13,7 @@ bool BatInit::operator()(Obj & obj)
 	// ----------アニメーション登録開始
 	AnimVector data;
 
-	ImageKey key = { IMG::ENEMY_BAD,STATE::NORMAL };
+	ImageKey key = { IMG::ENEMY_BAT,STATE::NORMAL };
 
 	// -- 通常
 	for (auto dir = DIR::LEFT; dir != DIR::MAX; dir = static_cast<DIR>(static_cast<int>(dir) + 1))
@@ -60,7 +60,12 @@ bool BatInit::operator()(Obj & obj)
 	obj._attackRange = 40.0;
 
 	obj._size = { 48,48 };
-	obj._speed = 2.0;
+
+	obj._speed = 4;
+	obj._hpMax = 12;
+	obj._power = 3;
+	obj._coolCntMax = 1;
+
 	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() },{STATE::ATTACK,BatAttack()} };
 
 

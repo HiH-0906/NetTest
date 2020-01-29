@@ -26,8 +26,9 @@ struct CONNECT_INF
 struct KEY_INF
 {
 	unsigned char type : 4;
+	unsigned char num;							// ｷｰ情報通し番号
 	unsigned char plNum : 2;					// Player識別番号 4人なので2bit
-	unsigned char lf : 1;
+	unsigned char lf : 1;						// stick入力があるかどうか
 	unsigned char a : 1;
 	unsigned char b : 1;
 	unsigned char y : 1;
@@ -54,7 +55,7 @@ struct TYPE_INF
 union MES
 {
 	// 8byteのはず
-	unsigned int data;											// 送信用
+	unsigned int data;									// 送信用
 	CONNECT_INF connect;								// 接続確認用
 	TYPE_INF check;										// MES_TYPE確認用
 	KEY_INF key;										// Key情報確認用
@@ -73,27 +74,25 @@ public:
 	virtual int netWorkHandle(PlNum num) = 0;			// netWorkHandle獲得
 	virtual void Connect(void) = 0;						// ﾎｽﾄ/ｹﾞｽﾄとの接続
 	virtual void RunMesList(void);						// ﾘｽﾄのﾃﾞｰﾀ送信
-	virtual void StartGame(void);							// ｹﾞｰﾑｽﾀｰﾄﾒｯｾｰｼﾞ作成関数
+	virtual void StartGame(void);						// ｹﾞｰﾑｽﾀｰﾄﾒｯｾｰｼﾞ作成関数
 	virtual void Update(void) = 0;
-	virtual bool GetData(void);							// Bufからのﾃﾞｰﾀ取得
-	bool DataSend(int handle, int mes);					// ﾃﾞｰﾀ送信
+	virtual bool GetData(void) = 0;						// Bufからのﾃﾞｰﾀ取得
+	bool DataSend(int handle, MES mes);					// ﾃﾞｰﾀ送信
 	bool AddSendMesList(MES mes);						// 送信用ﾃﾞｰﾀ追加
 	bool AddRecMesList(MES mes);						// 受信ﾒｯｾｰｼﾞﾘｽﾄ
 	void ReSetRecMes(void);								// 受信ﾒｯｾｰｼﾞ削除
 	MES GetMes(PlNum num,MES_TYPE type);				// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
-	bool SetnetWorkHandle(int handle);
-	bool LinkFlag(bool flag);
-	const bool LinkFlag(void)const;
+	bool SetNetWorkHandle(int handle);					// _netWorkHandleの設定
+	const bool LinkFlag(void)const;						// 接続できているか確認
 protected:
 	MES _mes;											// 受け取りﾒｯｾｰｼﾞ一時保存用
-	std::vector<int> _sendMesList;						// 送信ﾒｯｾｰｼﾞﾘｽﾄ
+	std::vector<MES> _sendMesList;						// 送信ﾒｯｾｰｼﾞﾘｽﾄ
 	std::vector<MES> _recMesList;						// 受信ﾒｯｾｰｼﾞﾘｽﾄ
 	PlNum _plNum;										// 何番目のﾌﾟﾚｲﾔｰか
 	std::map<PlNum,int> _netWorkHandle;					// NetWorkHandle保存用変数
-	bool _startFlag;									// ｹﾞｰﾑ開始ﾌﾗｸﾞ
 	bool _linkFlag;										// 接続できたかﾌﾗｸﾞ
 	std::map<PlNum, IPDATA> _ip;						// ipｱﾄﾞﾚｽ
 	int _port;											// ﾎﾟｰﾄ番号
-	bool CheckData(PlNum plNum);						// bufにﾃﾞｰﾀがあるかﾁｪｯｸ　あった場合は取り出す
+	bool CheckData(PlNum plNum);						// 引数のPlNumのbufにﾃﾞｰﾀがあるかﾁｪｯｸ　あった場合は取り出す
 };
 

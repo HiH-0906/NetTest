@@ -38,14 +38,26 @@ struct FuncIntoPot;
 struct ThrownUpdate;
 struct HoldenUpdate;
 struct TestEnemyUpdate;
+
 struct HeadPot;
+struct HealTagDec;
+struct LookForEnemy;
+
 struct BatAttack;
+struct Heal;
+struct Slime_Attack;
+struct GhostAttack;
+struct DemonAttack;
+struct OctpusAttack;
+struct BeeAttack;
 
 struct SlimeInit;
 struct BatInit;
 struct MushroomInit;
 struct GhostInit;
 struct DemonInit;
+
+struct ItemNormal;
 
 struct OctpusInit;
 struct BeeInit;
@@ -97,8 +109,13 @@ public:
 	const double& searchRange(void);
 	const double& attackRange(void);
 
+	void DoDamage(int power);		// 攻撃されてHPが減る、引数は攻撃力
+	const int& hp(void);
+	const int& hpMax(void);
+
 	bool isAnimEnd(void);								// アニメーションが終了しているか
 	bool SetAnim(const AnimKey key,AnimVector& data);	// アニメーションのデータを登録
+	void LoadStaticImg(void);								// HPバーの読み込み
 
 private:
 	friend NetWork;
@@ -114,8 +131,20 @@ private:
 	friend ThrownUpdate;
 	friend HoldenUpdate;
 	friend TestEnemyUpdate;
-	friend BatAttack;
+
+	// AI
 	friend HeadPot;
+	friend HealTagDec;
+	friend LookForEnemy;
+
+	// 攻撃
+	friend BatAttack;
+	friend Heal;
+	friend Slime_Attack;
+	friend GhostAttack;
+	friend DemonAttack;
+	friend OctpusAttack;
+	friend BeeAttack;
 
 	// Enemyのinit
 	friend SlimeInit;
@@ -123,6 +152,9 @@ private:
 	friend MushroomInit;
 	friend GhostInit;
 	friend DemonInit;
+
+	// Item
+	friend ItemNormal;
 
 	// FollowerのInit
 	friend OctpusInit;
@@ -140,12 +172,18 @@ private:
 protected:
 	
 	bool DestroyProc(void);			// 生存状態確認,死亡状態設定
+	virtual void DrawHP(void);				// HPバー描画関数、操作するPlayerではUI上に描画したいのでoverrideする
+	static int _hpBarImg[2];		// Obj共通のHPバー画像
+	static int _shadowImg;			// 影画像ID
+
 	bool _alive;					// 生存してるか(かつ爆発していない)
 	bool _dead;						// 死亡してるか(かつ爆発が終了した)
 	bool _exFlag;					// 特殊行動フラグ(Enemy:突撃開始,Player:キャプチャされる,など)
 	bool _holdFlag;					// 持たれているか
 	bool _glowFlag;					// エフェクトをかけるか
 	int _hp;						// 体力
+	int _hpMax;						// 最大体力
+	int _power;						// 攻撃力
 	UNIT_ID _unitID;				// 種別
 	Vector2Dbl _pos;				// 座標
 	Vector2Int _size;				// サイズ
@@ -153,8 +191,9 @@ protected:
 
 	int _zOrder;					// 描画優先度
 	int _weight;					// 重さ
-	int _thrownCnt;					// 投げられ状態用ｶｳﾝﾄ
+	int _damageCnt;					// ダメージを受けた後のHPバー表示時間調整用
 	int _glowID;					// 描画エフェクトをかけるためのスクリーン
+	int _hpID;						// HPバー表示のためのスクリーン
 	int _serialNum;					// 通し番号
 	double _height;					// 高さ
 	double _gravity;				// 投げられてるときの重力
@@ -169,5 +208,7 @@ protected:
 	std::map<STATE, funcObj> _funcState;	// オブジェクトの状態をキーにしてUpdateで行う関数を決定
 	std::shared_ptr<InputState> _input;			// 入力管理クラス
 	bool _effectFlg;							// ｴﾌｪｸﾄを連続再生していいかどうか
+	int _coolCnt;								// ｸｰﾙﾀｲﾑ用
+	int _coolCntMax;							// ｸｰﾙﾀｲﾑの最大値
 };
 

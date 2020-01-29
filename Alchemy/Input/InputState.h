@@ -34,6 +34,7 @@ public:
 
 	void SetOld(void);									// キーのold状態更新
 	virtual void Update(std::vector<sharedObj>& objList) = 0;
+
 private:
 	KeyMap _btnState;									// 入力可能キーの押下状態,first:new,second:old
 	StickPair _LStickState;								// 左スティックの入力状態,first:new,second:old

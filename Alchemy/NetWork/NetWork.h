@@ -51,6 +51,7 @@ private:
 	static std::unique_ptr<NetWork, NetWorkDeleter> sInstans;
 	NetWork();
 	virtual ~NetWork();
+	unsigned char _keyNum;										// ｷｰ情報確認用通し番号
 	int _matchTime;										// 同期のためのｶｳﾝﾄ
 	MES _tmpMes;										// 受け取りMES一時保存用
 	NETMODE _netMode;									// ﾈｯﾄﾜｰｸのﾓｰﾄﾞ hostかGuestか

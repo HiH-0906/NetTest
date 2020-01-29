@@ -18,6 +18,5 @@ private:
 	std::vector<funcAI> _AIList;	// 
 	Obj& _masterObj;				// 呼ばれた元のオブジェクト
 	InputState& _masterInput;		// 呼ばれた元の入力管理
-	
 };
 

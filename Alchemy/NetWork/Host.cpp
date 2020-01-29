@@ -12,7 +12,7 @@ Host::~Host()
 {
 	if (_netWorkHandle.size())
 	{
-		for (PlNum num = PlNum::PL_01;num<_plNum;++num)
+		for (PlNum num = begin(PlNum()); num < _plNum; ++num)
 		{
 			CloseNetWork(netWorkHandle(num));
 		}
@@ -21,7 +21,7 @@ Host::~Host()
 
 bool Host::GetData(void)
 {
-	for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
+	for (PlNum num = begin(PlNum()); num < _plNum; ++num)
 	{
 		while (CheckData(num))
 		{
@@ -67,15 +67,17 @@ void Host::Connect(void)
 	// 接続待ち状態へ移行
 	PreparationListenNetWork(_port);
 	// 帰ってきたNetWorkHandleが-1じゃないならtrue
-	if (SetnetWorkHandle(GetNewAcceptNetWork()))
+	if (SetNetWorkHandle(GetNewAcceptNetWork()))
 	{
 		// ipｱﾄﾞﾚｽ獲得&接続したよﾃﾞｰﾀ送信
 		ConnectCheck();
+		GetData();
 		auto checkMes=[&](){
-			for (PlNum num = PlNum::PL_01; num < GetPlNum(); ++num)
+			for (PlNum num = begin(PlNum()); num < GetPlNum(); ++num)
 			{
 				return static_cast<MES_TYPE>(GetMes(num, MES_TYPE::GAMEMODE).check.type)!=MES_TYPE::NON;
 			}
+			return false;
 		};
 		// 4人いる？
 		if (_plNum == PlNum::PL_02/*PlNum::PL_MAX*/ || checkMes())
@@ -92,7 +94,7 @@ bool Host::CheckDisConnect(void)
 	// 切断したやつがいるか
 	int DisCnHandle = GetLostNetWork();
 	auto specificPlayer = [&]() {
-		for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
+		for (PlNum num = begin(PlNum()); num < _plNum; ++num)
 		{
 			if (netWorkHandle(num) == DisCnHandle)
 			{
@@ -121,8 +123,8 @@ void Host::ConnectCheck(void)
 	// 切断してしまった時用のIPｱﾄﾞﾚｽ確保
 	GetNetWorkIP(netWorkHandle(_plNum), &_ip[_plNum]);
 	// 接続確認したよﾒｯｾ送信
-	DataSend(netWorkHandle(_plNum), tmpMes.data);
-	TRACE("player[%d]さんがログインしました\n", (static_cast<int>(_plNum) + 1));
+	DataSend(netWorkHandle(_plNum), tmpMes);
+	TRACE("player[%d]さんが接続しました\n", (static_cast<int>(_plNum) + 1));
 	++_plNum;
 	TRACE("%d\n", static_cast<int>(_plNum));
 }
@@ -134,7 +136,7 @@ void Host::RunMesList(void)
 		return;
 	}
 	// 各Handleに送信
-	for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
+	for (PlNum num = begin(PlNum()); num < _plNum; ++num)
 	{
 		for (unsigned int i = 0; i < _sendMesList.size(); i++)
 		{
@@ -155,7 +157,7 @@ void Host::StartGame(void)
 	MES tmpMes;
 	tmpMes.check = tmpInf;
 	AddSendMesList(tmpMes);
-	LinkFlag(true);
+	_linkFlag = true;
 }
 
 void Host::Update(void)

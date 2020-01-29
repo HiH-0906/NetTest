@@ -13,6 +13,7 @@ public:
 	IPDATA ip(PlNum num);
 	int netWorkHandle(PlNum num);
 	void Connect(void);
+	bool GetData(void)override;
 	PlNum GetPlNum(void);
 private:
 	void Update(void);

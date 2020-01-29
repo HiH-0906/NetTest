@@ -116,6 +116,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -141,13 +142,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="object\func\BeeAttack.cpp" />
+    <ClCompile Include="object\Boss.cpp" />
+    <ClCompile Include="object\func\ItemNormal.cpp" />
+    <ClCompile Include="object\func\DemonAttack.cpp" />
+    <ClCompile Include="object\func\GhostAttack.cpp" />
+    <ClCompile Include="object\func\OctpusAttack.cpp" />
+    <ClCompile Include="object\func\TestEnemyUpdate.cpp" />
+    <ClCompile Include="object\Item.cpp" />
+    <ClCompile Include="object\func\Heal.cpp" />
+    <ClCompile Include="Input\AI\Escape.cpp" />
+    <ClCompile Include="Input\AI\HealTagDec.cpp" />
+    <ClCompile Include="Input\AI\Leave.cpp" />
     <ClCompile Include="object\func\BatAttack.cpp" />
     <ClCompile Include="object\Follower_Init\BeeInit.cpp" />
     <ClCompile Include="object\Follower_Init\FollowDemonInit.cpp" />
     <ClCompile Include="object\Follower_Init\FollowGhostInit.cpp" />
     <ClCompile Include="object\Follower_Init\FollowMushInit.cpp" />
     <ClCompile Include="object\Follower_Init\OctpusInit.cpp" />
-    <ClCompile Include="Input\AI\RunAway.cpp" />
+    <ClCompile Include="object\func\PlayerDeath.cpp" />
     <ClCompile Include="scene\func\FuncIntoPot.cpp" />
     <ClCompile Include="Input\NetState.cpp" />
     <ClCompile Include="object\Enemy_Init\BatInit.cpp" />
@@ -167,9 +180,6 @@
     <ClCompile Include="Input\Follower_AI\FollowGhost.cpp" />
     <ClCompile Include="Input\Follower_AI\FollowMushroom.cpp" />
     <ClCompile Include="object\Enemy_Init\MushroomInit.cpp" />
-    <ClCompile Include="object\func\Mix_Enemy.cpp" />
-    <ClCompile Include="object\func\Mix_Follower.cpp" />
-    <ClCompile Include="object\func\Mix_Player.cpp" />
     <ClCompile Include="object\Enemy_Init\SlimeInit.cpp" />
     <ClCompile Include="object\FOLLOWER_TYPE.cpp" />
     <ClCompile Include="object\Follower.cpp" />
@@ -214,21 +224,33 @@
     <ClCompile Include="Input\AI\TargetDec.cpp" />
     <ClCompile Include="Input\AI\wait.cpp" />
     <ClCompile Include="object\func\ThrownUpdate.cpp" />
-    <ClCompile Include="object\func\TestEnemyUpdate.cpp" />
     <ClCompile Include="Input\Enemy_AI\Slime.cpp" />
     <ClCompile Include="object\UNIT_ID.cpp" />
     <ClCompile Include="object\STATE.cpp" />
+    <ClCompile Include="object\func\Slime_Attack.cpp" />
     <ClCompile Include="_debug\_DebugConOut.cpp" />
     <ClCompile Include="_debug\_DebugDispOut.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="object\func\BeeAttack.h" />
+    <ClInclude Include="object\Boss.h" />
+    <ClInclude Include="object\func\ItemNormal.h" />
+    <ClInclude Include="object\func\DemonAttack.h" />
+    <ClInclude Include="object\func\GhostAttack.h" />
+    <ClInclude Include="object\func\OctpusAttack.h" />
+    <ClInclude Include="object\func\TestEnemyUpdate.h" />
+    <ClInclude Include="object\Item.h" />
+    <ClInclude Include="object\func\Heal.h" />
+    <ClInclude Include="Input\AI\Escape.h" />
+    <ClInclude Include="Input\AI\HealTagDec.h" />
+    <ClInclude Include="Input\AI\Leave.h" />
     <ClInclude Include="object\func\BatAttack.h" />
     <ClInclude Include="object\Follower_Init\BeeInit.h" />
     <ClInclude Include="object\Follower_Init\FollowDemonInit.h" />
     <ClInclude Include="object\Follower_Init\FollowGhostInit.h" />
     <ClInclude Include="object\Follower_Init\FollowMushInit.h" />
     <ClInclude Include="object\Follower_Init\OctpusInit.h" />
-    <ClInclude Include="Input\AI\RunAway.h" />
+    <ClInclude Include="object\func\PlayerDeath.h" />
     <ClInclude Include="scene\func\FuncIntoPot.h" />
     <ClInclude Include="Input\NetState.h" />
     <ClInclude Include="object\Enemy_Init\BatInit.h" />
@@ -248,9 +270,6 @@
     <ClInclude Include="Input\Follower_AI\FollowGhost.h" />
     <ClInclude Include="Input\Follower_AI\FollowMushroom.h" />
     <ClInclude Include="object\Enemy_Init\MushroomInit.h" />
-    <ClInclude Include="object\func\Mix_Enemy.h" />
-    <ClInclude Include="object\func\Mix_Follower.h" />
-    <ClInclude Include="object\func\Mix_Player.h" />
     <ClInclude Include="object\Enemy_Init\SlimeInit.h" />
     <ClInclude Include="object\FOLLOWER_TYPE.h" />
     <ClInclude Include="object\Follower.h" />
@@ -296,10 +315,10 @@
     <ClInclude Include="Input\AI\TargetDec.h" />
     <ClInclude Include="Input\AI\wait.h" />
     <ClInclude Include="object\func\ThrownUpdate.h" />
-    <ClInclude Include="object\func\TestEnemyUpdate.h" />
     <ClInclude Include="Input\Enemy_AI\Slime.h" />
     <ClInclude Include="object\UNIT_ID.h" />
     <ClInclude Include="object\STATE.h" />
+    <ClInclude Include="object\func\Slime_Attack.h" />
     <ClInclude Include="_debug\_DebugConOut.h" />
     <ClInclude Include="_debug\_DebugDispOut.h" />
   </ItemGroup>

@@ -1,12 +1,14 @@
 #include <algorithm>
 #include <DxLib.h>
 #include <EffekseerForDXLib.h>
-#include <_DebugDispOut.h>
 #include "SceneMng.h"
+#include <_DebugDispOut.h>
 #include "TitleScene.h"
 #include "GameScene.h"
 #include "ResultScene.h"
 #include "NetWork/NetWork.h"
+#include "../common/EffectMng.h"
+#include "../Map.h"
 
 std::unique_ptr<SceneMng, SceneMng::SceneMngDeleter> SceneMng::sInstance(new SceneMng());
 
@@ -15,20 +17,21 @@ void SceneMng::Run(void)
 	SysInit();
 	
 	_activeScene = std::make_unique<GameScene>();
+	_dbgStartFPS();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		_dbgStartDraw();
 		lpNetWork.Connect();
 		_drawList.clear();
-		_effectList.clear();
-		lpNetWork.UpDate();
+		//lpNetWork.UpDate();
 
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		(*_activeScene).RunInstanceQue(std::move(_instanceList));
 		(*_activeScene).RunActQue(std::move(_actList));
+		lpMap.Draw();
 		Draw();
-		_flameCnt++;
-		lpNetWork.ReSetRecMes();
+		_frameCnt++;
+		//lpNetWork.ReSetRecMes();
 	}
 }
 
@@ -44,18 +47,6 @@ bool SceneMng::AddDrawQue(DrawQueT dQue)
 	return true;
 }
 
-bool SceneMng::AddEffectQue(EffectQueT eQue)
-{
-	// ¸”s‚µ‚Ä‚½‚ç-1‚ª“ü‚Á‚Ä‚é‚Í‚¸
-	if (std::get<static_cast<int>(EFFECT_QUE::EFFECT)>(eQue) <= -1)
-	{
-		// ´Ìª¸ÄID‚ª•s³‚È‚Ì‚Å’Ç‰Á‚µ‚È‚¢
-		return false;
-	}
-	// Que‚Ì’Ç‰Á
-	_effectList.emplace_back(eQue);
-	return true;
-}
 
 bool SceneMng::AddActQue(ActQueT aQue)
 {
@@ -106,14 +97,14 @@ std::vector<PlayerQueT>& SceneMng::playerList(void)
 	return _playerList;
 }
 
-void SceneMng::FlameCntReset(void)
+void SceneMng::FrameCntReset(void)
 {
-	_flameCnt = 0;
+	_frameCnt = 0;
 }
 
-const int SceneMng::flameCnt(void) const
+const int SceneMng::frameCnt(void) const
 {
-	return _flameCnt;
+	return _frameCnt;
 }
 
 int SceneMng::serialNumCnt(void)
@@ -147,7 +138,7 @@ bool SceneMng::SysInit(void)
 		return false;
 	}
 
-	if (Effekseer_Init(8000) == -1)
+	if (Effekseer_Init(6000) == -1)
 	{
 		DxLib_End();
 		return false;
@@ -165,15 +156,14 @@ bool SceneMng::SysInit(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// Effekseer‚É•`‰æ‚Ìİ’è‚ğ‚·‚é
-	Effekseer_Set2DSetting(static_cast<int>(ScreenSize.x), static_cast<int>(ScreenSize.y));
+	Effekseer_Set2DSetting(static_cast<int>(WorldSize.x), static_cast<int>(WorldSize.y));
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
 	_dbgSetup(255);
 
-	_flameCnt = 0;
+	_frameCnt = 0;
 	lpNetWork.NetMode(NETMODE::HOST);						// ¹Ş½ÄÓ°ÄŞİ’è Î½Ä‚ÍLabo‚Ì
-
 	return false;
 }
 
@@ -192,16 +182,10 @@ void SceneMng::Draw(void)
 	// DrawØ½Ä‚Ì¿°Ä
 	std::sort(_drawList.begin(), _drawList.end(),
 		[](DrawQueT queA, DrawQueT queB) {
-		return std::tie(std::get<static_cast<int>(DRAW_QUE::LAYER)>(queA), std::get<static_cast<int>(DRAW_QUE::ZORDER)>(queA)) <
-			std::tie(std::get<static_cast<int>(DRAW_QUE::LAYER)>(queB), std::get<static_cast<int>(DRAW_QUE::ZORDER)>(queB));
+		return std::tie(std::get<static_cast<int>(DRAW_QUE::LAYER)>(queA), std::get<static_cast<int>(DRAW_QUE::ZORDER)>(queA), std::get<static_cast<int>(DRAW_QUE::Y)>(queA)) <
+			std::tie(std::get<static_cast<int>(DRAW_QUE::LAYER)>(queB), std::get<static_cast<int>(DRAW_QUE::ZORDER)>(queB), std::get<static_cast<int>(DRAW_QUE::Y)>(queB));
 	});
 
-	// EffectØ½Ä‚Ì¿°Ä
-	std::sort(_effectList.begin(),_effectList.end(),
-		[](EffectQueT queA, EffectQueT queB) {
-		return std::tie(std::get<static_cast<int>(EFFECT_QUE::LAYER)>(queA), std::get<static_cast<int>(EFFECT_QUE::ZORDER)>(queA)) <
-			std::tie(std::get<static_cast<int>(EFFECT_QUE::LAYER)>(queB), std::get<static_cast<int>(EFFECT_QUE::ZORDER)>(queB));
-	});
 
 	// •`‰æƒXƒNƒŠ[ƒ“‚ğ‰Šú‰»
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -226,29 +210,19 @@ void SceneMng::Draw(void)
 		int blendModeOld = blendMode;
 		int blendModeNumOld = blendModeNum;
 
-		std::tie(id, x, y, rad, std::ignore, layer, blendMode, blendModeNum) = que;
+		std::tie(id, x, y, rad, rate, std::ignore, layer, blendMode, blendModeNum) = que;
 
-		if ((layer != drawLayer) || (blendMode != blendModeOld) || (blendModeNum != blendModeNumOld))
+		/*if ((layer != drawLayer) || (blendMode != blendModeOld) || (blendModeNum != blendModeNumOld))
 		{
 			SetDrawScreen(DX_SCREEN_BACK);
-			SetDrawBlendMode(blendMode, blendModeNum);
+			SetDrawBlendMode(blendModeOld, blendModeNumOld);
 			auto layPos = ScreenCenter + (*_activeScene)._screenPos;
 			DrawRotaGraph(static_cast<int>(layPos.x), static_cast<int>(layPos.y), 1.0, 0, _layerGID, true);
 
 			SetDrawScreen(_layerGID);
 			SetDrawBlendMode(blendMode, blendModeNum);
 			ClsDrawScreen();
-		}
-
-		// ·¬×‚¾‚¯Šg‘å
-		if (layer == LAYER::CHAR)
-		{
-			rate = 1.2;
-		}
-		else
-		{
-			rate = 1.0;
-		}
+		}*/
 
 		DrawRotaGraph(
 			static_cast<int>(x),
@@ -259,34 +233,11 @@ void SceneMng::Draw(void)
 			true
 		);
 	}
-
-	for (auto que : _effectList)
-	{
-		double x, y;
-		int id;
-		LAYER layer;
-
-		std::tie(id, x, y, std::ignore, layer) = que;
-
-		//auto flag = PlayEffekseer2DEffect(id);
-
-		//// Ä¶Áª¯¸
-		//if (IsEffekseer2DEffectPlaying(flag) == -1)
-		//{
-		//	StopEffekseer2DEffect(flag);
-		//}
-		
-		// ´Ìª¸Ä‚Ì¾¯Ä
-		SetPosPlayingEffekseer2DEffect(id, static_cast<float>(x), static_cast<float>(y), 0);
-
-	}
-
 	// ‚»‚ê‚¼‚ê‚ÌƒŒƒCƒ„[‚ğ•`‰æ‚·‚é
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetDrawBlendMode(blendMode, blendModeNum);
 	DrawRotaGraph(static_cast<int>(ScreenCenter.x), static_cast<int>(ScreenCenter.y), 1.0, 0, _layerGID, true);
-	DrawEffekseer2D();
 
-
+	_dbgDrawFPS();
 	ScreenFlip();
 }

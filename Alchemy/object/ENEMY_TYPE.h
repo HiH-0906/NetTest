@@ -2,11 +2,11 @@
 
 enum class ENEMY_TYPE
 {
-	SLIME,		// ½×²Ñ
-	BAD,		// º³ÓØ
-	DAEMON,		// ÃÞ°ÓÝ
-	GHOST,		// ‚¨‚Î‚¯
-	MUSH,		// ‚«‚Ì‚±
+	SLIME = 1,		// ½×²Ñ
+	BAD = 2,		// º³ÓØ
+	GHOST = 4,		// ‚¨‚Î‚¯
+	MUSH = 8,		// ‚«‚Ì‚±
+	DAEMON = 16,		// ÃÞ°ÓÝ
 	MAX
 };
 

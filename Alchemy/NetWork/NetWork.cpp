@@ -6,7 +6,6 @@ std::unique_ptr<NetWork, NetWork::NetWorkDeleter> NetWork::sInstans(new NetWork(
 
 bool NetWork::NetMode(NETMODE mode)
 {
-	_matchTime = MATCH_TIME;
 	_netMode = mode;
 	if (_netWorkUnit != nullptr)
 	{
@@ -53,7 +52,9 @@ bool NetWork::Active(void)
 NetWork::NetWork()
 {
 	_netMode = NETMODE::OFFLINE;
+	_matchTime = MATCH_TIME;
 	_netWorkUnit = nullptr;
+	_keyNum = 0;
 }
 
 NetWork::~NetWork()
@@ -82,7 +83,6 @@ void NetWork::UpDate(void)
 		return;
 	}
 	(*NetWork::_netWorkUnit).Update();
-	_matchTime--;
 }
 
 MES NetWork::GetMes(PlNum num, MES_TYPE type)
@@ -105,6 +105,7 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 {
 	// “Øæ∞ºﬁçÏê¨
 	_tmpMes.key.type = static_cast<unsigned char>(MES_TYPE::KEY);
+	_tmpMes.key.num = _keyNum;
 	_tmpMes.key.plNum = static_cast<unsigned char>((*NetWork::_netWorkUnit).GetPlNum());
 	_tmpMes.key.lf = static_cast<unsigned char>(stick.isInput);
 	_tmpMes.key.a = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_A).first);
@@ -112,6 +113,7 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.y = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_Y).first);
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
+	_keyNum++;
 }
 
 void NetWork::MakeMatchMes(Vector2Dbl& pos)

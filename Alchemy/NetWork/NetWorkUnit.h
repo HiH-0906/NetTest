@@ -82,6 +82,7 @@ public:
 	bool AddRecMesList(MES mes);						// 受信ﾒｯｾｰｼﾞﾘｽﾄ
 	void ReSetRecMes(void);								// 受信ﾒｯｾｰｼﾞ削除
 	MES GetMes(PlNum num,MES_TYPE type);				// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
+	MES GetMes(MES_TYPE type);
 	bool SetNetWorkHandle(int handle);					// _netWorkHandleの設定
 	const bool LinkFlag(void)const;						// 接続できているか確認
 protected:

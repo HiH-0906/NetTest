@@ -23,7 +23,7 @@ void SceneMng::Run(void)
 		_dbgStartDraw();
 		lpNetWork.Connect();
 		_drawList.clear();
-		//lpNetWork.UpDate();
+		lpNetWork.UpDate();
 
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		(*_activeScene).RunInstanceQue(std::move(_instanceList));
@@ -31,7 +31,7 @@ void SceneMng::Run(void)
 		lpMap.Draw();
 		Draw();
 		_frameCnt++;
-		//lpNetWork.ReSetRecMes();
+		lpNetWork.ReSetRecMes();
 	}
 }
 
@@ -238,6 +238,6 @@ void SceneMng::Draw(void)
 	SetDrawBlendMode(blendMode, blendModeNum);
 	DrawRotaGraph(static_cast<int>(ScreenCenter.x), static_cast<int>(ScreenCenter.y), 1.0, 0, _layerGID, true);
 
-	_dbgDrawFPS();
+	//_dbgDrawFPS();
 	ScreenFlip();
 }

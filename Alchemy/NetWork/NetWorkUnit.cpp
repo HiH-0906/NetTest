@@ -64,6 +64,20 @@ MES NetWorkUnit::GetMes(PlNum num, MES_TYPE type)
 	return nonMes;
 }
 
+MES NetWorkUnit::GetMes(MES_TYPE type)
+{
+	MES nonMes = { 0 };
+	for (auto data : _recMesList)
+	{
+		if (static_cast<MES_TYPE>(data.key.type) != type)
+		{
+			continue;
+		}
+		return data;
+	}
+	return nonMes;
+}
+
 void NetWorkUnit::RunMesList(void)
 {
 	if (_sendMesList.size() == 0)

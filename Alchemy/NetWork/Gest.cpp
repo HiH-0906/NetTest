@@ -52,7 +52,7 @@ void Guest::Connect(void)
 	}
 	// MesSize•ªÃÞ°À‚ªÊÞ¯Ì§‚É—­‚Á‚Ä‚¢‚é‚©Áª¯¸
 	GetData();
-	if (static_cast<MES_TYPE>(GetMes(_plNum,MES_TYPE::CONNECT).check.type) != MES_TYPE::NON)
+	if (static_cast<MES_TYPE>(GetMes(MES_TYPE::CONNECT).check.type) != MES_TYPE::NON)
 	{
 		_plNum = static_cast <PlNum>(_mes.key.plNum);
 		TRACE("‚ ‚È‚½‚Íplayer[%d]‚Å‚·\n", (static_cast<int>(_plNum) + 1));

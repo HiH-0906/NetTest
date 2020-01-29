@@ -29,7 +29,7 @@ GameScene::GameScene()
 	potObj = _objList[0];
 	(*potObj).LoadStaticImg();
 
-	_objList.emplace_back(new Player(PlNum::PL_01, {1080.0,800.0 }, DX_INPUT_PAD1,potObj));
+	_objList.emplace_back(new Player(PlNum::PL_01, {1080.0,800.0 },potObj));
 	//_objList.emplace_back(new Player(PlNum::PL_02, {1080.0,800.0 }, DX_INPUT_PAD2,potObj));
 	//_objList.emplace_back(new Player(PlNum::PL_03, { 1080.0,800.0 }, DX_INPUT_PAD3, potObj));
 

@@ -19,9 +19,14 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	// Ò¯¾°¼Şæ“¾
 	auto mes = lpNetWork.GetMes(_plNum, MES_TYPE::KEY);
 	tmp.emplace_back(mes);
+	if (tmp.size()>=256)
+	{
+		AST();
+	}
 	// æ“¾‚µ‚½Ò¯¾°¼Ş‚ªKeyî•ñ‚©‚Ç‚¤‚©
 	if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::KEY)
 	{
+		TRACE("%d\n", mes.key.num);
 		_num++;
 		btnState(INPUT_ID::BTN_A,mes.key.a);
 		btnState(INPUT_ID::BTN_B, mes.key.b);

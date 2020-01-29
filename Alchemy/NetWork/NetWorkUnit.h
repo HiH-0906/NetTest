@@ -32,7 +32,7 @@ struct KEY_INF
 	unsigned char b : 1;
 	unsigned char y : 1;
 	short ls;
-	unsigned char num;							// ·°î•ñ’Ê‚µ”Ô†
+	unsigned int num : 8;							// ·°î•ñ’Ê‚µ”Ô†
 	// ‡Œv32bit 4byte
 };
 

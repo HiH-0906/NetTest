@@ -20,7 +20,7 @@ bool NetWork::NetMode(NETMODE mode)
 		_netWorkUnit = std::make_unique<Host>(9850);
 		break;
 	case NETMODE::GUEST:
-		_netWorkUnit = std::make_unique<Guest>(IPDATA{ 172,20,40,61 }, 9850);
+		_netWorkUnit = std::make_unique<Guest>(IPDATA{ 172,20,44,53 }, 9850);
 		break;
 	case NETMODE::MAX:
 		AST();

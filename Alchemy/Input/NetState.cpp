@@ -1,5 +1,5 @@
 #include "NetState.h"
-#include "../NetWork/NetWork.h"
+
 
 NetState::NetState(PlNum plNum)
 {
@@ -18,13 +18,10 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	auto state = LStickState().second;
 	// Ò¯¾°¼Şæ“¾
 	auto mes = lpNetWork.GetMes(_plNum, MES_TYPE::KEY);
+	tmp.emplace_back(mes);
 	// æ“¾‚µ‚½Ò¯¾°¼Ş‚ªKeyî•ñ‚©‚Ç‚¤‚©
 	if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::KEY)
 	{
-		if (mes.key.num!=_num)
-		{
-			AST();
-		}
 		_num++;
 		btnState(INPUT_ID::BTN_A,mes.key.a);
 		btnState(INPUT_ID::BTN_B, mes.key.b);

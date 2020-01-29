@@ -26,13 +26,13 @@ struct CONNECT_INF
 struct KEY_INF
 {
 	unsigned char type : 4;
-	unsigned char num;							// ·°î•ñ’Ê‚µ”Ô†
 	unsigned char plNum : 2;					// Player¯•Ê”Ô† 4l‚È‚Ì‚Å2bit
 	unsigned char lf : 1;						// stick“ü—Í‚ª‚ ‚é‚©‚Ç‚¤‚©
 	unsigned char a : 1;
 	unsigned char b : 1;
 	unsigned char y : 1;
 	short ls;
+	unsigned char num;							// ·°î•ñ’Ê‚µ”Ô†
 	// ‡Œv32bit 4byte
 };
 

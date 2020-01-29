@@ -57,14 +57,9 @@ void Guest::Connect(void)
 		_plNum = static_cast <PlNum>(_mes.key.plNum);
 		TRACE("‚ ‚È‚½‚Íplayer[%d]‚Å‚·\n", (static_cast<int>(_plNum) + 1));
 	}
-	else if (static_cast<MES_TYPE>(GetMes(_plNum, MES_TYPE::GAMEMODE).check.type) != MES_TYPE::NON)
+	if (static_cast<MES_TYPE>(GetMes(_plNum, MES_TYPE::GAMEMODE).check.type) != MES_TYPE::NON)
 	{
 		_linkFlag = true;
-	}
-	else
-	{
-		// ‚±‚Ì’iŠK‚ÅCONNECT‚©GAMEMODEˆÈŠO‚ÌÒ¯¾°¼Þ‚Í‚¨‚©‚µ‚¢‚Ì‚ÅAST
-		AST();
 	}
 }
 

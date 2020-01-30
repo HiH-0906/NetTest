@@ -26,6 +26,7 @@ void PotHold::operator()(Obj& pot, std::vector<sharedObj>& objList)
 		pot._pos.y + 60.0 - lpCamera.OfSet().y,
 		0.0,
 		1.0,
+		0.0,
 		0,
 		LAYER::UI ,
 		DX_BLENDMODE_NOBLEND,

@@ -46,10 +46,16 @@ void Camera::UpDate(void)
 {
 	if (_exMoveFlag)
 	{
-		if (_moveCnt <= CAMERA_MOVE_CNT)
+		/*if (_moveCnt <= CAMERA_MOVE_CNT)
 		{
 			_pos += _unitVel * (_b + _a * static_cast<double>((_moveCnt - CAMERA_MOVE_CNT / 2) * (_moveCnt - CAMERA_MOVE_CNT / 2)));
 			_moveCnt++;
+		}*/
+
+		if (_moveCnt > 0)
+		{
+			_pos += _unitVel * (_length * _moveCnt / _cntSum);
+			_moveCnt--;
 		}
 	}
 	else
@@ -93,12 +99,19 @@ void Camera::SearchObj(std::vector<sharedObj> List)
 
 void Camera::SetMoveData(Vector2Dbl aimPos)
 {
-	double length = sqrt(LengthSquare(aimPos, _pos));
+	_length = sqrt(LengthSquare(aimPos, _pos));
 
-	_a = -6.0 * length / static_cast<double>(CAMERA_MOVE_CNT * CAMERA_MOVE_CNT * CAMERA_MOVE_CNT);
+	_a = -6.0 * _length / static_cast<double>(CAMERA_MOVE_CNT * CAMERA_MOVE_CNT * CAMERA_MOVE_CNT);
 	_b = -static_cast<double>(CAMERA_MOVE_CNT / 2 * CAMERA_MOVE_CNT / 2) * _a;
+	
+	_cntSum = 0;
 
+	for (int i = 1; i < CAMERA_MOVE_CNT; i++)
+	{
+		_cntSum += i;
+	}
 	/*_b = length / 20.0;
 	_a = -_b / static_cast<double>(CAMERA_MOVE_CNT /2  * CAMERA_MOVE_CNT / 2);*/
-	_unitVel = (aimPos - _pos) / length;
+	_unitVel = (aimPos - _pos) / _length;
+	_moveCnt = CAMERA_MOVE_CNT;
 }

@@ -7,9 +7,9 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 {
 	if (actQue.second.unitID() == UNIT_ID::PLAYER)
 	{
+		// プレイヤーが投げるとき
 		Player& player = ((Player&)actQue.second);
 		auto thrownObj = player._holdList.front();
-		// プレイヤーが投げるとき
 		if (!(player._tageObj.expired()))
 		{
 			// 壺をターゲットにしているときは壺に向かって投げる
@@ -30,6 +30,10 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 					}
 				}
 			}
+			else
+			{
+				(*thrownObj)._vel.x = player._throwRange / THROW_CNT_MAX;		// 距離300を30フレームで
+			}
 		}
 		else
 		{
@@ -41,6 +45,11 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 		// 投げるときに方向を補正する
 		//(*((Player&)actQue.second)._holdList.front())._rad = convToRad((*((Player&)actQue.second)._holdList.front())._dir);
 
+		if ((*thrownObj)._vel.x == 0)
+		{
+			AST();
+		}
+
 		auto vel = (*thrownObj)._vel;
 		vel.y = sqrt(THROW_INITIAL_SPEED*THROW_INITIAL_SPEED - vel.x * vel.x);
 		(*thrownObj)._vel.y = vel.y;
@@ -49,6 +58,11 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 		(*thrownObj)._holdPlayer.reset();
 		(*thrownObj)._zOrder = 0;
 		player._holdList.erase(player._holdList.begin());
+
+		for (int i = 0; i < player._holdList.size();i++)
+		{
+			(*player._holdList[i])._height = 40.0 * (i + 1);
+		}
 		player.state(STATE::THROW);
 		return true;
 	}

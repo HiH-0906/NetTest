@@ -22,7 +22,7 @@ void Slime_Attack::operator()(Obj & obj, std::vector<sharedObj>& objList)
 	if (!obj._effectFlg)
 	{
 		// çƒê∂ÇµÇ‹Ç∑
-		obj._effectID = PlayEffekseer2DEffect(EFFECT_ID(EFFECT::AT_SLIME));
+		//obj._effectID = PlayEffekseer2DEffect(EFFECT_ID(EFFECT::AT_SLIME));
 
 		// ¡™Ø∏
 		if (IsEffekseer2DEffectPlaying(obj._effectID) == 0)

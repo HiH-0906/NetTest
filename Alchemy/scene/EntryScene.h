@@ -25,8 +25,10 @@ private:
 	int _entrnum[4];							// エントリーした番号を保存するや～つ
 
 	int _entryBG;								// エントリー背景
-	int _padImage[4];							// 接続済み未登録のPAD
-	int _entryImage[4];							// 操作キャラの色を表す画像
+	int _backImage[4];							// 接続済み未登録の背景
+	int _entryImage[4][4];						// 操作キャラを表す画像
+
+	int _cnt[4];
 
 
 	std::shared_ptr<InputState> _input[4];		// 入力管理クラス

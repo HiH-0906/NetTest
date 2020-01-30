@@ -78,6 +78,31 @@ MES NetWorkUnit::GetMes(MES_TYPE type)
 	return nonMes;
 }
 
+void NetWorkUnit::GetKey(std::vector<MES>& buf, PlNum num)
+{
+	if (_recMesList.size() == 0)
+	{
+		return;
+	}
+	for (auto data:_recMesList)
+	{
+		if (static_cast<MES_TYPE>(data.check.type) != MES_TYPE::KEY)
+		{
+			continue;
+		}
+		else if (static_cast<PlNum>(data.key.plNum)!=num)
+		{
+			continue;
+		}
+		else
+		{
+			buf.emplace_back(data);
+		}
+	}
+
+	return;
+}
+
 void NetWorkUnit::RunMesList(void)
 {
 	if (_sendMesList.size() == 0)

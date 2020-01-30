@@ -18,6 +18,7 @@ public:
 private:
 	void initFunc(void);
 	void initImg(void);
+	void initSound(void);					// BGM,SE‚Ìinit
 	void enemyListInit(void);				// “G‚Ìî•ñ‚ğØ½Ä‚É’Ç‰Á
 	void searchEnlist(void);
 	void RunActQue(std::vector<ActQueT> actList)override;

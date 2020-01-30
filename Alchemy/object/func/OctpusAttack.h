@@ -8,7 +8,7 @@ struct OctpusAttack
 	void operator ()(Obj& obj, std::vector<sharedObj>& objList);
 	
 private:
-	float _effectRad;		// ´Ìª¸Ä—p‚ÌŠp“x
+	double _effectRad;		// ´Ìª¸Ä—p‚ÌŠp“x
 };
 
 

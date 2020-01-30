@@ -3,6 +3,7 @@
 #include <DxLib.h>
 #include <_DebugConOut.h>
 #include <ImageMng.h>
+#include <SoundMng.h>
 #include <EffectMng.h>
 #include "GameScene.h"
 #include <object/Player.h>
@@ -13,6 +14,7 @@
 #include "func/FuncHold.h"
 #include "func/FuncThrow.h"
 #include "func/FuncIntoPot.h"
+#include "func/FuncPut.h"
 #include "Map.h"
 #include <EffekseerForDXLib.h>
 
@@ -21,6 +23,7 @@ GameScene::GameScene()
 	TRACE("πﬁ∞—º∞›\n");
 	initFunc();
 	initImg();
+	initSound();
 
 	srand((unsigned int)time(NULL));
 
@@ -29,7 +32,7 @@ GameScene::GameScene()
 	potObj = _objList[0];
 	(*potObj).LoadStaticImg();
 
-	_objList.emplace_back(new Player(PlNum::PL_01, {1080.0,800.0 },potObj));
+	_objList.emplace_back(new Player(PlNum::PL_01, {1080.0,800.0 }, DX_INPUT_PAD1,potObj));
 	//_objList.emplace_back(new Player(PlNum::PL_02, {1080.0,800.0 }, DX_INPUT_PAD2,potObj));
 	//_objList.emplace_back(new Player(PlNum::PL_03, { 1080.0,800.0 }, DX_INPUT_PAD3, potObj));
 
@@ -59,7 +62,7 @@ UniqueBase GameScene::Update(UniqueBase own)
 	// ∂“◊à íuçXêV
 	lpCamera.UpDate();
 	// Ç∆ÇËÇ†Ç¶Ç∏ÇÃîwåi
-	lpSceneMng.AddDrawQue({ lpMap.mapScreen(),lpSceneMng.WorldCenter.x - lpCamera.OfSet().x ,lpSceneMng.WorldCenter.y - lpCamera.OfSet().y,0.0,1.0,255,LAYER::BG , DX_BLENDMODE_NOBLEND, 255 });
+	lpSceneMng.AddDrawQue({ lpMap.mapScreen(),lpSceneMng.WorldCenter.x - lpCamera.OfSet().x ,lpSceneMng.WorldCenter.y - lpCamera.OfSet().y,0.0,1.0,0.0,255,LAYER::BG , DX_BLENDMODE_NOBLEND, 255 });
 
 	if (!lpCamera.exMoveFlag())
 	{
@@ -95,7 +98,7 @@ UniqueBase GameScene::Update(UniqueBase own)
 
 void GameScene::initFunc(void)
 {
-	funcQue = { {ACT_QUE::HOLD,FuncHold()} ,{ACT_QUE::THOROW,FuncThrow()} ,{ACT_QUE::INTO_POT,FuncIntoPot()} };
+	funcQue = { {ACT_QUE::HOLD,FuncHold()} ,{ACT_QUE::THOROW,FuncThrow()} ,{ACT_QUE::INTO_POT,FuncIntoPot()} ,{ACT_QUE::PUT,FuncPut() } };
 }
 
 void GameScene::initImg(void)
@@ -148,6 +151,12 @@ void GameScene::initImg(void)
 	lpImageMng.GetID({ IMG::BLAST ,STATE::DEATH }, "image/blast.png", { 192,192 }, { 5,2 });
 
 
+}
+
+void GameScene::initSound(void)
+{
+	lpSoundMng.GetID(SOUND::THROW, "sound/Throw.mp3");
+	lpSoundMng.GetID(SOUND::HOLD, "sound/Hold.mp3");
 }
 
 void GameScene::enemyListInit(void)

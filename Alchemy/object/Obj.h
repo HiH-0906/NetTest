@@ -6,6 +6,7 @@
 #include <memory>
 #include <Vector2.h>
 #include <ImageMng.h>
+#include <SoundMng.h>
 #include <DIR.h>
 #include "UNIT_ID.h"
 #include "STATE.h"
@@ -25,6 +26,7 @@ class Obj;
 class InputState;
 class Camera;
 class NetWork;
+class EffectMng;
 struct PlayerNormal;
 struct PlayerHold;
 struct PlayerThrow;
@@ -35,6 +37,7 @@ struct PotThrow;
 struct FuncHold;
 struct FuncThrow;
 struct FuncIntoPot;
+struct FuncPut;
 struct ThrownUpdate;
 struct HoldenUpdate;
 struct TestEnemyUpdate;
@@ -118,6 +121,7 @@ public:
 	void LoadStaticImg(void);								// HPバーの読み込み
 
 private:
+	friend EffectMng;
 	friend NetWork;
 	friend PlayerNormal;
 	friend PlayerHold;
@@ -128,6 +132,7 @@ private:
 	friend FuncHold;
 	friend FuncThrow;
 	friend FuncIntoPot;
+	friend FuncPut;
 	friend ThrownUpdate;
 	friend HoldenUpdate;
 	friend TestEnemyUpdate;
@@ -194,6 +199,7 @@ protected:
 	int _damageCnt;					// ダメージを受けた後のHPバー表示時間調整用
 	int _glowID;					// 描画エフェクトをかけるためのスクリーン
 	int _hpID;						// HPバー表示のためのスクリーン
+	int _effectScreen;				// エフェクト表示用のスクリーン
 	int _serialNum;					// 通し番号
 	double _height;					// 高さ
 	double _gravity;				// 投げられてるときの重力

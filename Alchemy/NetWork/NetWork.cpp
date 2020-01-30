@@ -90,9 +90,19 @@ MES NetWork::GetMes(PlNum num, MES_TYPE type)
 	return (*NetWork::_netWorkUnit).GetMes(num, type);
 }
 
+void NetWork::GetKey(std::vector<MES>& buf, PlNum num)
+{
+	(*NetWork::_netWorkUnit).GetKey(buf, num);
+}
+
 void NetWork::ReSetRecMes(void)
 {
 	(*NetWork::_netWorkUnit).ReSetRecMes();
+}
+
+MES NetWork::GetMes(MES_TYPE type)
+{
+	return (*NetWork::_netWorkUnit).GetMes(type);
 }
 
 PlNum NetWork::GetPlNum(void)
@@ -100,9 +110,25 @@ PlNum NetWork::GetPlNum(void)
 	return (*NetWork::_netWorkUnit).GetPlNum();
 }
 
+void NetWork::MakeAgainMes(PlNum plNum, int num)
+{
+	if (!(*NetWork::_netWorkUnit).LinkFlag())
+	{
+		return;
+	}
+	// “Øæ∞ºﬁçÏê¨
+	_tmpMes.again.type = static_cast<unsigned char>(MES_TYPE::AGAIN);
+	_tmpMes.again.plNum = static_cast<unsigned char>(plNum);
+	_tmpMes.again.num = static_cast<unsigned char>(num);
+	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
+}
 
 void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 {
+	if (!(*NetWork::_netWorkUnit).LinkFlag())
+	{
+		return;
+	}
 	// “Øæ∞ºﬁçÏê¨
 	_tmpMes.key.type = static_cast<unsigned char>(MES_TYPE::KEY);
 	_tmpMes.key.num = _keyNum;
@@ -111,21 +137,11 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.a = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_A).first);
 	_tmpMes.key.b = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_B).first);
 	_tmpMes.key.y = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_Y).first);
+	_tmpMes.key.lb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_LB).first);
+	_tmpMes.key.rb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_RB).first);
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
 	_keyNum++;
 }
 
-void NetWork::MakeMatchMes(Vector2Dbl& pos)
-{
-	if (_matchTime>=0)
-	{
-		return;
-	}
-	_tmpMes.match.type = static_cast<unsigned char>(MES_TYPE::MATCH);
-	_tmpMes.match.x = static_cast<unsigned short>(pos.x);
-	_tmpMes.match.y = static_cast<unsigned short>(pos.y);
-	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
-	_matchTime = MATCH_TIME;
-}
 

@@ -8,7 +8,7 @@ void PlayerNormal::operator()(Obj& player, std::vector<sharedObj>& objList)
 	// 何も持ってないとき
 		// 今後持てる数が増える可能性があるので条件が変わるかも
 
-		// ターゲット検索
+	// ターゲット検索
 	for (auto obj : objList)
 	{
 		if (LengthSquare((*obj).pos(), player._pos) > player._searchRange * player._searchRange)
@@ -28,9 +28,10 @@ void PlayerNormal::operator()(Obj& player, std::vector<sharedObj>& objList)
 	}
 
 	// 持つ
-	if (!(player._tageObj.expired()) && (((*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second) || ((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second)))
+	if (!(player._tageObj.expired()) && (((*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second)))
 	{
 		lpSceneMng.AddActQue({ ACT_QUE::HOLD,player });
+		lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::HOLD)[0], 255 , player.pos().x, player.pos().y });
 	}
 }
 

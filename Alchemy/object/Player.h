@@ -5,6 +5,7 @@
 
 struct FuncThrow;
 struct FuncHold;
+struct FuncPut;
 
 class Player :
 	public Obj
@@ -16,6 +17,7 @@ public:
 	void Update(std::vector<sharedObj>& objList) override;
 	PlNum plNum(void);
 	int holdWeightMax(void);
+	int GetHoldListSize(void);
 	bool throwPot(void);
 	void throwPot(bool throwMode);
 
@@ -23,6 +25,7 @@ public:
 private:
 	friend FuncHold;
 	friend FuncThrow;
+	friend FuncPut;
 	void Init(void);
 	void DrawHP(void)override;
 

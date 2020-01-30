@@ -5,6 +5,12 @@
 #include "../Player.h"
 void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 {
+	if (((*player._input).btnState(INPUT_ID::BTN_RB).first && !(*player._input).btnState(INPUT_ID::BTN_RB).second))
+	{
+		lpSceneMng.AddActQue({ ACT_QUE::PUT,player });
+		return;
+	}
+
 	if (((Player&)player).throwPot())
 	{
 		// 壺に入れられる距離なら壺をターゲットに設定
@@ -20,12 +26,40 @@ void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 		//TRACE("rad : %f, player : %f\n", potRad, player._rad);
 
 		if (LengthSquare((*player._potObj.lock()).pos(), player._pos) < (350.0*350.0)
-			&& abs(relRad) < PI / 4.0)
+			/*&& abs(relRad) < PI / 4.0*/)
 		{
 			player._rad = atan2((*player._potObj.lock()).pos().y - player._pos.y, (*player._potObj.lock()).pos().x - player._pos.x);
 			player._tageObj = player._potObj;
 		}
-	}	
+	}
+	else if (((Player&)player).GetHoldListSize() < ((Player&)player).holdWeightMax())
+	{
+		// ターゲット検索
+		for (auto obj : objList)
+		{
+			if (LengthSquare((*obj).pos(), player._pos) > player._searchRange * player._searchRange)
+			{
+				// 上でソートしてるので索敵範囲を超えた敵がいたら判定終わり
+				break;
+			}
+
+			// holden,thrwon,deathの時は持てない
+			if ((*obj).weight() > ((Player&)player).holdWeightMax() || static_cast<int>((*obj).state()) >= static_cast<int>(STATE::THROWN))
+			{
+				continue;
+			}
+
+			player._tageObj = obj;
+			break;
+		}
+
+		// 持つ
+		if (!(player._tageObj.expired()) && (((*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second)))
+		{
+			lpSceneMng.AddActQue({ ACT_QUE::HOLD,player });
+			lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::HOLD)[0], 255 , player.pos().x, player.pos().y });
+		}
+	}
 
 	// 壺に投げるか切り替え
 	if ((*player._input).btnState(INPUT_ID::BTN_LB).first && (*player._input).btnState(INPUT_ID::BTN_LB).second)
@@ -38,9 +72,10 @@ void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 	}
 
 	// 投げる
-	if ((((*player._input).btnState(INPUT_ID::BTN_B).first && !(*player._input).btnState(INPUT_ID::BTN_B).second) || ((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second)))
+	if ((((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second)))
 	{
 		lpSceneMng.AddActQue({ ACT_QUE::THOROW,player });
+		lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::THROW)[0], 200 , player.pos().x, player.pos().y});
 	}
 
 	

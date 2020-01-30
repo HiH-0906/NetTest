@@ -67,7 +67,20 @@ void Player::Update(std::vector<sharedObj>& objList)
 		if ((*_input).LStickState().first.isInput)
 		{
 			_rad = RAD(static_cast<double>((*_input).LStickState().first.angle));
-			_pos += {_speed * cos(_rad), _speed * sin(_rad)};
+			auto move = _speed * Vector2Dbl{ cos(_rad),sin(_rad) };			// à⁄ìÆãóó£
+
+			// à⁄ìÆêßå¿
+			// âÊñ â°
+			if (_pos.x + move.x <= _size.x /2.0 || _pos.x + move.x >= lpSceneMng.WorldSize.x - _size.x / 2.0)
+			{
+				move.x = 0;
+			}
+			// âÊñ è„â∫
+			if (_pos.y + move.y <= _size.y / 2.0 || _pos.y + move.y >= lpSceneMng.WorldSize.y - _size.y / 2.0)
+			{
+				move.y = 0;
+			}
+			_pos += move;
 
 			dir((*_input).LStickState().first.dir);
 		}
@@ -85,7 +98,6 @@ void Player::Update(std::vector<sharedObj>& objList)
 			lpCamera.exMoveFlag(true);
 		}
 	}
-	
 
 	try
 	{
@@ -115,6 +127,11 @@ PlNum Player::plNum(void)
 int Player::holdWeightMax(void)
 {
 	return _holdWeightMax;
+}
+
+int Player::GetHoldListSize(void)
+{
+	return static_cast<int>(_holdList.size());
 }
 
 bool Player::throwPot(void)
@@ -215,6 +232,7 @@ void Player::DrawHP(void)
 		15.0,
 		0.0,
 		1.0,
+		0.0,
 		_zOrder + 1,
 		LAYER::UI ,
 		DX_BLENDMODE_NOBLEND,
@@ -225,7 +243,8 @@ void Player::DrawHP(void)
 		15.0,
 		0.0,
 		1.0,
-		_zOrder + 1,
+		0.0,
+		_zOrder + 2,
 		LAYER::UI ,
 		DX_BLENDMODE_NOBLEND,
 		255 });

@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="scene\func\FuncPut.cpp" />
     <ClCompile Include="object\func\BeeAttack.cpp" />
     <ClCompile Include="object\Boss.cpp" />
     <ClCompile Include="object\func\ItemNormal.cpp" />
@@ -232,6 +233,7 @@
     <ClCompile Include="_debug\_DebugDispOut.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="scene\func\FuncPut.h" />
     <ClInclude Include="object\func\BeeAttack.h" />
     <ClInclude Include="object\Boss.h" />
     <ClInclude Include="object\func\ItemNormal.h" />

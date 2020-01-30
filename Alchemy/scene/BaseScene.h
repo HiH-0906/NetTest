@@ -12,7 +12,8 @@ enum class ACT_QUE
 	ATTACK,			// UŒ‚
 	HOLD,			// Ž‚Â
 	THOROW,			// “Š‚°‚é
-	INTO_POT		// “–‚½‚è”»’è
+	INTO_POT,		// “–‚½‚è”»’è
+	PUT,			// ‚»‚Ìê‚É’u‚­
 };
 
 enum class INSTANCE_QUE

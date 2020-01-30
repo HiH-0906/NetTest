@@ -32,14 +32,16 @@ public:
 
 	bool NetMode(NETMODE mode);
 	const NETMODE NetMode(void);
-	bool Active(void);									// 接続確立しているか
-	void Connect(void);									// 接続させに行く
-	void UpDate(void);									// 接続した後はこれを回してればいいはず
-	void ReSetRecMes(void);								// 受信ﾒｯｾｰｼﾞ削除
-	MES GetMes(PlNum num,MES_TYPE type);				// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
-	PlNum GetPlNum(void);								// 現在の自分のPlNum取得
-	void MakeKeyMes(KeyMap butan, StickState& stick);	// Key押下情報ﾒｯｾｰｼﾞ化
-	void MakeMatchMes(Vector2Dbl& pos);					// 位置情報ﾒｯｾｰｼﾞ化
+	bool Active(void);											// 接続確立しているか
+	void Connect(void);											// 接続させに行く
+	void UpDate(void);											// 接続した後はこれを回してればいいはず
+	void ReSetRecMes(void);										// 受信ﾒｯｾｰｼﾞ削除
+	MES GetMes(MES_TYPE type);									// 指定されたtypeのﾒｯｾｰｼﾞ取得
+	MES GetMes(PlNum num,MES_TYPE type);						// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
+	void GetKey(std::vector<MES>& buf,PlNum num );				// _recMesListからのｷｰ情報の取り出し
+	PlNum GetPlNum(void);										// 現在の自分のPlNum取得
+	void MakeAgainMes(PlNum plNum, int num);					// 再送依頼
+	void MakeKeyMes(KeyMap butan, StickState& stick);			// Key押下情報ﾒｯｾｰｼﾞ化
 private:
 	struct NetWorkDeleter
 	{
@@ -51,7 +53,7 @@ private:
 	static std::unique_ptr<NetWork, NetWorkDeleter> sInstans;
 	NetWork();
 	virtual ~NetWork();
-	unsigned int _keyNum;								// ｷｰ情報確認用通し番号
+	unsigned char _keyNum;										// ｷｰ情報確認用通し番号
 	int _matchTime;										// 同期のためのｶｳﾝﾄ
 	MES _tmpMes;										// 受け取りMES一時保存用
 	NETMODE _netMode;									// ﾈｯﾄﾜｰｸのﾓｰﾄﾞ hostかGuestか

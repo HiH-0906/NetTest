@@ -77,9 +77,10 @@ void Obj::Draw(void)
 		// 現在のコマの画像を描画キューに追加
 		lpSceneMng.AddDrawQue({ _animMap[{ _state ,_dir}][_animFrame].first,
 			_pos.x - lpCamera.OfSet().x,
-			_pos.y - _height - lpCamera.OfSet().y,
+			_pos.y - lpCamera.OfSet().y,
 			0.0,
-			1.2,
+			1.2 + (_height /400.0),
+			_height,
 			_zOrder,
 			LAYER::CHAR ,
 			DX_BLENDMODE_NOBLEND,
@@ -100,8 +101,8 @@ void Obj::Draw(void)
 		GraphFilter(_glowID, DX_GRAPH_FILTER_GAUSS, 8, 100);
 		GraphFilter(_glowID, DX_GRAPH_FILTER_TWO_COLOR, 10, 0, 0, 0xffffff, 255);
 		lpSceneMng.AddDrawQue({ _glowID,_pos.x - lpCamera.OfSet().x,
-			_pos.y - _height - lpCamera.OfSet().y,
-			0.0,1.2,_zOrder - 1,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
+			_pos.y - lpCamera.OfSet().y,
+			0.0,1.2,_height,_zOrder - 1,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
 
 		_glowFlag = false;
 	}
@@ -115,8 +116,9 @@ void Obj::Draw(void)
 			_pos.x - lpCamera.OfSet().x,
 			_pos.y + _size.y / 2.0 - lpCamera.OfSet().y,
 			0.0,
-			1.2,
-			-5,
+			1.2 - (_height / 400.0),
+			_height,
+			INT_MIN,
 			LAYER::CHAR ,
 			DX_BLENDMODE_NOBLEND,
 			255 });
@@ -129,9 +131,10 @@ void Obj::Draw(int id)
 {
 	lpSceneMng.AddDrawQue({ id,
 							_pos.x,
-					        _pos.y - _height,
+					        _pos.y,
 					        _rad,
 							1.2,
+							_height,
 							_zOrder,
 							LAYER::CHAR, 
 							DX_BLENDMODE_NOBLEND, 
@@ -398,9 +401,10 @@ void Obj::DrawHP(void)
 
 			lpSceneMng.AddDrawQue({ _hpID,
 				_pos.x - lpCamera.OfSet().x,
-				_pos.y - _height - lpCamera.OfSet().y - 48,
+				_pos.y-lpCamera.OfSet().y - 48,
 				0.0,
 				1.0,
+				_height,
 				_zOrder + 1,
 				LAYER::UI ,
 				DX_BLENDMODE_NOBLEND,

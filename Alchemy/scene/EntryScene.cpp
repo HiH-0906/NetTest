@@ -15,6 +15,7 @@ EntryScene::EntryScene()
 	for (int i = 0; i < _padnum; i++)
 	{
 		_entrnum[i] = 0;
+		_cnt[i] = 0;
 	}
 	TRACE("Ú‘±PAD”‚Í%d‚Å‚·\n", _padnum);
 	DrawInit();
@@ -35,14 +36,17 @@ UniqueBase EntryScene::Update(UniqueBase own)
 		{
 			return std::make_unique<GameScene>();
 		}
-
-		if (_entrnum[i] == 0)
-		{
-			//lpSceneMng.AddDrawQue({ _padImage[i],(320 * (i + 1)) - 160,332.0,0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
-		}
 		else
 		{
-			//lpSceneMng.AddDrawQue({ _entryImage[_entrnum[i] - 1],(320 * (i + 1)) - 160,332.0,0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+			for (int j = 0; j < 4; j++)
+			{
+				lpSceneMng.AddDrawQue({ _backImage[j],(320.0 * static_cast<double>((j + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+			}
+			if (_entrnum[i] != 0)
+			{
+				lpSceneMng.AddDrawQue({ _entryImage[(_entrnum[i]-1)][((_cnt[i]/10)%4)],(320.0 * static_cast<double>((i + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0,1.2,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+				_cnt[i]++;
+			}
 		}
 
 		if ((*_input[i]).btnState(INPUT_ID::BTN_START).first)
@@ -69,9 +73,7 @@ UniqueBase EntryScene::Update(UniqueBase own)
 		}
 
 	}
-
-	lpSceneMng.AddDrawQue({ _entryBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
-
+	lpSceneMng.AddDrawQue({ _entryBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
 
 	return std::move(own);
 }
@@ -86,10 +88,14 @@ void EntryScene::Init(void)
 
 void EntryScene::DrawInit(void)
 {
-	_entryBG = LoadGraph("image/EntryBG.png");
-	//for (int i = 0; i < _padnum; i++)
-	//{
-	//	_padImage[i] = LoadGraph("image/PAD_2.png");
-	//	LoadDivGraph("image/Entrycolor.png",4,4,1,265,250, _entryImage);
-	//}
+	_entryBG = LoadGraph("image/TitleBG.png");
+	for (int i = 0; i < 4; i++)
+	{
+		_backImage[i] = LoadGraph("image/Woodback.png");
+	}
+	LoadDivGraph("image/Player_walk.png", 16, 4, 4, 266, 249, *_entryImage);
+	//_entryImage[0] = LoadGraph("image/Player01_death.png");
+	//_entryImage[1] = LoadGraph("image/Player02_death.png");
+	//_entryImage[2] = LoadGraph("image/Player03_death.png");
+	//_entryImage[3] = LoadGraph("image/Player04_death.png");
 }

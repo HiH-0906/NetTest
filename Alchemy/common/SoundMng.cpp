@@ -1,6 +1,8 @@
 #include <DxLib.h>
 #include "SoundMng.h"
 
+std::unique_ptr<SoundMng, SoundMng::SoundMngDeleter> SoundMng::_sInstance(new SoundMng());
+
 const std::vector<int>& SoundMng::GetID(const SOUND & key)
 {
 	return GetID(key, "");

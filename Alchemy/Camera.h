@@ -25,6 +25,8 @@ private:
 	Vector2Dbl _pos;
 	Vector2Dbl _size;
 	Vector2Dbl _unitVel;	// 特殊移動するときの速度の単位ベクトル
+	int _cntSum;			// CAMERA_MOVE_CNTの総和
+	double _length;			// 移動距離
 	double _a;				// 速さの変化関数v = a * (x - CAMERA_MOVE_CNT / 2) + b　のa
 	double _b;				// 速さの変化関数v = a * (x - CAMERA_MOVE_CNT / 2) + b　のb
 	bool _exMoveFlag;		// 特殊移動のﾌﾗｸﾞ

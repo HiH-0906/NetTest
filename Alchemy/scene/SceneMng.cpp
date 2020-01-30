@@ -23,15 +23,19 @@ void SceneMng::Run(void)
 		_dbgStartDraw();
 		lpNetWork.Connect();
 		_drawList.clear();
-		lpNetWork.UpDate();
+		_soundList.clear();
+		lpEffectMng.Clear();
+		//lpNetWork.UpDate();
 
 		_activeScene = (*_activeScene).Update(std::move(_activeScene));
 		(*_activeScene).RunInstanceQue(std::move(_instanceList));
 		(*_activeScene).RunActQue(std::move(_actList));
 		lpMap.Draw();
+		lpEffectMng.Draw();
 		Draw();
+		SoundPlay();
 		_frameCnt++;
-		lpNetWork.ReSetRecMes();
+		//lpNetWork.ReSetRecMes();
 	}
 }
 
@@ -56,11 +60,25 @@ bool SceneMng::AddActQue(ActQueT aQue)
 
 bool SceneMng::AddSoundQue(SoundQueT sQue)
 {
-	if (std::get<static_cast<int>(SOUND_QUE::SOUND)>(sQue) <= 0)
+	int id;
+	double x, y;
+	std::tie(id, std::ignore, x, y) = sQue;
+
+	if ((x <= lpCamera.pos().x - lpCamera.size().x) &&
+		(x >= lpCamera.pos().x + lpCamera.size().x) &&
+		(y <= lpCamera.pos().y - lpCamera.size().y) &&
+		(y >= lpCamera.pos().y + lpCamera.size().y)
+		)
+	{
+		return false;
+	}
+
+	if (std::get<static_cast<int>(DRAW_QUE::IMAGE)>(sQue) <= 0)
 	{
 		// SoundIDÇ™ïsê≥Ç»ÇÃÇ≈í«â¡ÇµÇ»Ç¢
 		return false;
 	}
+
 	// QueÇí«â¡
 	_soundList.emplace_back(sQue);
 	return true;
@@ -156,7 +174,7 @@ bool SceneMng::SysInit(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	// EffekseerÇ…ï`âÊÇÃê›íËÇÇ∑ÇÈ
-	Effekseer_Set2DSetting(static_cast<int>(WorldSize.x), static_cast<int>(WorldSize.y));
+	Effekseer_Set2DSetting(static_cast<int>(500), static_cast<int>(500));
 	SetUseZBuffer3D(TRUE);
 	SetWriteZBuffer3D(TRUE);
 
@@ -202,7 +220,7 @@ void SceneMng::Draw(void)
 	// ÇΩÇ‹Ç¡ÇƒÇ¢ÇÈDrawQueÇÇªÇÍÇºÇÍÇÃÉåÉCÉÑÅ[Ç…ï`âÊÇ∑ÇÈ
 	for (auto que : _drawList)
 	{
-		double x, y, rad;
+		double x, y, rad,height;
 		int id;
 		LAYER layer;
 
@@ -210,7 +228,7 @@ void SceneMng::Draw(void)
 		int blendModeOld = blendMode;
 		int blendModeNumOld = blendModeNum;
 
-		std::tie(id, x, y, rad, rate, std::ignore, layer, blendMode, blendModeNum) = que;
+		std::tie(id, x, y, rad, rate, height,std::ignore, layer, blendMode, blendModeNum) = que;
 
 		/*if ((layer != drawLayer) || (blendMode != blendModeOld) || (blendModeNum != blendModeNumOld))
 		{
@@ -226,7 +244,7 @@ void SceneMng::Draw(void)
 
 		DrawRotaGraph(
 			static_cast<int>(x),
-			static_cast<int>(y),
+			static_cast<int>(y) - static_cast<int>(height),
 			rate,
 			rad,
 			id,
@@ -238,6 +256,18 @@ void SceneMng::Draw(void)
 	SetDrawBlendMode(blendMode, blendModeNum);
 	DrawRotaGraph(static_cast<int>(ScreenCenter.x), static_cast<int>(ScreenCenter.y), 1.0, 0, _layerGID, true);
 
-	//_dbgDrawFPS();
+	_dbgDrawFPS();
 	ScreenFlip();
+}
+
+void SceneMng::SoundPlay(void)
+{
+	int id, vol;
+	// ∑≠∞Ç…ó≠Ç‹Ç¡ÇƒÇ¢ÇÈâπÇçƒê∂Ç∑ÇÈ
+	for (auto que : _soundList)
+	{
+		std::tie(id, vol, std::ignore, std::ignore) = que;
+		ChangeVolumeSoundMem(vol, id);
+		PlaySoundMem(id, DX_PLAYTYPE_BACK);
+	}
 }

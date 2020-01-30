@@ -13,13 +13,14 @@
 
 enum class EFFECT_QUE
 {
-	OBJ,		// ©•ª‚ªÄ¶‚µ‚Ä‚¢‚é´Ìª¸Ä‚ğ•Û‘¶‚µ‚½‚¢
+	OBJ,			// ©•ª‚ªÄ¶‚µ‚Ä‚¢‚é´Ìª¸Ä‚ğ•Û‘¶‚µ‚½‚¢
 	POS,
-	RAD,		// Šp“x
-	ZORDER		// •`‰æ—Dæ“x
+	RAD,			// Šp“x
+	PLAY_ID,
+	ZORDER			// •`‰æ—Dæ“x
 };
 
-using EffectQueT = std::tuple <sharedObj, Vector2Dbl, double, int>;						// <©•ª‚Ìî•ñAÀ•WAŠp“xA•`‰æ—Dæ“x>
+using EffectQueT = std::tuple <Obj&, Vector2Dbl, double, EFFECT, int>;			// <´Ìª¸ÄIDAÀ•WAŠp“xAÄ¶‚µ‚½‚¢´Ìª¸ÄA•`‰æ—Dæ“x>
 
 class EffectMng
 {
@@ -29,12 +30,14 @@ public:
 		return *sInstance;
 	}
 
-	const int& GetID(EFFECT id);													// æ“¾
-	const int& GetID(EFFECT id, const std::string& key, float magnification);		// “o˜^
-	bool AddEffectQue(EffectQueT eQue);												// ´Ìª¸Ä·­°‚Ì’Ç‰Á
-	void DrawFront(void);																// •`‰æ
-	void DrawBack(void);
+	const int& GetID(EFFECT id);												// æ“¾
+	const int& GetID(EFFECT id, const std::string& key, float magnification);	// “o˜^
+	bool AddEffectQue(EffectQueT eQue);											// ´Ìª¸Ä·­°‚Ì’Ç‰Á
+	void Draw(void);															// •`‰æ
 	void Init(void);
+	void Clear(void);
+
+	const Vector2Dbl _screenSize;												// ´Ìª¸Ä‚Ì½¸Ø°İ»²½Ş
 private:
 	// ¶½ÀÑÃŞØ°À°
 	struct EffectMngDeleter
@@ -47,9 +50,8 @@ private:
 
 	static std::unique_ptr<EffectMng, EffectMngDeleter> sInstance;
 
-	std::map<EFFECT,int> _effectMap;					// “o˜^—p
-	int _effectScreen;									// ´Ìª¸Ä—p½¸Ø°İ
-	std::vector<EffectQueT> _effectList;				// ´Ìª¸Ä·­°‚ÌŠÇ—”z—ñ
+	std::map<EFFECT,int> _effectMap;						// “o˜^—p
+	std::vector<EffectQueT> _effectList;					// ´Ìª¸Ä·­°‚ÌŠÇ—”z—ñ
 	EffectMng();
 	~EffectMng();
 };

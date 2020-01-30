@@ -89,7 +89,7 @@ void Map::Draw(void)
 				true
 				);
 		}
-		lpSceneMng.AddDrawQue({ _miniMapScreen,MINI_MAP_POS_X,MINI_MAP_POS_Y,0.0,1.0,INT_MAX,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+		lpSceneMng.AddDrawQue({ _miniMapScreen,MINI_MAP_POS_X,MINI_MAP_POS_Y,0.0,1.0,0.0,INT_MAX,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 	}
 	_chipData.clear();
 }

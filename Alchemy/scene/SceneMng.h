@@ -19,15 +19,19 @@ enum class DRAW_QUE
 	Y,
 	RAD,
 	RATE,
+	HEIGHT,
 	ZORDER,
-	LAYER
+	LAYER,
+	MODE,
+	PARAMETER
 };
 
 enum class SOUND_QUE
 {
 	SOUND,
-	LOOP,
 	VOL,
+	X,
+	Y
 };
 
 enum class PLAYER_QUE
@@ -37,8 +41,8 @@ enum class PLAYER_QUE
 	PADNUM
 };
 
-using DrawQueT = std::tuple<int, double, double, double, double, int, LAYER, int, int>;
-using SoundQueT = std::tuple<int, bool, int>;									// <ﾊﾝﾄﾞﾙ, ﾙｰﾌﾟするか, 音量>
+using DrawQueT = std::tuple<int, double, double, double, double,double, int, LAYER, int, int>;
+using SoundQueT = std::tuple<int, int, double, double>;							// <ﾊﾝﾄﾞﾙ, 音量, 発生座標X, 発生座標Y>
 using PlayerQueT = std::tuple <PlNum, Vector2Dbl, int >;						// <ﾌﾟﾚｲﾔｰ番号、座標、PAD番号>
 
 class SceneMng
@@ -88,6 +92,7 @@ private:
 	static std::unique_ptr<SceneMng, SceneMngDeleter> sInstance;
 
 	void Draw(void);
+	void SoundPlay(void);
 	bool SysInit(void);
 
 	int _layerGID;							// 描画用ｽｸﾘｰﾝ

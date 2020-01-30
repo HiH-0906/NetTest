@@ -11,7 +11,7 @@ bool HealTagDec::operator()(Obj & master, std::vector<sharedObj>& objList, Input
 			{
 				if ((master.searchRange() * master.searchRange()) > LengthSquare(master.pos(), (*obj).pos()))
 				{
-					if ((*obj)._hp >= (*obj)._hpMax)
+					if ((*obj)._hp < (*obj)._hpMax)
 					{
 						if ((*obj).state() == STATE::NORMAL || (*obj).state() == STATE::ATTACK || (*obj).state() == STATE::HOLD)
 						{

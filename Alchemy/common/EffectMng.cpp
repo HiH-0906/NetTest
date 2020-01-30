@@ -31,8 +31,6 @@ bool EffectMng::AddEffectQue(EffectQueT eQue)
 
 void EffectMng::Init(void)
 {
-	_effectScreen = MakeScreen(static_cast<int>(lpSceneMng.WorldSize.x), static_cast<int>(lpSceneMng.WorldSize.y), true);
-
 	GetID(EFFECT::HEAL, "effect/heal.efk", 25.0F);
 	GetID(EFFECT::AT_SLIME, "effect/slime.efk", 30.0F);
 	GetID(EFFECT::AT_BITE, "effect/bite.efk", 15.0F);
@@ -47,61 +45,64 @@ void EffectMng::Init(void)
 	GetID(EFFECT::SMOKE, "effect/smoke.efk", 20.0F);
 }
 
-void EffectMng::DrawFront(void)
+void EffectMng::Clear(void)
 {
-	//sharedObj obj;
-	//Vector2Dbl pos;
-	//double rad;
-	//int zOrder;
+	_effectList.clear();
+}
+
+void EffectMng::Draw(void)
+{
 
 	// ｴﾌｪｸﾄ用ｽｸﾘｰﾝに切り替え
-	SetDrawScreen(_effectScreen);
-
 	for (auto data : _effectList)
 	{
+		Obj& obj = std::get<(int)EFFECT_QUE::OBJ>(data);
+		Vector2Dbl pos;
+		double rad;
+		EFFECT playID;
+		int zOrder;
+		std::tie(std::ignore, pos, rad, playID, zOrder) = data;
+
+		SetDrawScreen(obj._effectScreen);
 		ClsDrawScreen();
 
+		if (obj._effectFlg)
+		{
+			if (IsEffekseer2DEffectPlaying(obj._effectID) == -1)
+			{
+				obj._effectFlg = false;
+				obj._effectID = PlayEffekseer2DEffect(EFFECT_ID(playID));
+			}
+		}
+
+		// ｴﾌｪｸﾄの座標指定
+		SetPosPlayingEffekseer2DEffect(obj._effectID,
+			static_cast<float>(_screenSize.x / 2),
+			static_cast<float>(_screenSize.y / 2),
+			0);
+
+		// ｴﾌｪｸﾄの角度指定
+		SetRotationPlayingEffekseer2DEffect(obj._effectID, 0, 0, static_cast<float>(rad));
+
 		// ｴﾌｪｸﾄの描画
-		DrawEffekseer2D();
+		DrawEffekseer2D_Begin();
+		DrawEffekseer2D_Draw(obj._effectID);
+		DrawEffekseer2D_End();
 
-		SetDrawScreen(DX_SCREEN_BACK);
+		lpSceneMng.AddDrawQue({ obj._effectScreen,
+						pos.x - lpCamera.OfSet().x ,
+						pos.y - lpCamera.OfSet().y,
+						0,
+						1.0,
+						0.0,
+						zOrder,
+						LAYER::CHAR,
+						DX_BLENDMODE_NOBLEND,
+						255 });
 	}
-
-	lpSceneMng.AddDrawQue({ _effectScreen,
-							lpSceneMng.WorldCenter.x - lpCamera.OfSet().x ,
-							lpSceneMng.WorldCenter.y - lpCamera.OfSet().y,
-							0,
-							1.0,
-							0,
-							LAYER::CHAR,
-							DX_BLENDMODE_NOBLEND,
-							255 });
 }
 
-void EffectMng::DrawBack(void)
-{
-	// ｴﾌｪｸﾄ用ｽｸﾘｰﾝに切り替え
-	SetDrawScreen(_effectScreen);
-	ClsDrawScreen();
-
-	// ｴﾌｪｸﾄの描画
-	DrawEffekseer2D();
-
-	SetDrawScreen(DX_SCREEN_BACK);
-
-	lpSceneMng.AddDrawQue({ _effectScreen,
-							lpSceneMng.WorldCenter.x - lpCamera.OfSet().x ,
-							lpSceneMng.WorldCenter.y - lpCamera.OfSet().y,
-							0,
-							1.0,
-							0,
-							LAYER::CHAR,
-							DX_BLENDMODE_NOBLEND,
-							255 });
-}
-
-
-EffectMng::EffectMng()
+EffectMng::EffectMng():	_screenSize{ 500.0,500.0 }
 {
 }
 

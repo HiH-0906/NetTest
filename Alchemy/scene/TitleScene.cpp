@@ -42,8 +42,8 @@ UniqueBase TitleScene::Update(UniqueBase own)
 		return std::make_unique<EntryScene>();
 	}
 
-	lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
-	lpSceneMng.AddDrawQue({ _titleLogo,lpSceneMng.ScreenCenter.x,T_logoPos.y,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _titleLogo,lpSceneMng.ScreenCenter.x,T_logoPos.y,0.0,1.0,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 
 	(this->*func)();
 
@@ -58,9 +58,9 @@ void TitleScene::Init(void)
 void TitleScene::TitleSelect(void)
 {
 		
-	lpSceneMng.AddDrawQue({ _selectTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 150.0,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _selectTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 150.0,0.0,1.0,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 
-	lpSceneMng.AddDrawQue({ _cursor,_cursorPos.x,_cursorPos.y,0.0,1.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+	lpSceneMng.AddDrawQue({ _cursor,_cursorPos.x,_cursorPos.y,0.0,1.0,0.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
 	
 	(*_input[0]).Update(_objList);
 	if (((*_input[0]).LStickState().first.isInput))
@@ -127,7 +127,7 @@ void TitleScene::TitleNormal(void)
 	{
 		if ((_cnt / 45) % 2 == 0)
 		{
-			lpSceneMng.AddDrawQue({ _titleTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 200.0,0.0,1.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+			lpSceneMng.AddDrawQue({ _titleTex,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y + 200.0,0.0,1.0,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
 		}
 
 		_cnt++;

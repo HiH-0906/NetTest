@@ -8,6 +8,7 @@
 #include "Enemy_Init\GhostInit.h"
 #include "Enemy_Init\MushroomInit.h"
 #include "Enemy_Init\DemonInit.h"
+#include <EffectMng.h>
 #include "../Map.h"
 
 
@@ -54,7 +55,7 @@ void Enemy::Update(std::vector<sharedObj>& objList)
 			(*_input).StateReset();
 
 			(*_input).Update(objList);
-			if ((*_input).btnState(INPUT_ID::BTN_B).first)
+			if ((*_input).btnState(INPUT_ID::BTN_B).first && !(*_input).btnState(INPUT_ID::BTN_B).second)
 			{
 				_effectFlg = false;
 				state(STATE::ATTACK);
@@ -78,6 +79,8 @@ void Enemy::Update(std::vector<sharedObj>& objList)
 	{
 		alive(false);
 	}
+
+	_zOrder = static_cast<int>(_height);
 }
 
 const ENEMY_TYPE Enemy::enemyType(void) const
@@ -125,6 +128,7 @@ void Enemy::Init(void)
 	_coolCnt = _coolCntMax;
 	_weight = INT_MAX;
 	_glowID = MakeScreen(_size.x * 2, _size.y * 2, true);
+	_effectScreen = MakeScreen(static_cast<int>(lpEffectMng._screenSize.x), static_cast<int>(lpEffectMng._screenSize.y), true);
 	_unitID = UNIT_ID::ENEMY;
 	_team = TEAM_TAG::ENEMY_TEAM;
 

@@ -5,7 +5,8 @@
 
 enum class SOUND
 {
-	THROW
+	THROW,
+	HOLD
 };
 
 #define lpSoundMng SoundMng::GetInstance()

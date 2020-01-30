@@ -32,6 +32,15 @@ void Item::Update(std::vector<sharedObj>& objList)
 	{
 		AST();
 	}
+
+	if (state() == STATE::NORMAL)
+	{
+		_zOrder = 0;
+	}
+	else
+	{
+		_zOrder = static_cast<int>(_height);
+	}
 }
 
 int Item::getType(void)

@@ -11,6 +11,7 @@
 #include "Follower_Init/FollowDemonInit.h"
 #include "Follower_Init/FollowGhostInit.h"
 #include "Follower_Init/FollowMushInit.h"
+#include <EffectMng.h>
 #include "../Map.h"
 #include "PlNum.h"
 
@@ -56,7 +57,7 @@ void Follower::Update(std::vector<sharedObj>& objList)
 			(*_input).StateReset();
 
 			(*_input).Update(objList);
-			if ((*_input).btnState(INPUT_ID::BTN_B).first)
+			if ((*_input).btnState(INPUT_ID::BTN_B).first && !(*_input).btnState(INPUT_ID::BTN_B).second)
 			{
 				_effectFlg = false;
 				state(STATE::ATTACK);
@@ -81,6 +82,8 @@ void Follower::Update(std::vector<sharedObj>& objList)
 	{
 		alive(false);
 	}
+
+	_zOrder = static_cast<int>(_height);
 }
 
 int Follower::getType(void)
@@ -123,6 +126,8 @@ void Follower::Init(void)
 	_team = TEAM_TAG::ALLY_TEAM;
 	_glowID = MakeScreen(_size.x * 2, _size.y * 2, true);
 	_weight = 1;
+	_coolCnt = _coolCntMax;
+	_effectScreen = MakeScreen(static_cast<int>(lpEffectMng._screenSize.x), static_cast<int>(lpEffectMng._screenSize.y), true);
 
 	// 初期アニメーション
 	state(STATE::NORMAL);

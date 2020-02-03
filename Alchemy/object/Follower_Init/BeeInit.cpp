@@ -56,10 +56,10 @@ bool BeeInit::operator()(Obj & obj)
 
 	obj._size = { 48,48 };
 
-	obj._speed = 4;
+	obj._speed = 1.0;
 	obj._hpMax = 10;
 	obj._power = 2;
-	obj._coolCntMax = 10;
+	obj._coolCntMax = 5;
 
 	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() } ,{STATE::ATTACK,BeeAttack()} };
 

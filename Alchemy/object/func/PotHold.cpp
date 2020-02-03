@@ -62,7 +62,7 @@ void PotHold::operator()(Obj& pot, std::vector<sharedObj>& objList)
 		// ˆê‰ñ‚ÍŠm’è‚Å‚¾‚·‚©‚çi = 2‚©‚çŽn‚Ü‚é
 		for (int i = 2; i < ((Pot&)pot)._comboNum + 1; i++)
 		{
-			num += i;
+			num = i*2-1;
 		}
 
 		if (combiBit)

@@ -6,5 +6,7 @@
 struct Slime_Attack
 {
 	void operator ()(Obj& obj, std::vector<sharedObj>& objList);
+private:
+	Vector2Dbl _ofSet;
 };
 

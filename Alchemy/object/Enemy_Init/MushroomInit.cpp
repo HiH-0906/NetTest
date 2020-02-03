@@ -6,7 +6,7 @@
 #include "../func/TestEnemyUpdate.h"
 #include "../func/HoldenUpdate.h"
 #include "../func/ThrownUpdate.h"
-#include "../func/Heal.h"
+#include "../func/MushroomAttack.h"
 
 bool MushroomInit::operator()(Obj & obj)
 {
@@ -70,13 +70,13 @@ bool MushroomInit::operator()(Obj & obj)
 
 	obj._size = { 48,48 };
 
-	obj._speed = 1.5;
+	obj._speed = 0.3;
 	obj._hpMax = 20;
 	obj._coolCntMax = 40;
 	obj._power = 4;
 
 
-	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() }, {STATE::ATTACK,Heal()} };
+	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() }, {STATE::ATTACK,MushroomAttack()} };
 
 
 	return true;

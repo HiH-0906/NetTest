@@ -33,29 +33,15 @@ void Enemy::Update(std::vector<sharedObj>& objList)
 		return;
 	}
 
-	// 自分からの距離が近い順にobjListをソート
-	//std::sort(objList.begin(), objList.end(),
-	//	[&](sharedObj objA, sharedObj objB) {
-	//	return LengthSquare((*objA).pos(), _pos) < LengthSquare((*objB).pos(), _pos);
-	//});
-
-	
-
 	if (state() == STATE::NORMAL)
 	{
 		if (lpSceneMng.frameCnt() % 2)
 		{
-			//// 自分からの距離が近い順にobjListをソート
-			//std::sort(objList.begin(), objList.end(),
-			//	[&](sharedObj objA, sharedObj objB) {
-			//	return LengthSquare((*objA).pos(), _pos) < LengthSquare((*objB).pos(), _pos);
-			//});
-			//
 			(*_input).SetOld();
 			(*_input).StateReset();
 
 			(*_input).Update(objList);
-			if ((*_input).btnState(INPUT_ID::BTN_B).first && !(*_input).btnState(INPUT_ID::BTN_B).second)
+			if ((*_input).btnState(INPUT_ID::BTN_B).first)
 			{
 				_effectFlg = false;
 				state(STATE::ATTACK);
@@ -125,6 +111,7 @@ void Enemy::Init(void)
 	}
 	
 	_hp = _hpMax;
+	_coolCntMax = 100;
 	_coolCnt = _coolCntMax;
 	_weight = INT_MAX;
 	_glowID = MakeScreen(_size.x * 2, _size.y * 2, true);

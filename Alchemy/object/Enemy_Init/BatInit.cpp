@@ -56,15 +56,15 @@ bool BatInit::operator()(Obj & obj)
 	//_input = std::make_unique<PadState>(DX_INPUT_PAD1);
 	obj._input = std::make_unique<Bat>(obj);
 
-	obj._searchRange = 150.0;
+	obj._searchRange = 350.0;
 	obj._attackRange = 40.0;
 
 	obj._size = { 48,48 };
 
-	obj._speed = 4;
-	obj._hpMax = 12;
-	obj._power = 3;
-	obj._coolCntMax = 1;
+	obj._speed = 1.0;
+	obj._hpMax = 16;
+	obj._power = 2;
+	obj._coolCntMax = 5;
 
 	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() },{STATE::ATTACK,BatAttack()} };
 

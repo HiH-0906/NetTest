@@ -3,7 +3,7 @@
 #include "../func/TestEnemyUpdate.h"
 #include "../func/HoldenUpdate.h"
 #include "../func/ThrownUpdate.h"
-#include "../func/Heal.h"
+#include "../func/MushroomAttack.h"
 
 bool FollowMushInit::operator()(Obj & obj)
 {
@@ -61,7 +61,7 @@ bool FollowMushInit::operator()(Obj & obj)
 	obj._coolCntMax = 20;
 	obj._power = 3;
 
-	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() },{ STATE::ATTACK,Heal() } };
+	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() },{ STATE::ATTACK,MushroomAttack() } };
 
 
 	return true;

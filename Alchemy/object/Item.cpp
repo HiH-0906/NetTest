@@ -5,11 +5,12 @@
 #include "func/ItemNormal.h"
 #include "func/HoldenUpdate.h"
 #include "func/ThrownUpdate.h"
+#include "../scene/func/FuncThrow.h"
 
-Item::Item(ENEMY_TYPE type, Vector2Dbl pos)
+Item::Item(int type, Vector2Dbl pos)
 {
 	_pos = pos;
-	_type = type;
+	_type = static_cast<FOLLOWER_TYPE>(type);
 	Init();
 }
 
@@ -63,22 +64,25 @@ void Item::Init(void)
 
 	switch (_type)
 	{
-	case ENEMY_TYPE::SLIME:
+	case FOLLOWER_TYPE::OCTOPUS:
 		key = { IMG::ITEM_SLIME,STATE::NORMAL };
 		break;
-	case ENEMY_TYPE::BAD:
+	case FOLLOWER_TYPE::BEE:
 		key = { IMG::ITEM_BAT,STATE::NORMAL };
 		break;
-	case ENEMY_TYPE::GHOST:
+	case FOLLOWER_TYPE::GHOST:
 		key = { IMG::ITEM_GHOST,STATE::NORMAL };
 		break;
-	case ENEMY_TYPE::MUSH:
+	case FOLLOWER_TYPE::MUSH:
 		key = { IMG::ITEM_MUSH,STATE::NORMAL };
 		break;
-	case ENEMY_TYPE::DAEMON:
+	case FOLLOWER_TYPE::DAEMON:
 		key = { IMG::ITEM_DEMON,STATE::NORMAL };
 		break;
-	case ENEMY_TYPE::MAX:
+	case FOLLOWER_TYPE::POT:
+		key = { IMG::ITEM_POT,STATE::NORMAL };
+		break;
+	case FOLLOWER_TYPE::MAX:
 		AST();
 		break;
 	default:
@@ -105,7 +109,10 @@ void Item::Init(void)
 		SetAnim({ STATE::THROWN,dir }, data);
 	}
 	// 初期アニメーション
-	state(STATE::NORMAL);
+	state(STATE::THROWN);
+	_vel.y = 5.0;
+	_gravity = 0.2;
+
 	dir(DIR::DOWN);
 	_floatCnt = 0;
 	_size = { 48,48 };

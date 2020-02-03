@@ -57,10 +57,10 @@ bool OctpusInit::operator()(Obj & obj)
 
 	obj._size = { 48,48 };
 
-	obj._speed = 2.5;
-	obj._hpMax = 15;
-	obj._coolCntMax = 15;
-	obj._power = 2;
+	obj._speed = 0.5;
+	obj._hpMax = 8;
+	obj._coolCntMax = 10;
+	obj._power = 1;
 
 	obj._funcState = { { STATE::NORMAL,TestEnemyUpdate() },{ STATE::HOLDEN,HoldenUpdate() },{ STATE::THROWN,ThrownUpdate() }, { STATE::ATTACK,OctpusAttack() } };
 

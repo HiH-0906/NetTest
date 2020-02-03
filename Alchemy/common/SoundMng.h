@@ -6,7 +6,8 @@
 enum class SOUND
 {
 	THROW,
-	HOLD
+	HOLD,
+	COMBO
 };
 
 #define lpSoundMng SoundMng::GetInstance()
@@ -23,6 +24,7 @@ public:
 
 	const std::vector<int>& GetID(const SOUND& key);
 	const std::vector<int>& GetID(const SOUND& key, const std::string& fileName);
+	const std::vector<int>& GetID(const SOUND& key, const std::string& fileName, const int num);
 
 private:
 	struct SoundMngDeleter

@@ -54,7 +54,7 @@ bool FollowDemonInit::operator()(Obj & obj)
 	obj._searchRange = 150.0;
 	obj._attackRange = 40.0;
 
-	obj._size = { 48,48 };
+	obj._size = { 80,80 };
 
 	obj._speed = 1.0;
 	obj._hpMax = 50;

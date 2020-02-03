@@ -5,7 +5,7 @@
 #include "../Player.h"
 void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 {
-	if (((*player._input).btnState(INPUT_ID::BTN_RB).first && !(*player._input).btnState(INPUT_ID::BTN_RB).second))
+	if (((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second))
 	{
 		lpSceneMng.AddActQue({ ACT_QUE::PUT,player });
 		return;
@@ -62,7 +62,7 @@ void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 	}
 
 	// ö‚Ç…ìäÇ∞ÇÈÇ©êÿÇËë÷Ç¶
-	if ((*player._input).btnState(INPUT_ID::BTN_LB).first && (*player._input).btnState(INPUT_ID::BTN_LB).second)
+	if ((*player._input).btnState(INPUT_ID::LEFT_TRIGGER).first)
 	{
 		((Player&)player).throwPot(true);
 	}
@@ -72,11 +72,40 @@ void PlayerHold::operator()(Obj& player, std::vector<sharedObj>& objList)
 	}
 
 	// ìäÇ∞ÇÈ
-	if ((((*player._input).btnState(INPUT_ID::BTN_A).first && !(*player._input).btnState(INPUT_ID::BTN_A).second)))
+	if ((((*player._input).btnState(INPUT_ID::BTN_Y).first && !(*player._input).btnState(INPUT_ID::BTN_Y).second)))
 	{
 		lpSceneMng.AddActQue({ ACT_QUE::THOROW,player });
-		lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::THROW)[0], 200 , player.pos().x, player.pos().y});
+		lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::THROW)[0], 160, player.pos().x, player.pos().y});
+		return;
 	}
 
-	
+	// éùÇ¡ÇƒÇÈï®Çì¸ÇÍë÷Ç¶ÇÈ
+	if (((Player&)player)._holdList.size() < 1)
+	{
+		return;
+	}
+
+	if ((((*player._input).btnState(INPUT_ID::BTN_RB).first && !(*player._input).btnState(INPUT_ID::BTN_RB).second)))
+	{
+		auto frontObj = ((Player&)player)._holdList.front();
+		((Player&)player)._holdList.erase(((Player&)player)._holdList.begin());
+		((Player&)player)._holdList.emplace_back(frontObj);
+		for (int i = 0; i < ((Player&)player)._holdList.size();i++)
+		{
+			(*(((Player&)player)._holdList[i]))._height = 40.0 * (i + 1);
+		}
+		return;
+	}
+
+	if ((((*player._input).btnState(INPUT_ID::BTN_LB).first && !(*player._input).btnState(INPUT_ID::BTN_LB).second)))
+	{
+		auto backObj = ((Player&)player)._holdList.back();
+		((Player&)player)._holdList.erase(((Player&)player)._holdList.end() - 1);
+		((Player&)player)._holdList.emplace(((Player&)player)._holdList.begin(),backObj);
+		for (int i = 0; i < ((Player&)player)._holdList.size(); i++)
+		{
+			(*(((Player&)player)._holdList[i]))._height = 40.0 * (i + 1);
+		}
+		return;
+	}
 }

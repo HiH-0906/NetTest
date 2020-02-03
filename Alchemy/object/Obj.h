@@ -47,12 +47,13 @@ struct HealTagDec;
 struct LookForEnemy;
 
 struct BatAttack;
-struct Heal;
+struct MushroomAttack;
 struct Slime_Attack;
 struct GhostAttack;
 struct DemonAttack;
 struct OctpusAttack;
 struct BeeAttack;
+struct BossAttack;
 
 struct SlimeInit;
 struct BatInit;
@@ -67,6 +68,7 @@ struct BeeInit;
 struct FollowMushInit;
 struct FollowGhostInit;
 struct FollowDemonInit;
+struct FollowPotInit;
 
 using AnimVector = std::vector<std::pair<int, unsigned int>>;
 using sharedObj = std::shared_ptr<Obj>;
@@ -144,12 +146,13 @@ private:
 
 	// 攻撃
 	friend BatAttack;
-	friend Heal;
+	friend MushroomAttack;
 	friend Slime_Attack;
 	friend GhostAttack;
 	friend DemonAttack;
 	friend OctpusAttack;
 	friend BeeAttack;
+	friend BossAttack;
 
 	// Enemyのinit
 	friend SlimeInit;
@@ -167,6 +170,7 @@ private:
 	friend FollowMushInit;
 	friend FollowGhostInit;
 	friend FollowDemonInit;
+	friend FollowPotInit;
 
 	std::map<AnimKey, AnimVector> _animMap;			// アニメーション格納マップ
 	STATE _state;									// 状態

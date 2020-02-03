@@ -11,6 +11,7 @@
 #include "Follower_Init/FollowDemonInit.h"
 #include "Follower_Init/FollowGhostInit.h"
 #include "Follower_Init/FollowMushInit.h"
+#include "Follower_Init/FollowPotInit.h"
 #include <EffectMng.h>
 #include "../Map.h"
 #include "PlNum.h"
@@ -20,7 +21,8 @@ std::map<FOLLOWER_TYPE, std::function<bool(Obj&)>> Follower::followerInitMap = {
 	{FOLLOWER_TYPE::BEE, BeeInit()}, 
 	{FOLLOWER_TYPE::DAEMON, FollowDemonInit()}, 
 	{FOLLOWER_TYPE::GHOST, FollowGhostInit()}, 
-	{FOLLOWER_TYPE::MUSH, FollowMushInit()} 
+	{FOLLOWER_TYPE::MUSH, FollowMushInit()},
+	{FOLLOWER_TYPE::POT,FollowPotInit()}
 };
 
 Follower::Follower()
@@ -57,7 +59,7 @@ void Follower::Update(std::vector<sharedObj>& objList)
 			(*_input).StateReset();
 
 			(*_input).Update(objList);
-			if ((*_input).btnState(INPUT_ID::BTN_B).first && !(*_input).btnState(INPUT_ID::BTN_B).second)
+			if ((*_input).btnState(INPUT_ID::BTN_B).first)
 			{
 				_effectFlg = false;
 				state(STATE::ATTACK);

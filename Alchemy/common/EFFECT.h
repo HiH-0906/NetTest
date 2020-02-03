@@ -8,13 +8,13 @@ enum class EFFECT
 	GHOST_CHARGE,		// Á¬°¼Þ
 	GHOST_SHOT,			// ’e•\Ž¦—p
 	GHOST_BLAST,		// ”š”­
-	DEMON_CHARGE,
+	DEMON_CHARGE,		// Á¬°¼Þ
 	DEMON_WAR,			// Œx
-	DEMON_BLAST,
 	INK,				// –nUŒ‚
 	FIRE,				// ‰ŠUŒ‚
 	AT_BEE,				// –I‚Ì‚±‚¤‚°‚«
 	SMOKE,				// ·Éº‚Ì‰ŒUŒ‚
+	LANDING,			// ’…’n
 	MAX
 };
 

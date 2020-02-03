@@ -1,5 +1,6 @@
 #include "ThrownUpdate.h"
 #include <scene/SceneMng.h>
+#include <EffekseerForDXLib.h>
 #include <EffectMng.h>
 #include <Camera.h>
 #include "../Pot.h"
@@ -44,10 +45,29 @@ void ThrownUpdate::operator()(Obj& obj, std::vector<sharedObj>& objList)
 				return;
 			}
 		}
-
+		// 着地ｴﾌｪｸﾄを再生したい
+		if (IsEffekseer2DEffectPlaying(obj._effectID) == -1)
+		{
+			if (obj._effectFlg)
+			{
+				// ステータスを戻す
+				StopEffekseer2DEffect(obj._effectID);
+				obj._effectFlg = false;
+				obj._height = 0;
+				obj.state(STATE::NORMAL);
+				obj._tageObj.reset();
+				return;
+			}
+		}
+		else
+		{
+			obj._effectFlg = true;
+		}
+		Vector2Dbl ofSet = { 0.0,static_cast<double>(obj._size.y / 2) };
+		// ｴﾌｪｸﾄをｷｭｰに投げる
+		lpEffectMng.AddEffectQue({ obj,obj._pos + ofSet,0,EFFECT::LANDING,obj._zOrder + 1 });
+		obj._vel = { 0,0 };
 		obj._height = 0;
-		obj.state(STATE::NORMAL);
-		obj._tageObj.reset();
 		return;
 	}
 

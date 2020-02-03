@@ -142,6 +142,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Input\Enemy_AI\Boss_AI.cpp" />
+    <ClCompile Include="common\Message.cpp" />
+    <ClCompile Include="object\func\BossAttack.cpp" />
+    <ClCompile Include="Input\Follower_AI\FollowerPot.cpp" />
+    <ClCompile Include="object\Follower_Init\FollowPotInit.cpp" />
+    <ClCompile Include="object\func\MushroomAttack.cpp" />
     <ClCompile Include="scene\func\FuncPut.cpp" />
     <ClCompile Include="object\func\BeeAttack.cpp" />
     <ClCompile Include="object\Boss.cpp" />
@@ -151,7 +157,6 @@
     <ClCompile Include="object\func\OctpusAttack.cpp" />
     <ClCompile Include="object\func\TestEnemyUpdate.cpp" />
     <ClCompile Include="object\Item.cpp" />
-    <ClCompile Include="object\func\Heal.cpp" />
     <ClCompile Include="Input\AI\Escape.cpp" />
     <ClCompile Include="Input\AI\HealTagDec.cpp" />
     <ClCompile Include="Input\AI\Leave.cpp" />
@@ -229,10 +234,18 @@
     <ClCompile Include="object\UNIT_ID.cpp" />
     <ClCompile Include="object\STATE.cpp" />
     <ClCompile Include="object\func\Slime_Attack.cpp" />
+    <ClCompile Include="common\Text.cpp" />
+    <ClCompile Include="common\UI_Mng.cpp" />
     <ClCompile Include="_debug\_DebugConOut.cpp" />
     <ClCompile Include="_debug\_DebugDispOut.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Input\Enemy_AI\Boss_AI.h" />
+    <ClInclude Include="common\Message.h" />
+    <ClInclude Include="object\func\BossAttack.h" />
+    <ClInclude Include="Input\Follower_AI\FollowerPot.h" />
+    <ClInclude Include="object\Follower_Init\FollowPotInit.h" />
+    <ClInclude Include="object\func\MushroomAttack.h" />
     <ClInclude Include="scene\func\FuncPut.h" />
     <ClInclude Include="object\func\BeeAttack.h" />
     <ClInclude Include="object\Boss.h" />
@@ -242,7 +255,6 @@
     <ClInclude Include="object\func\OctpusAttack.h" />
     <ClInclude Include="object\func\TestEnemyUpdate.h" />
     <ClInclude Include="object\Item.h" />
-    <ClInclude Include="object\func\Heal.h" />
     <ClInclude Include="Input\AI\Escape.h" />
     <ClInclude Include="Input\AI\HealTagDec.h" />
     <ClInclude Include="Input\AI\Leave.h" />
@@ -321,6 +333,8 @@
     <ClInclude Include="object\UNIT_ID.h" />
     <ClInclude Include="object\STATE.h" />
     <ClInclude Include="object\func\Slime_Attack.h" />
+    <ClInclude Include="common\Text.h" />
+    <ClInclude Include="common\UI_Mng.h" />
     <ClInclude Include="_debug\_DebugConOut.h" />
     <ClInclude Include="_debug\_DebugDispOut.h" />
   </ItemGroup>

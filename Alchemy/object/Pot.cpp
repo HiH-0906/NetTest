@@ -38,6 +38,9 @@ void Pot::AddMixList(MixData data)
 {
 	UNIT_ID id;
 	std::tie(id, std::ignore) = data;
+
+	lpSceneMng.AddSoundQue({ lpSoundMng.GetID(SOUND::COMBO)[_comboNum], 255, _pos.x, _pos.y });
+
 	if (id == UNIT_ID::ITEM) 
 	{
 		_comboNum++;
@@ -47,9 +50,7 @@ void Pot::AddMixList(MixData data)
 			_mixList.emplace_back(data);
 		}*/
 	}
-	else
-	{
-	}
+
 	_mixList.emplace_back(data);
 	_comboCnt = COMBO_TIME_MAX - 30 * (_comboNum - 1);
 }
@@ -118,16 +119,16 @@ void Pot::CombiListInit(void)
 	}
 
 	int confType = 0;
-	int prob[5] = {0,0,0,0,0};
+	int prob[6] = {0,0,0,0,0,0};
 	int probCnt = 0;
 	MixCombination combi;
 
-	while (fscanf_s(filePt, "%d, %d, %d, %d, %d, %d", &confType, &prob[0], &prob[1], &prob[2], &prob[3], &prob[4]) != EOF)
+	while (fscanf_s(filePt, "%d, %d, %d, %d, %d, %d, %d", &confType, &prob[0], &prob[1], &prob[2], &prob[3], &prob[4], &prob[5]) != EOF)
 	{
 		int probCnt = 0;
 		probCnt = 0;
 		combi.confType = confType;
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 6; i++)
 		{
 			while (prob[i])
 			{

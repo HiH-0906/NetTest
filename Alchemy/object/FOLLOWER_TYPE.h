@@ -7,6 +7,7 @@ enum class FOLLOWER_TYPE
 	GHOST = 4,		// ‚¨‚Î‚¯
 	MUSH = 8,		// ‚«‚Ì‚±
 	DAEMON = 16,		// ÃÞ°ÓÝ
+	POT = 32,			// ÊØ°
 	MAX
 };
 

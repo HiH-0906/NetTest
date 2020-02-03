@@ -9,26 +9,49 @@
 
 void OctpusAttack::operator()(Obj & obj, std::vector<sharedObj>& objList)
 {
-
 	// リンク切れ
 	if (obj.tageObj().expired())
 	{
 		StopEffekseer2DEffect(obj._effectID);
-		obj._effectFlg = true;
+		obj._effectFlg = false;
 		obj._coolCnt = obj._coolCntMax;
 		obj.state(STATE::NORMAL);
+		return;
 	}
 
-	auto target = obj.tageObj().lock();		// ターゲットの情報格納
-	int _effectzOrder;						// ｾﾞｯﾄｵｰﾀﾞｰ
-	Vector2Dbl _ofSet = { 0,0 };			// 座標のｵﾌｾｯﾄ
+	auto target = obj.tageObj().lock();					// ターゲットの情報格納
+	int _effectzOrder;									// ｾﾞｯﾄｵｰﾀﾞｰ
+	Vector2Dbl _ofSet = { 0,0 };						// 座標のｵﾌｾｯﾄ
 
-	if (!obj._effectFlg)
+	// 再生ﾁｪｯｸ
+	if (IsEffekseer2DEffectPlaying(obj._effectID) == -1)
 	{
-		(*target).DoDamage(obj._power);			// enemyのpowerを引数にしてね
-		_effectRad = atan2((*target).pos().y - obj._pos.y, (*target).pos().x - obj._pos.x);
+		if (!obj._effectFlg)
+		{
+			(*target).DoDamage(obj._power);				// ﾀﾞﾒｰｼﾞをあたえる
+			_effectRad = atan2((*target).pos().y - obj._pos.y, (*target).pos().x - obj._pos.x);
+		}
+		else
+		{
+			obj._coolCnt--;								// ｸｰﾙﾀｲﾑ
+
+			// ステータスを戻す
+			if (obj._coolCnt <= 0)
+			{
+				StopEffekseer2DEffect(obj._effectID);
+				obj._coolCnt = obj._coolCntMax;
+				obj._effectFlg = false;
+				obj.state(STATE::NORMAL);
+				return;
+			}
+			return;										// 攻撃が終わってるから処理はここまで
+		}
+	}
+	else
+	{
 		obj._effectFlg = true;
 	}
+
 
 	// ｵﾌｾｯﾄとｵｰﾀﾞｰの調整
 	switch (obj._dir)
@@ -50,6 +73,15 @@ void OctpusAttack::operator()(Obj & obj, std::vector<sharedObj>& objList)
 		break;
 	default:
 		break;
+	}
+
+	// ステータスを戻す
+	if (obj._coolCnt <= 0)
+	{
+		StopEffekseer2DEffect(obj._effectID);
+		obj._coolCnt = obj._coolCntMax;
+		obj.state(STATE::NORMAL);
+		return;
 	}
 
 	// ｴﾌｪｸﾄをｷｭｰに投げる

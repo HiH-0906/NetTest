@@ -31,18 +31,34 @@ bool EffectMng::AddEffectQue(EffectQueT eQue)
 
 void EffectMng::Init(void)
 {
+	// ｷﾉｺ
 	GetID(EFFECT::HEAL, "effect/heal.efk", 25.0F);
+	GetID(EFFECT::SMOKE, "effect/smoke.efk", 20.0F);
+
+	// ｽﾗｲﾑ
 	GetID(EFFECT::AT_SLIME, "effect/slime.efk", 30.0F);
+
+	// ｺｳﾓﾘ
 	GetID(EFFECT::AT_BITE, "effect/bite.efk", 15.0F);
+
+	// ｺﾞｰｽﾄ
 	GetID(EFFECT::GHOST_CHARGE, "effect/charge.efk", 15.0F);
 	GetID(EFFECT::GHOST_SHOT, "effect/shot.efk", 15.0F);
 	GetID(EFFECT::GHOST_BLAST, "effect/blast.efk", 25.0F);
+
+	// たこちゃん
 	GetID(EFFECT::INK, "effect/ink.efk", 20.0F);
+
+	// ﾃﾞｰﾓﾝ
 	GetID(EFFECT::FIRE, "effect/fire.efk", 20.0F);
 	GetID(EFFECT::DEMON_CHARGE, "effect/demon_charge.efk", 30.0F);
 	GetID(EFFECT::DEMON_WAR, "effect/warning.efk", 40.0F);
+
+	// ﾊﾁ
 	GetID(EFFECT::AT_BEE, "effect/spear.efk", 10.0F);
-	GetID(EFFECT::SMOKE, "effect/smoke.efk", 20.0F);
+
+	// 着地ｴﾌｪｸﾄ
+	GetID(EFFECT::LANDING, "effect/landing.efk", 20.0F);
 }
 
 void EffectMng::Clear(void)
@@ -53,7 +69,6 @@ void EffectMng::Clear(void)
 void EffectMng::Draw(void)
 {
 
-	// ｴﾌｪｸﾄ用ｽｸﾘｰﾝに切り替え
 	for (auto data : _effectList)
 	{
 		Obj& obj = std::get<(int)EFFECT_QUE::OBJ>(data);
@@ -66,11 +81,13 @@ void EffectMng::Draw(void)
 		SetDrawScreen(obj._effectScreen);
 		ClsDrawScreen();
 
-		if (obj._effectFlg)
+		// 再生チェック
+		if (IsEffekseer2DEffectPlaying(obj._effectID) == -1)
 		{
-			if (IsEffekseer2DEffectPlaying(obj._effectID) == -1)
+			// falseで新しく再生させる
+			if (!obj._effectFlg)
 			{
-				obj._effectFlg = false;
+				StopEffekseer2DEffect(obj._effectID);
 				obj._effectID = PlayEffekseer2DEffect(EFFECT_ID(playID));
 			}
 		}

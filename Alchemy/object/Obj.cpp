@@ -18,6 +18,7 @@ Obj::Obj()
 	_size = { 100,100 };
 	_rad = 0.0;
 	_zOrder = 0;
+	_effectID = -1;
 	_height = 0;
 	_holdFlag = false;
 	_effectFlg = false;
@@ -101,8 +102,8 @@ void Obj::Draw(void)
 		GraphFilter(_glowID, DX_GRAPH_FILTER_GAUSS, 8, 100);
 		GraphFilter(_glowID, DX_GRAPH_FILTER_TWO_COLOR, 10, 0, 0, 0xffffff, 255);
 		lpSceneMng.AddDrawQue({ _glowID,_pos.x - lpCamera.OfSet().x,
-			_pos.y - lpCamera.OfSet().y,
-			0.0,1.2,_height,_zOrder - 1,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
+			_pos.y - lpCamera.OfSet().y - 0.1,
+			0.0,1.2,_height,_zOrder,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
 
 		_glowFlag = false;
 	}
@@ -117,7 +118,7 @@ void Obj::Draw(void)
 			_pos.y + _size.y / 2.0 - lpCamera.OfSet().y,
 			0.0,
 			1.2 - (_height / 400.0),
-			_height,
+			0.0,
 			INT_MIN,
 			LAYER::CHAR ,
 			DX_BLENDMODE_NOBLEND,
@@ -390,8 +391,8 @@ bool Obj::DestroyProc(void)
 void Obj::DrawHP(void)
 {
 	// ‚Ü‚¸‰º‚ÉÔ‚¢ƒo[‚ð•`‰æ‚µAã‚É—Î‚Ìƒo[‚ðRectGraph‚ÅŽc‚èHP‚É]‚Á‚Ä•`‰æ
-	/*if (_damageCnt > 0)
-	{*/
+	if (_damageCnt > 0)
+	{
 		if (_hpMax != 0)
 		{
 			SetDrawScreen(_hpID);
@@ -411,9 +412,5 @@ void Obj::DrawHP(void)
 				255 });
 			_damageCnt--;
 		}
-		else
-		{
-			//AST();
-		}
-	//}
+	}
 }

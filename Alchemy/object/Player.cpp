@@ -12,6 +12,8 @@
 #include "func/PlayerThrow.h"
 #include "func/PlayerDeath.h"
 
+int Player::_playerIcon[4][2];
+
 Player::Player()
 {
 	_input = std::make_unique<PadState>(DX_INPUT_PAD1);
@@ -54,6 +56,8 @@ void Player::Update(std::vector<sharedObj>& objList)
 	}
 	else*/
 	{
+		std::string str = "あいうえお";
+
 		(*_input).Update(objList);
 		_tageObj.reset();
 
@@ -116,7 +120,8 @@ void Player::Update(std::vector<sharedObj>& objList)
 	lpMap.ChangeChip(_pos, _rad, 1);
 	/*TRACE("%lf\n", _pos.x);
 	TRACE("%lf\n", _pos.y);*/
-	//lpNetWork.MakeMatchMes(_pos);
+	lpNetWork.SyncObj(*this);
+	lpNetWork.MakeSyncMes(_pos);
 }
 
 PlNum Player::plNum(void)
@@ -193,16 +198,28 @@ void Player::Init(void)
 	
 	_unitID = UNIT_ID::PLAYER;
 	_team = TEAM_TAG::ALLY_TEAM;
-	_searchRange = 40.0;
+	_searchRange = 50.0;
 	_weight = 10;
-	_holdWeightMax = 5;
+	_holdWeightMax = 4;
 	_throwRange = 300.0;
 	_serialNum = lpSceneMng.serialNumCnt();
 	lpSceneMng.AddSerialNum();
-	_playerHPImg[0] = lpImageMng.GetID({ IMG::PL_HP_R,STATE::NORMAL }, "image/playerHP_R.png")[0];
-	_playerHPImg[1] = lpImageMng.GetID({ IMG::PL_HP_G,STATE::NORMAL }, "image/playerHP_G.png")[0];
+	_playerHPImg[0] = lpImageMng.GetID({ IMG::PL_HP_R,STATE::NORMAL }, "image/playerHP_Back.png")[0];
+	_playerHPImg[1] = lpImageMng.GetID({ IMG::PL_HP_G,STATE::NORMAL }, "image/playerHP_Frame.png")[0];
+	_playerHPImg[2] = lpImageMng.GetID({ IMG::PL_HP_G,STATE::HOLD }, "image/playerHP_Gauge.png")[0];
+
+	if (_playerIcon[0][0] == 0)
+	{
+		lpImageMng.GetID({ IMG::PL_ICON ,STATE::NORMAL }, "image/Player_icon.png", { 72,70 }, { 2,4 });
+		for (auto num : PlNum())
+		{
+			_playerIcon[static_cast<int>(num)][0] = lpImageMng.GetID({ IMG::PL_ICON ,STATE::NORMAL })[static_cast<int>(num)];
+			_playerIcon[static_cast<int>(num)][1] = lpImageMng.GetID({ IMG::PL_ICON ,STATE::NORMAL })[static_cast<int>(num) + 1];
+		}
+	}
+
 	_heartImg = lpImageMng.GetID({ IMG::HEART,STATE::NORMAL }, "image/heart.png")[0];
-	_hpID = MakeScreen(240, 24, true);
+	_hpID = MakeScreen(384, 86, true);
 
 	_speed = 5.0;
 	_glowID = MakeScreen(_size.x * 2, _size.y * 2, true);
@@ -211,7 +228,6 @@ void Player::Init(void)
 
 	_hp = 20;
 	_hpMax = 20;
-
 
 	// 初期アニメーション
 	state(STATE::NORMAL);
@@ -223,13 +239,16 @@ void Player::DrawHP(void)
 	// 操作対象のプレイヤーだったらUIに表示、ほかのプレイヤーだったらObjのDrawを呼び出すようにする
 	// 今はネットワークつないでないので呼び出さない
 	SetDrawScreen(_hpID);
-	DrawRectGraph(240 * _hp / _hpMax, 0, 240 * _hp / _hpMax, 0,240 - (240 * _hp / _hpMax), 24, _playerHPImg[0], true, false);
-	DrawRectGraph(0, 0, 0, 0, 240 * _hp / _hpMax, 24, _playerHPImg[1], true, false);
+	DrawGraph(0, 0, _playerHPImg[0],true);
+	DrawGraph(8, 8, _playerIcon[static_cast<int>(_plNum)][0], true);
+	DrawRectGraph(92, 8, 0, 0, 284 * _hp / _hpMax, 40, _playerHPImg[2], true, false);
+	DrawGraph(0, 0, _playerHPImg[1], true);
+	
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	lpSceneMng.AddDrawQue({ _hpID,
-		130.0,
-		15.0,
+		192.0,
+		43.0,
 		0.0,
 		1.0,
 		0.0,
@@ -238,16 +257,20 @@ void Player::DrawHP(void)
 		DX_BLENDMODE_NOBLEND,
 		255 });
 
-	lpSceneMng.AddDrawQue({ _heartImg,
-		20,
-		15.0,
+	if (_text.isDraw())
+	{
+		lpSceneMng.AddDrawQue({ _text.screen() ,
+		500,
+		350,
 		0.0,
 		1.0,
 		0.0,
-		_zOrder + 2,
+		100,
 		LAYER::UI ,
 		DX_BLENDMODE_NOBLEND,
 		255 });
+	}
+	
 }
 
 void Player::throwPot(bool throwMode)

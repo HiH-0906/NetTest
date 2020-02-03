@@ -61,7 +61,7 @@ bool GhostInit::operator()(Obj & obj)
 
 	obj._size = { 48,48 };
 
-	obj._speed = 1.0;
+	obj._speed = 0.2;
 	obj._hpMax = 15;
 	obj._coolCntMax = 40;
 	obj._power = 4;

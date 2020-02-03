@@ -68,7 +68,7 @@ bool SlimeInit::operator()(Obj & obj)
 	obj._searchRange = 150.0;
 	obj._attackRange = 40.0;
 
-	obj._speed = 2.0;
+	obj._speed = 0.5;
 	obj._power = 2;
 	obj._hpMax = 10;
 	obj._coolCntMax = 10;

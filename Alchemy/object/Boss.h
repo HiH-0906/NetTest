@@ -6,5 +6,9 @@ class Boss :
 public:
 	Boss();
 	~Boss();
+	void Update(std::vector<sharedObj>& objList) override;
+
+private:
+	void Init();
 };
 

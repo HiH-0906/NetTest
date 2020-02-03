@@ -51,6 +51,7 @@ bool NetWorkUnit::AddKeyBuf(MES mes)
 		return false;
 	}
 	_keyBuf.emplace_back(mes);
+	return true;
 }
 
 MES NetWorkUnit::GetKeyBuf(PlNum plNum, unsigned int num)

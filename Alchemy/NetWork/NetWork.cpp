@@ -147,6 +147,8 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.y = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_Y).first);
 	_tmpMes.key.lb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_LB).first);
 	_tmpMes.key.rb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_RB).first);
+	_tmpMes.key.lt = static_cast<unsigned char>(butan.at(INPUT_ID::LEFT_TRIGGER).first);
+	_tmpMes.key.rt = static_cast<unsigned char>(butan.at(INPUT_ID::RIGHT_TRIGGER).first);
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
 	(*NetWork::_netWorkUnit).AddKeyBuf(_tmpMes);
@@ -163,6 +165,7 @@ void NetWork::MakeAgainMes(PlNum plNum, unsigned int num)
 	_tmpMes.again.type = static_cast<unsigned char>(MES_TYPE::AGAIN);
 	_tmpMes.again.plNum = static_cast<unsigned char>(plNum);
 	_tmpMes.again.num = num;
+	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
 }
 
 void NetWork::MakeSyncMes(Vector2Dbl pos)

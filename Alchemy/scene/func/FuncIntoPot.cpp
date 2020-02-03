@@ -17,7 +17,7 @@ bool FuncIntoPot::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 	((Pot&)(*pot)).AddMixList(data);
 	(*pot).state(STATE::HOLD);
 	actQue.second.state(STATE::NORMAL);
-	//actQue.second._tageObj.reset();
+	actQue.second._tageObj.reset();
 	actQue.second._dead = true;
 
 	return true;

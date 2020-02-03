@@ -10,7 +10,6 @@ class Guest :
 public:
 	Guest(IPDATA IP,int port);
 	~Guest();
-	void ReSetKeyBuf(void)override;
 	IPDATA ip(PlNum num);
 	int netWorkHandle(PlNum num);
 	void Connect(void);

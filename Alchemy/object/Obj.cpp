@@ -16,6 +16,7 @@ Obj::Obj()
 	_animCount = 0;
 	_speed = 0.0;
 	_size = { 100,100 };
+	_extRate = 1.2;
 	_rad = 0.0;
 	_zOrder = 0;
 	_effectID = -1;
@@ -72,7 +73,7 @@ void Obj::Draw(void)
 	if ((_pos.x >= lpCamera.pos().x - lpCamera.size().x - _size.x) &&
 		(_pos.x <= lpCamera.pos().x + lpCamera.size().x + _size.x) &&
 		(_pos.y >= lpCamera.pos().y - lpCamera.size().y - _size.y) &&
-		(_pos.y <= lpCamera.pos().y + lpCamera.size().y + _size.y)
+		(_pos.y <= lpCamera.pos().y + lpCamera.size().y + _size.y + _height)
 		)
 	{
 		// 現在のコマの画像を描画キューに追加
@@ -80,7 +81,7 @@ void Obj::Draw(void)
 			_pos.x - lpCamera.OfSet().x,
 			_pos.y - lpCamera.OfSet().y,
 			0.0,
-			1.2 + (_height /400.0),
+			_extRate + (_height /400.0),
 			_height,
 			_zOrder,
 			LAYER::CHAR ,
@@ -103,7 +104,7 @@ void Obj::Draw(void)
 		GraphFilter(_glowID, DX_GRAPH_FILTER_TWO_COLOR, 10, 0, 0, 0xffffff, 255);
 		lpSceneMng.AddDrawQue({ _glowID,_pos.x - lpCamera.OfSet().x,
 			_pos.y - lpCamera.OfSet().y - 0.1,
-			0.0,1.2,_height,_zOrder,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
+			0.0,_extRate,_height,_zOrder,LAYER::CHAR,DX_BLENDMODE_ADD,255 });
 
 		_glowFlag = false;
 	}
@@ -117,7 +118,7 @@ void Obj::Draw(void)
 			_pos.x - lpCamera.OfSet().x,
 			_pos.y + _size.y / 2.0 - lpCamera.OfSet().y,
 			0.0,
-			1.2 - (_height / 400.0),
+			_extRate - (_height / 5000.0),
 			0.0,
 			INT_MIN,
 			LAYER::CHAR ,

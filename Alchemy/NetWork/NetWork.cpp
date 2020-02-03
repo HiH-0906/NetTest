@@ -63,6 +63,7 @@ NetWork::~NetWork()
 
 void NetWork::Connect(void)
 {
+	//TRACE("%d\n", MES_SIZE);
 	// ê⁄ë±ämóßÇµÇƒÇÈÇ©
 	if (!Active())
 	{
@@ -83,8 +84,6 @@ void NetWork::UpDate(void)
 		return;
 	}
 	(*NetWork::_netWorkUnit).Update();
-	(*NetWork::_netWorkUnit).AgainDataSend();
-	(*NetWork::_netWorkUnit).ReSetKeyBuf();
 	_syncTime--;
 }
 
@@ -147,11 +146,12 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.y = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_Y).first);
 	_tmpMes.key.lb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_LB).first);
 	_tmpMes.key.rb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_RB).first);
-	_tmpMes.key.lt = static_cast<unsigned char>(butan.at(INPUT_ID::LEFT_TRIGGER).first);
+ 	_tmpMes.key.lt=static_cast<unsigned char>(butan.at(INPUT_ID::LEFT_TRIGGER).first);
 	_tmpMes.key.rt = static_cast<unsigned char>(butan.at(INPUT_ID::RIGHT_TRIGGER).first);
+	_tmpMes.key.up = static_cast<unsigned char>(butan.at(INPUT_ID::UP).first);
+	_tmpMes.key.down = static_cast<unsigned char>(butan.at(INPUT_ID::DOWN).first);
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
-	(*NetWork::_netWorkUnit).AddKeyBuf(_tmpMes);
 	_keyNum++;
 }
 

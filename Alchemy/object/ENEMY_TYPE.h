@@ -6,7 +6,8 @@ enum class ENEMY_TYPE
 	BAD = 2,		// º³ÓØ
 	GHOST = 4,		// ‚¨‚Î‚¯
 	MUSH = 8,		// ‚«‚Ì‚±
-	DAEMON = 16,		// ÃÞ°ÓÝ
+	DAEMON = 16,	// ÃÞ°ÓÝ
+	BOSS = 32,		// ÎÞ½
 	MAX
 };
 

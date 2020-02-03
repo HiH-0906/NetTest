@@ -30,6 +30,11 @@ Vector2Dbl Camera::size(void)
 	return _size;
 }
 
+Vector2Dbl Camera::exMovePos(void)
+{
+	return _exMovePos;
+}
+
 void Camera::exMoveFlag(bool exMove)
 {
 	_exMoveFlag = exMove;
@@ -52,11 +57,7 @@ void Camera::UpDate(void)
 			_moveCnt++;
 		}*/
 
-		if (_moveCnt > 0)
-		{
-			_pos += _unitVel * (_length * _moveCnt / _cntSum);
-			_moveCnt--;
-		}
+		MoveData();
 	}
 	else
 	{
@@ -78,6 +79,8 @@ void Camera::UpDate(void)
 		{
 			_pos.y = _size.y;
 		}
+
+		_exMovePos = _pos;
 	}
 }
 
@@ -114,4 +117,18 @@ void Camera::SetMoveData(Vector2Dbl aimPos)
 	_a = -_b / static_cast<double>(CAMERA_MOVE_CNT /2  * CAMERA_MOVE_CNT / 2);*/
 	_unitVel = (aimPos - _pos) / _length;
 	_moveCnt = CAMERA_MOVE_CNT;
+}
+
+bool Camera::MoveData()
+{
+	if (_moveCnt > 0)
+	{
+		_moveCnt--;
+		_pos += _unitVel * (_length * _moveCnt / _cntSum);
+	}
+	else
+	{
+		return true;
+	}
+	return false;
 }

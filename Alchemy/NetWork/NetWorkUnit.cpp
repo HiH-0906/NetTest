@@ -44,16 +44,6 @@ bool NetWorkUnit::AddRecMesList(MES mes)
 	return true;
 }
 
-bool NetWorkUnit::AddKeyBuf(MES mes)
-{
-	if (static_cast<MES_TYPE>(mes.check.type) != MES_TYPE::KEY)
-	{
-		return false;
-	}
-	_keyBuf.emplace_back(mes);
-	return true;
-}
-
 MES NetWorkUnit::GetKeyBuf(PlNum plNum, unsigned int num)
 {
 	MES nonMes = { 0 };
@@ -68,12 +58,6 @@ MES NetWorkUnit::GetKeyBuf(PlNum plNum, unsigned int num)
 	return nonMes;
 }
 
-
-void NetWorkUnit::DeleteBackUpMes(void)
-{
-
-}
-
 void NetWorkUnit::ReSetRecMes(void)
 {
 	_recMesList.clear();
@@ -84,11 +68,11 @@ MES NetWorkUnit::GetMes(PlNum num, MES_TYPE type)
 	MES nonMes = { 0 };
 	for (auto data : _recMesList)
 	{
-		if (static_cast<MES_TYPE>(data.key.type) != type)
+		if (static_cast<MES_TYPE>(data.check.type) != type)
 		{
 			continue;
 		}
-		if (static_cast<PlNum>(data.key.plNum) == num)
+		if (static_cast<PlNum>(data.check.plNum) == num)
 		{
 			return data;
 		}
@@ -101,7 +85,7 @@ MES NetWorkUnit::GetMes(MES_TYPE type)
 	MES nonMes = { 0 };
 	for (auto data : _recMesList)
 	{
-		if (static_cast<MES_TYPE>(data.key.type) != type)
+		if (static_cast<MES_TYPE>(data.check.type) != type)
 		{
 			continue;
 		}
@@ -131,11 +115,6 @@ void NetWorkUnit::GetKey(std::vector<MES>& buf, PlNum num)
 			buf.emplace_back(data);
 		}
 	}
-	std::sort(buf.begin(), buf.end(),
-		[&](MES mesA, MES mesB) {
-		return mesA.key.num < mesB.key.num;
-	}
-	);
 	return;
 }
 

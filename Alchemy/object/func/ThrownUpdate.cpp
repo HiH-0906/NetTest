@@ -10,7 +10,7 @@ void ThrownUpdate::operator()(Obj& obj, std::vector<sharedObj>& objList)
 {
 	// ‰æ–ÊŠO”»’è
 	auto tmpPos = obj._pos + obj._vel.x * Vector2Dbl{ cos(obj._rad), sin(obj._rad) };
-	tmpPos.y -= obj._height;
+	//tmpPos.y -= obj._height;
 
 	// xŽ²‚Å”½“]
 	if (tmpPos.x <= 0 || tmpPos.x >= lpSceneMng.WorldSize.x)
@@ -19,7 +19,7 @@ void ThrownUpdate::operator()(Obj& obj, std::vector<sharedObj>& objList)
 	}
 	
 	// yŽ²‚Å”½“]
-	if (tmpPos.y <= 0 || tmpPos.y >= lpSceneMng.WorldSize.y)
+	if (tmpPos.y /*- obj._height*/ <= 0 || tmpPos.y >= lpSceneMng.WorldSize.y - static_cast<double>(obj._size.y) / 2.0)
 	{
 		obj._rad = atan2(-sin(obj._rad), cos(obj._rad));
 	}

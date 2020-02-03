@@ -6,6 +6,7 @@
 #include "func/HoldenUpdate.h"
 #include "func/ThrownUpdate.h"
 #include "../scene/func/FuncThrow.h"
+#include <EffectMng.h>
 
 Item::Item(int type, Vector2Dbl pos)
 {
@@ -58,6 +59,8 @@ void Item::Init(void)
 {
 	// ----------アニメーション登録開始
 	_unitID = UNIT_ID::ITEM;
+
+	_effectScreen = MakeScreen(static_cast<int>(lpEffectMng._screenSize.x), static_cast<int>(lpEffectMng._screenSize.y), true);
 
 	AnimVector data;
 	ImageKey key;

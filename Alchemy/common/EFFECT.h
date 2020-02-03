@@ -15,6 +15,7 @@ enum class EFFECT
 	AT_BEE,				// –I‚Ì‚±‚¤‚°‚«
 	SMOKE,				// ·Éº‚Ì‰ŒUŒ‚
 	LANDING,			// ’…’n
+	DARK,				// ÎÞ½UŒ‚‚P
 	MAX
 };
 

@@ -16,9 +16,11 @@ bool FuncPut::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 		player.state(STATE::THROW);
 		player._holdList.erase(player._holdList.begin());
 
+		double height = 0.0;
 		for (int i = 0; i < player._holdList.size(); i++)
 		{
-			(*player._holdList[i])._height = 40.0 * (i + 1);
+			(*player._holdList[i])._height = static_cast<double>(player._size.y / 2) + height;
+			height += (*player._holdList[i])._size.y;
 		}
 	}
 	else

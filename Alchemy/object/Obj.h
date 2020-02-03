@@ -26,6 +26,7 @@ class Obj;
 class InputState;
 class Camera;
 class NetWork;
+class NetState;
 class EffectMng;
 struct PlayerNormal;
 struct PlayerHold;
@@ -125,6 +126,7 @@ public:
 private:
 	friend EffectMng;
 	friend NetWork;
+	friend NetState;
 	friend PlayerNormal;
 	friend PlayerHold;
 	friend PlayerThrow;
@@ -211,6 +213,7 @@ protected:
 	double _speed;					// ‘¬‚³
 	double _searchRange;			// õ“G”ÍˆÍ
 	double _attackRange;			// UŒ‚”ÍˆÍ
+	double _extRate;				// Šg‘å—¦
 	TEAM_TAG _team;					// w‰c
 	std::weak_ptr<Obj> _tageObj;	// ‘ÎÛ‚Æ‚È‚éobj
 	std::weak_ptr<Obj> _holdPlayer;	// ‚½‚ê‚Ä‚¢‚éƒvƒŒƒCƒ„[A‚½‚ê‚Ä‚È‚¢‚Æ‚«‚ÍŠÄ‹‘ÎÛ–³‚µ

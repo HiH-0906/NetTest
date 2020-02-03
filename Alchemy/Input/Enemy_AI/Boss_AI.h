@@ -7,7 +7,7 @@ class Boss_AI :
 public:
 	Boss_AI(Obj& obj);
 	~Boss_AI();
-	void Update(std::vector<sharedObj>& objList);
+	void Update(std::vector<sharedObj>& objList) override;
 
 private:
 	Obj & _masterObj;

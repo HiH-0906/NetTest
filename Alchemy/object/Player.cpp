@@ -11,6 +11,7 @@
 #include "func/PlayerHold.h"
 #include "func/PlayerThrow.h"
 #include "func/PlayerDeath.h"
+#include <UI_Mng.h>
 
 int Player::_playerIcon[4][2];
 
@@ -98,6 +99,7 @@ void Player::Update(std::vector<sharedObj>& objList)
 		if ((*_input).btnState(INPUT_ID::BTN_RS).first && !(*_input).btnState(INPUT_ID::BTN_RS).second)
 		{
 			lpCamera.SetMoveData({ 1280.0,390.0 });
+			lpSceneMng.AddInstanceQue({ UNIT_ID::BOSS,0,{lpSceneMng.WorldSize.x / 2.0,0},0 });
 			lpCamera.exMoveFlag(true);
 		}
 
@@ -106,14 +108,14 @@ void Player::Update(std::vector<sharedObj>& objList)
 		{
 			Text mes;
 			mes.MakeText("‚±‚ñ‚É‚¿‚Í", -4);
-			_mesBoard.AddMesList(mes);
+			lpUI_Mng.AddMessage(mes);
 		}
 
 		if ((*_input).btnState(INPUT_ID::DOWN).first && !(*_input).btnState(INPUT_ID::DOWN).second)
 		{
 			Text mes;
 			mes.MakeText("ƒAƒCƒeƒ€‚ð‚à‚Á‚Ä‚¢‚Ü‚·", -8);
-			_mesBoard.AddMesList(mes);
+			lpUI_Mng.AddMessage(mes);
 		}
 	}
 
@@ -270,21 +272,6 @@ void Player::DrawHP(void)
 		LAYER::UI ,
 		DX_BLENDMODE_NOBLEND,
 		255 });
-
-	_mesBoard.DrawUpdate();
-
-	lpSceneMng.AddDrawQue({ _mesBoard.mesScreen() ,
-	160,
-	560,
-	0.0,
-	1.0,
-	0.0,
-	100,
-	LAYER::UI ,
-	DX_BLENDMODE_NOBLEND,
-	255 });
-
-
 }
 
 void Player::throwPot(bool throwMode)

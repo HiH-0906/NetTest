@@ -59,6 +59,9 @@ void EffectMng::Init(void)
 
 	// ’…’n´Ìª¸Ä
 	GetID(EFFECT::LANDING, "effect/landing.efk", 20.0F);
+
+	// ÎÞ½
+	GetID(EFFECT::DARK, "effect/dark.efk", 40.F);
 }
 
 void EffectMng::Clear(void)

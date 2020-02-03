@@ -14,15 +14,6 @@ Guest::~Guest()
 	CloseNetWork(netWorkHandle(_plNum));
 }
 
-void Guest::ReSetKeyBuf(void)
-{
-	if (_keyBuf.size() < 1024)
-	{
-		return;
-	}
-	_keyBuf.erase(_keyBuf.begin(), _keyBuf.begin() + 512);
-}
-
 IPDATA Guest::ip(PlNum num)
 {
 	try
@@ -61,7 +52,8 @@ void Guest::Connect(void)
 	}
 	// MesSize•ªÃÞ°À‚ªÊÞ¯Ì§‚É—­‚Á‚Ä‚¢‚é‚©Áª¯¸
 	GetData();
-	if (static_cast<MES_TYPE>(GetMes(MES_TYPE::CONNECT).check.type) != MES_TYPE::NON)
+	_mes = GetMes(MES_TYPE::CONNECT);
+	if (static_cast<MES_TYPE>(_mes.check.type) != MES_TYPE::NON)
 	{
 		_plNum = static_cast <PlNum>(_mes.key.plNum);
 		TRACE("‚ ‚È‚½‚Íplayer[%d]‚Å‚·\n", (static_cast<int>(_plNum) + 1));

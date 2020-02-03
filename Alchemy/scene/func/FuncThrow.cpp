@@ -59,9 +59,11 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 		(*thrownObj)._zOrder = 0;
 		player._holdList.erase(player._holdList.begin());
 
+		double height = 0.0;
 		for (int i = 0; i < player._holdList.size();i++)
 		{
-			(*player._holdList[i])._height = 40.0 * (i + 1);
+			(*player._holdList[i])._height = static_cast<double>(player._size.y / 2) + height;
+			height += (*player._holdList[i])._size.y;
 		}
 		player.state(STATE::THROW);
 		return true;

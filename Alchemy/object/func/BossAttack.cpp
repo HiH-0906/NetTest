@@ -1,5 +1,6 @@
 #include "BossAttack.h"
 #include <DxLib.h>
+#include <algorithm>
 #include <EffekseerForDXLib.h>
 #include <scene\SceneMng.h>
 #include <EffectMng.h>
@@ -24,7 +25,30 @@ void BossAttack::operator()(Obj & obj, std::vector<sharedObj>& objList)
 	{
 		if (!obj._effectFlg)
 		{
-			(*target).DoDamage(obj._power);				// ﾀﾞﾒｰｼﾞをあたえる
+			// 自分からの距離が近い順にobjListをソート
+			std::sort(objList.begin(), objList.end(),
+				[&](sharedObj objA, sharedObj objB) {
+				return LengthSquare(obj._pos, (*objA)._pos) < LengthSquare(obj._pos, (*objB)._pos);
+			});
+
+			for (auto list : objList)
+			{
+				// 範囲内の敵全てにﾀﾞﾒｰｼﾞを与えたい
+				if ((*list).teamTag() == TEAM_TAG::ALLY_TEAM)
+				{
+					if ((*list)._state != STATE::HOLDEN)
+					{
+						if ((obj._attackRange * obj._attackRange) > LengthSquare(obj._pos, (*list)._pos))
+						{
+							(*list).DoDamage(obj._power);		// ﾀﾞﾒｰｼﾞ
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+			}
 		}
 		else
 		{
@@ -48,5 +72,5 @@ void BossAttack::operator()(Obj & obj, std::vector<sharedObj>& objList)
 	}
 
 	// ｴﾌｪｸﾄをｷｭｰに投げる
-	lpEffectMng.AddEffectQue({ obj,(*target)._pos,0,EFFECT::AT_BITE,(*target)._zOrder + 1 });
+	lpEffectMng.AddEffectQue({ obj,obj._pos,0,EFFECT::DARK,obj._zOrder -1 });
 }

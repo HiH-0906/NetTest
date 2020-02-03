@@ -41,7 +41,6 @@ private:
 	int _heartImg;
 	static int _playerIcon[4][2];	//
 	PlNum _plNum;
-	Message _mesBoard;
 	std::vector<sharedObj> _holdList;			// 現在持っているオブジェクト
 
 };

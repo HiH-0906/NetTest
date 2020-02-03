@@ -19,15 +19,6 @@ Host::~Host()
 	}
 }
 
-void Host::ReSetKeyBuf(void)
-{
-	if (_keyBuf.size() < 2048)
-	{
-		return;
-	}
-	_keyBuf.erase(_keyBuf.begin(), _keyBuf.begin() + 1024);
-}
-
 bool Host::GetData(void)
 {
 	for (PlNum num = begin(PlNum()); num < _plNum; ++num)
@@ -124,8 +115,6 @@ void Host::TransferMes(void)
 		{
 			continue;
 		}
-		AddSendMesList(data);
-		AddKeyBuf(data);
 	}
 }
 
@@ -190,13 +179,17 @@ void Host::StartGame(void)
 {
 	// V‚µ‚¢Ú‘±‚ğI—¹
 	StopListenNetWork();
-	TYPE_INF tmpInf = {
-		static_cast<unsigned char>(MES_TYPE::GAMEMODE),
-	};
-	// ¹Ş°Ñ½À°ÄÒ¯¾°¼Şì¬
-	MES tmpMes;
-	tmpMes.check = tmpInf;
-	AddSendMesList(tmpMes);
+	for (PlNum num = PlNum::PL_01; num < _plNum; ++num)
+	{
+		TYPE_INF tmpInf = {
+			static_cast<unsigned char>(MES_TYPE::GAMEMODE),
+			static_cast<unsigned char>(num)
+		};
+		// ¹Ş°Ñ½À°ÄÒ¯¾°¼Şì¬
+		MES tmpMes;
+		tmpMes.check = tmpInf;
+		AddSendMesList(tmpMes);
+	}
 	_linkFlag = true;
 }
 

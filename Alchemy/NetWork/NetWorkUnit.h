@@ -36,6 +36,8 @@ struct KEY_INF
 	unsigned char rb : 1;
 	unsigned char lt : 1;
 	unsigned char rt : 1;
+	unsigned char up : 1;
+	unsigned char down : 1;
 	short ls;
 	unsigned int num : 8;						// ｷｰ情報通し番号
 };
@@ -44,6 +46,7 @@ struct KEY_INF
 struct TYPE_INF
 {
 	unsigned char type : 4;
+	unsigned char plNum : 2;
 };
 
 // AGAIN情報用
@@ -89,16 +92,13 @@ public:
 	virtual void RunMesList(void);								// ﾘｽﾄのﾃﾞｰﾀ送信
 	virtual void StartGame(void);								// ｹﾞｰﾑｽﾀｰﾄﾒｯｾｰｼﾞ作成関数
 	virtual void Update(void) = 0;
-	virtual void ReSetKeyBuf(void) = 0;							// keyBufのﾘｾｯﾄ
 	virtual bool GetData(void) = 0;								// Bufからのﾃﾞｰﾀ取得
 	void AgainDataSend(void);									// AgainMesが来ていた場合そのMesを再送
 	bool CheckMes(PlNum num,MES_TYPE type);						// 指定ﾀｲﾌﾟのﾒｯｾｰｼﾞ届いているか
 	bool DataSend(int handle, MES mes);							// ﾃﾞｰﾀ送信
 	bool AddSendMesList(MES mes);								// 送信用ﾃﾞｰﾀ追加
 	bool AddRecMesList(MES mes);								// 受信ﾒｯｾｰｼﾞﾘｽﾄ
-	bool AddKeyBuf(MES mes);									// ｷｰbuf追加
 	MES GetKeyBuf(PlNum plNum, unsigned int num);				// 指定されたPlNum,numのkey情報取り出し
-	void DeleteBackUpMes(void);									// 一定以上のbackupMes削除
 	void ReSetRecMes(void);										// 受信ﾒｯｾｰｼﾞ削除
 	MES GetMes(PlNum num, MES_TYPE type);						// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
 	MES GetMes(MES_TYPE type);									// 指定されたtypeのﾒｯｾｰｼﾞ取得

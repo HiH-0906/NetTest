@@ -1,7 +1,9 @@
 #include "NetState.h"
 
-NetState::NetState(PlNum plNum)
+NetState::NetState(PlNum plNum/*, Obj& obj*/)
 {
+	_missingCnt = 0;
+	_searchFlag = false;
 	_plNum = plNum;
 	_num = 0;
 }
@@ -16,21 +18,26 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	{
 		return;
 	}
+	if (!_searchFlag)
+	{
+		SearchObj(objList);
+	}
 	SetOld();
 	// Ò¯¾°¼Şæ‚èo‚µ—p•Ï”ì¬ Ò¯¾°¼Ş‚È‚©‚Á‚½ê‡‚Ì‚½‚ß‚ÌOld‘ã“ü
-	auto state = LStickState().second;
+	StickState state;
 	// Ò¯¾°¼Şæ“¾
 	lpNetWork.GetKey(_keyBuf, _plNum);
-	if (_keyBuf.size() == 0 || _keyBuf.size() <= _num)
+	if (_keyBuf.size() == 0)
 	{
 		return;
 	}
-	TRACE("%d\n", _num);
-	/*if (_keyBuf[_num].key.num != _num)
+	if (_keyBuf.size() <= _num)
 	{
-		lpNetWork.MakeAgainMes(_plNum, _num);
+		TRACE("-------------------------------------------------------------------------------\n");
+		_missingCnt++;
+		TRACE("%d\n", _missingCnt);
 		return;
-	}*/
+	}
 	btnState(INPUT_ID::BTN_A, _keyBuf[_num].key.a);
 	btnState(INPUT_ID::BTN_B, _keyBuf[_num].key.b);
 	btnState(INPUT_ID::BTN_Y, _keyBuf[_num].key.y);
@@ -38,6 +45,8 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	btnState(INPUT_ID::BTN_RB, _keyBuf[_num].key.rb);
 	btnState(INPUT_ID::LEFT_TRIGGER, _keyBuf[_num].key.lt);
 	btnState(INPUT_ID::RIGHT_TRIGGER, _keyBuf[_num].key.rt);
+	btnState(INPUT_ID::UP, _keyBuf[_num].key.up);
+	btnState(INPUT_ID::DOWN, _keyBuf[_num].key.down);
 	if (_keyBuf[_num].key.lf)
 	{
 		state.isInput = true;
@@ -52,4 +61,32 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	}
 	LStickState(state);
 	_num++;
+	if (_keyBuf.size() > 256 && _num >= 256)
+	{
+		for (auto i = 0; i < 256; i++)
+		{
+			if (_keyBuf[i].key.num != i)
+			{
+				AST();
+			}
+		}
+		_keyBuf.erase(_keyBuf.begin(), _keyBuf.begin() + 256);
+		_num = 0;
+	}
+}
+
+void NetState::SearchObj(std::vector<sharedObj>& List)
+{
+	for (auto obj : List)
+	{
+		if ((*obj).unitID() == UNIT_ID::PLAYER)
+		{
+			if (((Player&)(*obj)).plNum() == _plNum)
+			{
+				_plObj = obj;
+				_searchFlag = true;
+				return;
+			}
+		}
+	}
 }

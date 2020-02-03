@@ -36,6 +36,8 @@ enum class IMG
 	PL_HP_G,
 	PL_HP_R,
 	PL_ICON,
+	BOSS_HP_R,
+	BOSS_HP_G,
 	HEART,
 	COMBO_GAUGE,
 	BLAST,

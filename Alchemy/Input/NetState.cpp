@@ -21,12 +21,11 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	auto state = LStickState().second;
 	// Ò¯¾°¼ÞŽæ“¾
 	lpNetWork.GetKey(_keyBuf, _plNum);
-	if (_keyBuf.size() == 0)
+	if (_keyBuf.size() == 0 || _keyBuf.size() <= _num)
 	{
-		return;
-	}
-	if (_keyBuf[_num].key.num != _num % 256)
-	{
+		TRACE("-------------------------------------------------------------------------------");
+		_keyBuf.clear();
+		_num = 0;
 		return;
 	}
 
@@ -35,6 +34,8 @@ void NetState::Update(std::vector<sharedObj>& objList)
 	btnState(INPUT_ID::BTN_Y, _keyBuf[_num].key.y);
 	btnState(INPUT_ID::BTN_LB, _keyBuf[_num].key.lb);
 	btnState(INPUT_ID::BTN_RB, _keyBuf[_num].key.rb);
+	btnState(INPUT_ID::LEFT_TRIGGER, _keyBuf[_num].key.lt);
+	btnState(INPUT_ID::RIGHT_TRIGGER, _keyBuf[_num].key.rt);
 	if (_keyBuf[_num].key.lf)
 	{
 		state.isInput = true;
@@ -47,6 +48,7 @@ void NetState::Update(std::vector<sharedObj>& objList)
 		state.isInput = 0;
 		state.dir = DIR::DOWN;
 	}
+	TRACE("%d", _num % 256);
 	LStickState(state);
 	_num++;
 }

@@ -37,14 +37,17 @@ private:
 	int _cursor;								// カーソル画像
 	int _selectTex;								// GAME START,GAME END
 	int _titleTex;								// PLEES START
+	int _skyimage[2];							// 背景・空
 
 	Vector2Dbl T_logoPos;						// タイトルロゴの座標
+	Vector2Dbl _skyPos[2];						// 空の座標
 	Vector2Dbl _cursorPos;						// カーソル位置座標
 
 	int _padnum;								// 接続中のpad数
 
 	double _fallSpeed;							// セレクトメニューの移動速度
 	int _cnt;									// ﾌﾚｰﾑｶｳﾝﾄ
+	int _fadecolor;								// フェードの数値
 	int _fadespeed;								// フェード速度
 
 	SELECTMENU _selectnum;						// セレクト内容

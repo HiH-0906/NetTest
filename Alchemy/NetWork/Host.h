@@ -14,6 +14,7 @@ public:
 	void RunMesList(void)override;				// Ò¯¾°¼Ş‘—M
 	void StartGame(void);						// ¹Ş°Ñ½À°ÄMESì¬
 private:
+	void TransferMes(void);					// Ò¯¾°¼Ş‚Ì“]‘—
 	bool CheckDisConnect(void);					// Ø’f‚µ‚½‚â‚Â‚ª‚¢‚é‚©
 	void ConnectCheck(void);					// IP±ÄŞÚ½æ“¾‹y‚ÑÚ‘±Š®—¹Ò¯¾‘—M
 	void Update(void);

@@ -9,17 +9,20 @@
 
 EntryScene::EntryScene()
 {
-	TRACE("ｴﾝﾄﾘｰｼｰﾝ\n");
 	_padnum = GetJoypadNum();
 	_entryPadnum = 0;
+	_fadespeed = 15;
+	_fadecolor = 0;
 	for (int i = 0; i < _padnum; i++)
 	{
 		_entrnum[i] = 0;
 		_cnt[i] = 0;
 	}
-	TRACE("接続PAD数は%dです\n", _padnum);
 	DrawInit();
 	Init();
+
+	func = { &EntryScene::EntryStart };
+
 }
 
 
@@ -29,6 +32,8 @@ EntryScene::~EntryScene()
 
 UniqueBase EntryScene::Update(UniqueBase own)
 {
+	SetDrawBright(_fadecolor, _fadecolor, _fadecolor);
+
 	for (int i = 0; i < _padnum; i++)
 	{
 		(*_input[i]).Update(_objList);
@@ -36,44 +41,17 @@ UniqueBase EntryScene::Update(UniqueBase own)
 		{
 			return std::make_unique<GameScene>();
 		}
-		else
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				lpSceneMng.AddDrawQue({ _backImage[j],(320.0 * static_cast<double>((j + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
-			}
-			if (_entrnum[i] != 0)
-			{
-				lpSceneMng.AddDrawQue({ _entryImage[(_entrnum[i]-1)][((_cnt[i]/10)%4)],(320.0 * static_cast<double>((i + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0,1.2,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
-				_cnt[i]++;
-			}
-		}
-
-		if ((*_input[i]).btnState(INPUT_ID::BTN_START).first)
-		{
-			auto instancedata = [&]() {
-				for (auto listdata : lpSceneMng.playerList())//instancelistの中を見る
-				{
-					if (std::get<static_cast<int>(PLAYER_QUE::PADNUM)>(listdata) == i + 1)//ほかのものと被ってないか見る
-					{
-						return true;
-					}
-				}
-				return false;
-			};
-
-			if (instancedata())
-			{
-				continue;
-			}
-			lpSceneMng.AddPlayerQue({ static_cast<PlNum>(lpSceneMng.GetPlayerListSize()),{lpSceneMng.ScreenSize.x / 2.0 + (100.0*i),lpSceneMng.ScreenSize.y / 4.0}, i + 1 });
-			TRACE("プレイヤー%dがPAD%dで参加です\n", _entryPadnum + 1, i + 1);
-			_entryPadnum += 1;
-			_entrnum[i] = _entryPadnum;
-		}
-
+		
 	}
+
+	for (int j = 0; j < 4; j++)
+	{
+		lpSceneMng.AddDrawQue({ _backImage[j],(320.0 * static_cast<double>((j + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::CHAR,DX_BLENDMODE_NOBLEND,255 });
+	}
+	lpSceneMng.AddDrawQue({ _skyimage, lpSceneMng.ScreenCenter.x,208.0,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
 	lpSceneMng.AddDrawQue({ _entryBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+
+	(this->*func)();
 
 	return std::move(own);
 }
@@ -94,8 +72,54 @@ void EntryScene::DrawInit(void)
 		_backImage[i] = LoadGraph("image/Woodback.png");
 	}
 	LoadDivGraph("image/Player_walk.png", 16, 4, 4, 266, 249, *_entryImage);
-	//_entryImage[0] = LoadGraph("image/Player01_death.png");
-	//_entryImage[1] = LoadGraph("image/Player02_death.png");
-	//_entryImage[2] = LoadGraph("image/Player03_death.png");
-	//_entryImage[3] = LoadGraph("image/Player04_death.png");
+	_skyimage = LoadGraph("image/sky.png");
+}
+
+void EntryScene::EntryStart(void)
+{
+	if (_fadecolor < 255)
+	{
+		_fadecolor += _fadespeed;
+	}
+	else
+	{
+		func = &EntryScene::EntryNormal;
+	}
+}
+
+void EntryScene::EntryNormal(void)
+{
+	for (int i = 0; i < _padnum; i++)
+	{
+		(*_input[i]).Update(_objList);
+
+		if (_entrnum[i] != 0)
+		{
+				lpSceneMng.AddDrawQue({ _entryImage[(_entrnum[i] - 1)][((_cnt[i] / 10) % 4)],(320.0 * static_cast<double>((i + 1))) - 160.0,lpSceneMng.ScreenCenter.y,0,1.2,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+				_cnt[i]++;
+		}
+
+		if ((*_input[i]).btnState(INPUT_ID::BTN_START).first)
+		{
+			auto instancedata = [&]() {
+				for (auto listdata : lpSceneMng.playerList())//instancelistの中を見る
+				{
+					if (std::get<static_cast<int>(PLAYER_QUE::PADNUM)>(listdata) == i + 1)//ほかのものと被ってないか見る
+					{
+						return true;
+					}
+				}
+				return false;
+			};
+
+			if (instancedata())
+			{
+				continue;
+			}
+			lpSceneMng.AddPlayerQue({ static_cast<PlNum>(lpSceneMng.GetPlayerListSize()),{lpSceneMng.ScreenSize.x / 2.0 + (100.0*i),lpSceneMng.ScreenSize.y / 4.0}, i + 1 });
+			_entryPadnum += 1;
+			_entrnum[i] = _entryPadnum;
+		}
+
+	}
 }

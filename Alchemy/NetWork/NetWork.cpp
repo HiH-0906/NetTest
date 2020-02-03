@@ -52,7 +52,7 @@ bool NetWork::Active(void)
 NetWork::NetWork()
 {
 	_netMode = NETMODE::OFFLINE;
-	_matchTime = MATCH_TIME;
+	_syncTime = SYNC_TIME;
 	_netWorkUnit = nullptr;
 	_keyNum = 0;
 }
@@ -83,6 +83,7 @@ void NetWork::UpDate(void)
 		return;
 	}
 	(*NetWork::_netWorkUnit).Update();
+	_syncTime--;
 }
 
 MES NetWork::GetMes(PlNum num, MES_TYPE type)
@@ -100,6 +101,21 @@ void NetWork::ReSetRecMes(void)
 	(*NetWork::_netWorkUnit).ReSetRecMes();
 }
 
+void NetWork::SyncObj(Player & obj)
+{
+	if (!(*NetWork::_netWorkUnit).CheckSyncMes(obj._plNum))
+	{
+		return;
+	}
+	auto tmpMes = (*NetWork::_netWorkUnit).GetMes(obj._plNum, MES_TYPE::SYNC);
+	if (static_cast<MES_TYPE>(tmpMes.check.type) != MES_TYPE::SYNC)
+	{
+		return;
+	}
+	obj._pos.x = static_cast<double>(tmpMes.sync.x);
+	obj._pos.y = static_cast<double>(tmpMes.sync.y);
+}
+
 MES NetWork::GetMes(MES_TYPE type)
 {
 	return (*NetWork::_netWorkUnit).GetMes(type);
@@ -110,18 +126,7 @@ PlNum NetWork::GetPlNum(void)
 	return (*NetWork::_netWorkUnit).GetPlNum();
 }
 
-void NetWork::MakeAgainMes(PlNum plNum, int num)
-{
-	if (!(*NetWork::_netWorkUnit).LinkFlag())
-	{
-		return;
-	}
-	// “Øæ∞ºﬁçÏê¨
-	_tmpMes.again.type = static_cast<unsigned char>(MES_TYPE::AGAIN);
-	_tmpMes.again.plNum = static_cast<unsigned char>(plNum);
-	_tmpMes.again.num = static_cast<unsigned char>(num);
-	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
-}
+
 
 void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 {
@@ -142,6 +147,21 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
 	_keyNum++;
+}
+
+void NetWork::MakeSyncMes(Vector2Dbl pos)
+{
+	if (!(*NetWork::_netWorkUnit).LinkFlag() || _syncTime != 0)
+	{
+		return;
+	}
+	// “Øæ∞ºﬁçÏê¨
+	_tmpMes.sync.type = static_cast<unsigned char>(MES_TYPE::SYNC);
+	_tmpMes.sync.plnum = static_cast<unsigned char>((*NetWork::_netWorkUnit).GetPlNum());
+	_tmpMes.sync.x = static_cast<unsigned int>(pos.x);
+	_tmpMes.sync.y = static_cast<unsigned int>(pos.y);
+	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
+	_syncTime = SYNC_TIME;
 }
 
 

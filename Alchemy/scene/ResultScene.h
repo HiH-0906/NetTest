@@ -18,7 +18,7 @@ private:
 	void DrawInit(void);
 
 	int _resultBG;							// ”wŒi
-	int _resultLogo;
+	int _resultLogo;						// GAME OVER
 	int _resultTex;							// PLEES START
 
 	int _cnt;								// ÌÚ°Ñ¶³ÝÄ

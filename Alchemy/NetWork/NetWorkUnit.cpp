@@ -1,4 +1,6 @@
+#include <algorithm>
 #include "NetWorkUnit.h"
+#include "../_debug/_DebugConOut.h"
 
 
 NetWorkUnit::NetWorkUnit()
@@ -40,6 +42,12 @@ bool NetWorkUnit::AddRecMesList(MES mes)
 {
 	_recMesList.emplace_back(mes);
 	return true;
+}
+
+
+void NetWorkUnit::DeleteBackUpMes(void)
+{
+
 }
 
 void NetWorkUnit::ReSetRecMes(void)
@@ -99,7 +107,6 @@ void NetWorkUnit::GetKey(std::vector<MES>& buf, PlNum num)
 			buf.emplace_back(data);
 		}
 	}
-
 	return;
 }
 
@@ -125,6 +132,27 @@ void NetWorkUnit::StartGame(void)
 	MES tmpMes;
 	tmpMes.check = tmpInf;
 	AddSendMesList(tmpMes);
+}
+
+bool NetWorkUnit::CheckSyncMes(PlNum num)
+{
+	if (_recMesList.size() == 0)
+	{
+		return false;
+	}
+	for (auto data : _recMesList)
+	{
+		if (static_cast<MES_TYPE>(data.check.type) != MES_TYPE::SYNC)
+		{
+			continue;
+		}
+		if (static_cast<PlNum>(data.sync.plnum) != num)
+		{
+			continue;
+		}
+		return true;
+	}
+	return false;
 }
 
 bool NetWorkUnit::DataSend(int handle, MES mes)

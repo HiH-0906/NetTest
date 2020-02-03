@@ -89,6 +89,36 @@ void Host::Connect(void)
 }
 
 
+void Host::TransferMes(void)
+{
+	auto check = [](MES mes) {
+		if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::KEY)
+		{
+			return true;
+		}
+		else if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::SYNC)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
+	if (_recMesList.size() == 0)
+	{
+		return;
+	}
+	for (auto data:_recMesList)
+	{
+		if (!check(data))
+		{
+			continue;
+		}
+		AddSendMesList(data);
+	}
+}
+
 bool Host::CheckDisConnect(void)
 {
 	// Ø’f‚µ‚½‚â‚Â‚ª‚¢‚é‚©
@@ -166,4 +196,5 @@ void Host::Update(void)
 	CheckDisConnect();
 	RunMesList();
 	GetData();
+	TransferMes();
 }

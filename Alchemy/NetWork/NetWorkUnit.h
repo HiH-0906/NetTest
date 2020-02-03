@@ -11,6 +11,7 @@ enum class MES_TYPE
 	GAMEMODE,									// ｹﾞｰﾑ開始
 	CONNECT,									// 接続
 	KEY,										// ｷｰ情報
+	SYNC,										// 同期用ﾒｯｾｰｼﾞ
 	AGAIN,										// ﾒｯｾｰｼﾞ再送依頼
 	MAX
 };
@@ -33,6 +34,8 @@ struct KEY_INF
 	unsigned char y : 1;
 	unsigned char lb : 1;
 	unsigned char rb : 1;
+	unsigned char lt : 1;
+	unsigned char rt : 1;
 	short ls;
 	unsigned int num : 8;						// ｷｰ情報通し番号
 };
@@ -45,10 +48,18 @@ struct TYPE_INF
 
 // AGAIN情報用
 struct AGAIN_INF
-{
-	unsigned char type : 4;
+{	unsigned char type : 4;
+
 	unsigned char plNum : 2;
 	unsigned int num : 8;
+};
+
+struct SYNC_INF
+{
+	unsigned char type : 4;
+	unsigned char plnum : 2;
+	unsigned int x : 13;
+	unsigned int y : 12;
 };
 
 union MES
@@ -59,6 +70,7 @@ union MES
 	TYPE_INF check;												// MES_TYPE確認用
 	KEY_INF key;												// Key情報確認用
 	AGAIN_INF again;											// 再送依頼
+	SYNC_INF sync;												// 同期用ﾒｯｾｰｼﾞ
 };
 
 #define MES_SIZE (sizeof(MES))
@@ -78,13 +90,15 @@ public:
 	virtual void StartGame(void);								// ｹﾞｰﾑｽﾀｰﾄﾒｯｾｰｼﾞ作成関数
 	virtual void Update(void) = 0;
 	virtual bool GetData(void) = 0;								// Bufからのﾃﾞｰﾀ取得
+	bool CheckSyncMes(PlNum num);								// 同期ﾒｯｾｰｼﾞ届いているか
 	bool DataSend(int handle, MES mes);							// ﾃﾞｰﾀ送信
 	bool AddSendMesList(MES mes);								// 送信用ﾃﾞｰﾀ追加
 	bool AddRecMesList(MES mes);								// 受信ﾒｯｾｰｼﾞﾘｽﾄ
+	void DeleteBackUpMes(void);									// 一定以上のbackupMes削除
 	void ReSetRecMes(void);										// 受信ﾒｯｾｰｼﾞ削除
 	MES GetMes(PlNum num, MES_TYPE type);						// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
 	MES GetMes(MES_TYPE type);									// 指定されたtypeのﾒｯｾｰｼﾞ取得
-	void GetKey(std::vector<MES>& buf, PlNum num);	// _recMesListからのｷｰ情報の取り出し
+	void GetKey(std::vector<MES>& buf, PlNum num);				// _recMesListからのｷｰ情報の取り出し
 	bool SetNetWorkHandle(int handle);							// _netWorkHandleの設定
 	const bool LinkFlag(void)const;								// 接続できているか確認
 protected:

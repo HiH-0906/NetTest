@@ -16,6 +16,8 @@ enum class INPUT_ID:int
 	BTN_B,
 	BTN_X,
 	BTN_Y,
+	LEFT_TRIGGER,
+	RIGHT_TRIGGER,
 	MAX
 };
 

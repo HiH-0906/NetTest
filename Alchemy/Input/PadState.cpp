@@ -26,9 +26,29 @@ void PadState::Update(std::vector<sharedObj>& objList)
 		AST();
 	}
 	
-	for (auto id : INPUT_ID())
+	for (auto id = begin(INPUT_ID()); id != INPUT_ID::LEFT_TRIGGER;++id)
 	{
 		btnState(id, padState.Buttons[static_cast<int>(id)]);
+	}
+
+	// LƒgƒŠƒK[
+	if (padState.LeftTrigger > 200)
+	{
+		btnState(INPUT_ID::LEFT_TRIGGER, true);
+	}
+	else
+	{
+		btnState(INPUT_ID::LEFT_TRIGGER, false);
+	}
+
+	// RƒgƒŠƒK[
+	if (padState.LeftTrigger > 200)
+	{
+		btnState(INPUT_ID::RIGHT_TRIGGER, true);
+	}
+	else
+	{
+		btnState(INPUT_ID::RIGHT_TRIGGER, false);
 	}
 
 	StickState state;

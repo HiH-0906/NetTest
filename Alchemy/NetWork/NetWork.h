@@ -5,6 +5,7 @@
 #include <memory>
 #include <_debug/_DebugConOut.h>
 #include <scene/SceneMng.h>
+#include <object/Player.h>
 #include <object/PlNum.h>
 #include "../Input/InputState.h"
 #include "NetWorkUnit.h"
@@ -19,7 +20,7 @@ enum class NETMODE
 
 
 #define lpNetWork NetWork::GetInstans()
-#define MATCH_TIME 30
+#define SYNC_TIME 30
 
 
 class NetWork
@@ -36,12 +37,13 @@ public:
 	void Connect(void);											// 接続させに行く
 	void UpDate(void);											// 接続した後はこれを回してればいいはず
 	void ReSetRecMes(void);										// 受信ﾒｯｾｰｼﾞ削除
+	void SyncObj(Player& obj);										// 同期ﾒｯｾｰｼﾞ獲得時位置矯正
 	MES GetMes(MES_TYPE type);									// 指定されたtypeのﾒｯｾｰｼﾞ取得
 	MES GetMes(PlNum num,MES_TYPE type);						// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
 	void GetKey(std::vector<MES>& buf,PlNum num );				// _recMesListからのｷｰ情報の取り出し
 	PlNum GetPlNum(void);										// 現在の自分のPlNum取得
-	void MakeAgainMes(PlNum plNum, int num);					// 再送依頼
 	void MakeKeyMes(KeyMap butan, StickState& stick);			// Key押下情報ﾒｯｾｰｼﾞ化
+	void MakeSyncMes(Vector2Dbl pos);							// 同期用ﾒｯｾｰｼﾞ作成
 private:
 	struct NetWorkDeleter
 	{
@@ -54,7 +56,7 @@ private:
 	NetWork();
 	virtual ~NetWork();
 	unsigned char _keyNum;										// ｷｰ情報確認用通し番号
-	int _matchTime;										// 同期のためのｶｳﾝﾄ
+	int _syncTime;										// 同期のためのｶｳﾝﾄ
 	MES _tmpMes;										// 受け取りMES一時保存用
 	NETMODE _netMode;									// ﾈｯﾄﾜｰｸのﾓｰﾄﾞ hostかGuestか
 	std::unique_ptr<NetWorkUnit> _netWorkUnit;			// ﾕﾆｰｸﾎﾟｲﾝﾀ

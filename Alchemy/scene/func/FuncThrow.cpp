@@ -74,6 +74,7 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 
 		double throwRad = 2.0 * PI / static_cast<double>(((Pot&)pot)._throwList.size());		// ìfÇ´èoÇ∑Ç∆Ç´ÇÃäpìx
 		double cnt = 1.0;
+		double rad = rand() % 100;
 
 		for (auto selNum : pot._throwList)
 		{
@@ -85,7 +86,7 @@ bool FuncThrow::operator()(ActQueT& actQue, std::vector<sharedObj>& objList)
 
 					(*thrownObj)._rad = throwRad * cnt;
 					(*thrownObj).dir(convToDir(throwRad * cnt));
-					(*thrownObj)._vel.x = 200.0 / THROW_CNT_MAX;
+					(*thrownObj)._vel.x = (175.0 + rad) / THROW_CNT_MAX;
 					(*thrownObj)._vel.y = sqrt(THROW_INITIAL_SPEED*THROW_INITIAL_SPEED - (*thrownObj)._vel.x * (*thrownObj)._vel.x);
 					(*thrownObj)._gravity = 2 * ((*thrownObj)._height + (*thrownObj)._vel.y * THROW_CNT_MAX) / (THROW_CNT_MAX * THROW_CNT_MAX);
 					(*thrownObj).state(STATE::THROWN);

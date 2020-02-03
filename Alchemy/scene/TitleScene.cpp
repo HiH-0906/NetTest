@@ -10,16 +10,20 @@
 
 TitleScene::TitleScene()
 {
-	TRACE("¿≤ƒŸº∞›\n");
 	_padnum = GetJoypadNum();
-	TRACE("ê⁄ë±PADêîÇÕ%dÇ≈Ç∑\n", _padnum);
 	_selectnum = SELECTMENU::START;
 	_cursorPos.x =  lpSceneMng.ScreenCenter.x - 200.0;
 	_cursorPos.y = lpSceneMng.ScreenCenter.y + 115.0;
 	T_logoPos.x = lpSceneMng.ScreenCenter.x;
 	T_logoPos.y = -65.0;
+	_fadecolor = 255;
+	for (int s = 0; s < 2; s++)
+	{
+		_skyPos[s].x = (lpSceneMng.ScreenCenter.x + (s * lpSceneMng.ScreenSize.x));
+		_skyPos[s].y = 208.0;
+	}
 	_fallSpeed = 2.0;
-	_fadespeed = 25;
+	_fadespeed = 5;
 	_cnt = 0;
 	DrawInit();
 	Init();
@@ -36,14 +40,25 @@ UniqueBase TitleScene::Update(UniqueBase own)
 {
 	(*_input[0]).Update(_objList);
 
-	if ((func == &TitleScene::NEXT) && (_cnt <= 0))
+	SetDrawBright(_fadecolor, _fadecolor, _fadecolor);
+
+	if ((func == &TitleScene::NEXT) && (_fadecolor <= 0))
 	{
 		//return std::make_unique<GameScene>();
 		return std::make_unique<EntryScene>();
 	}
 
-	lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
 	lpSceneMng.AddDrawQue({ _titleLogo,lpSceneMng.ScreenCenter.x,T_logoPos.y,0.0,1.0,0.0,0,LAYER::UI,DX_BLENDMODE_NOBLEND,255 });
+	for (int s = 0; s < 2; s++)
+	{
+		lpSceneMng.AddDrawQue({ _skyimage[s], _skyPos[s].x,_skyPos[s].y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
+		_skyPos[s].x -= 0.3;
+		if ((_skyPos[s].x + lpSceneMng.ScreenCenter.x) <= 0.0)
+		{
+			_skyPos[s].x = lpSceneMng.ScreenSize.x + lpSceneMng.ScreenCenter.x;
+		}
+	}
+	lpSceneMng.AddDrawQue({ _titleBG,lpSceneMng.ScreenCenter.x,lpSceneMng.ScreenCenter.y,0.0,1.0,0.0,0,LAYER::BG,DX_BLENDMODE_NOBLEND,255 });
 
 	(this->*func)();
 
@@ -114,6 +129,10 @@ void TitleScene::TitleNormal(void)
 	{
 		T_logoPos.y += _fallSpeed;
 	}
+	else
+	{
+		T_logoPos.y = (lpSceneMng.ScreenCenter.y - 100.0);
+	}
 	if (((*_input[0]).btnState(INPUT_ID::BTN_START).first))
 	{
 		_cnt = 0;
@@ -136,13 +155,17 @@ void TitleScene::TitleNormal(void)
 
 void TitleScene::NEXT(void)
 {
-
+	_fadecolor -= _fadespeed;
 }
 
 void TitleScene::DrawInit(void)
 {
 	//ImageMng::GetInstance().GetID( "TitleBG", "image/TitleBG.png");
 	_titleBG   = LoadGraph("image/TitleBG.png");
+	for (int s = 0; s < 2; s++)
+	{
+		_skyimage[s] = LoadGraph("image/sky.png");
+	}
 	_cursor    = LoadGraph("image/selector.png");
 	_selectTex = LoadGraph("image/TitleSelect.png");
 	_titleTex  = LoadGraph("image/start_button.png");

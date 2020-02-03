@@ -56,7 +56,6 @@ void Player::Update(std::vector<sharedObj>& objList)
 	}
 	else*/
 	{
-		std::string str = "あいうえお";
 
 		(*_input).Update(objList);
 		_tageObj.reset();
@@ -95,11 +94,26 @@ void Player::Update(std::vector<sharedObj>& objList)
 			lpMap.miniMapDrawFlag();
 		}
 
-		// テスト用のカメラ特殊移動
+		// テスト用のカメラ特殊移動,あとでけす
 		if ((*_input).btnState(INPUT_ID::BTN_RS).first && !(*_input).btnState(INPUT_ID::BTN_RS).second)
 		{
 			lpCamera.SetMoveData({ 1280.0,390.0 });
 			lpCamera.exMoveFlag(true);
+		}
+
+		// メッセージテスト、あとでけす
+		if ((*_input).btnState(INPUT_ID::UP).first && !(*_input).btnState(INPUT_ID::UP).second)
+		{
+			Text mes;
+			mes.MakeText("こんにちは", -4);
+			_mesBoard.AddMesList(mes);
+		}
+
+		if ((*_input).btnState(INPUT_ID::DOWN).first && !(*_input).btnState(INPUT_ID::DOWN).second)
+		{
+			Text mes;
+			mes.MakeText("アイテムをもっています", -8);
+			_mesBoard.AddMesList(mes);
 		}
 	}
 
@@ -239,11 +253,11 @@ void Player::DrawHP(void)
 	// 操作対象のプレイヤーだったらUIに表示、ほかのプレイヤーだったらObjのDrawを呼び出すようにする
 	// 今はネットワークつないでないので呼び出さない
 	SetDrawScreen(_hpID);
-	DrawGraph(0, 0, _playerHPImg[0],true);
+	DrawGraph(0, 0, _playerHPImg[0], true);
 	DrawGraph(8, 8, _playerIcon[static_cast<int>(_plNum)][0], true);
 	DrawRectGraph(92, 8, 0, 0, 284 * _hp / _hpMax, 40, _playerHPImg[2], true, false);
 	DrawGraph(0, 0, _playerHPImg[1], true);
-	
+
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	lpSceneMng.AddDrawQue({ _hpID,
@@ -257,20 +271,20 @@ void Player::DrawHP(void)
 		DX_BLENDMODE_NOBLEND,
 		255 });
 
-	if (_text.isDraw())
-	{
-		lpSceneMng.AddDrawQue({ _text.screen() ,
-		500,
-		350,
-		0.0,
-		1.0,
-		0.0,
-		100,
-		LAYER::UI ,
-		DX_BLENDMODE_NOBLEND,
-		255 });
-	}
-	
+	_mesBoard.DrawUpdate();
+
+	lpSceneMng.AddDrawQue({ _mesBoard.mesScreen() ,
+	160,
+	560,
+	0.0,
+	1.0,
+	0.0,
+	100,
+	LAYER::UI ,
+	DX_BLENDMODE_NOBLEND,
+	255 });
+
+
 }
 
 void Player::throwPot(bool throwMode)

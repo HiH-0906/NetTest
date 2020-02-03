@@ -83,6 +83,8 @@ void NetWork::UpDate(void)
 		return;
 	}
 	(*NetWork::_netWorkUnit).Update();
+	(*NetWork::_netWorkUnit).AgainDataSend();
+	(*NetWork::_netWorkUnit).ReSetKeyBuf();
 	_syncTime--;
 }
 
@@ -103,7 +105,8 @@ void NetWork::ReSetRecMes(void)
 
 void NetWork::SyncObj(Player & obj)
 {
-	if (!(*NetWork::_netWorkUnit).CheckSyncMes(obj._plNum))
+	return;
+	if (!(*NetWork::_netWorkUnit).CheckMes(obj._plNum,MES_TYPE::SYNC))
 	{
 		return;
 	}
@@ -146,11 +149,25 @@ void NetWork::MakeKeyMes(KeyMap  butan, StickState & stick)
 	_tmpMes.key.rb = static_cast<unsigned char>(butan.at(INPUT_ID::BTN_RB).first);
 	_tmpMes.key.ls = stick.angle;
 	(*NetWork::_netWorkUnit).AddSendMesList(_tmpMes);
+	(*NetWork::_netWorkUnit).AddKeyBuf(_tmpMes);
 	_keyNum++;
+}
+
+void NetWork::MakeAgainMes(PlNum plNum, unsigned int num)
+{
+	if (!(*NetWork::_netWorkUnit).LinkFlag())
+	{
+		return;
+	}
+	// “Øæ∞ºﬁçÏê¨
+	_tmpMes.again.type = static_cast<unsigned char>(MES_TYPE::AGAIN);
+	_tmpMes.again.plNum = static_cast<unsigned char>(plNum);
+	_tmpMes.again.num = num;
 }
 
 void NetWork::MakeSyncMes(Vector2Dbl pos)
 {
+	return;
 	if (!(*NetWork::_netWorkUnit).LinkFlag() || _syncTime != 0)
 	{
 		return;

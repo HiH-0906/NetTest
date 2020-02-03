@@ -19,6 +19,15 @@ Host::~Host()
 	}
 }
 
+void Host::ReSetKeyBuf(void)
+{
+	if (_keyBuf.size() < 2048)
+	{
+		return;
+	}
+	_keyBuf.erase(_keyBuf.begin(), _keyBuf.begin() + 1024);
+}
+
 bool Host::GetData(void)
 {
 	for (PlNum num = begin(PlNum()); num < _plNum; ++num)
@@ -96,10 +105,10 @@ void Host::TransferMes(void)
 		{
 			return true;
 		}
-		else if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::SYNC)
-		{
-			return true;
-		}
+		//else if (static_cast<MES_TYPE>(mes.check.type) == MES_TYPE::SYNC)
+		//{
+		//	return true;
+		//}
 		else
 		{
 			return false;
@@ -116,6 +125,7 @@ void Host::TransferMes(void)
 			continue;
 		}
 		AddSendMesList(data);
+		AddKeyBuf(data);
 	}
 }
 

@@ -44,6 +44,29 @@ bool NetWorkUnit::AddRecMesList(MES mes)
 	return true;
 }
 
+bool NetWorkUnit::AddKeyBuf(MES mes)
+{
+	if (static_cast<MES_TYPE>(mes.check.type) != MES_TYPE::KEY)
+	{
+		return false;
+	}
+	_keyBuf.emplace_back(mes);
+}
+
+MES NetWorkUnit::GetKeyBuf(PlNum plNum, unsigned int num)
+{
+	MES nonMes = { 0 };
+	for (auto data : _keyBuf)
+	{
+		if (static_cast<PlNum>(data.key.plNum) != plNum || data.key.num != num)
+		{
+			continue;
+		}
+		return data;
+	}
+	return nonMes;
+}
+
 
 void NetWorkUnit::DeleteBackUpMes(void)
 {
@@ -107,6 +130,11 @@ void NetWorkUnit::GetKey(std::vector<MES>& buf, PlNum num)
 			buf.emplace_back(data);
 		}
 	}
+	std::sort(buf.begin(), buf.end(),
+		[&](MES mesA, MES mesB) {
+		return mesA.key.num < mesB.key.num;
+	}
+	);
 	return;
 }
 
@@ -134,7 +162,21 @@ void NetWorkUnit::StartGame(void)
 	AddSendMesList(tmpMes);
 }
 
-bool NetWorkUnit::CheckSyncMes(PlNum num)
+void NetWorkUnit::AgainDataSend(void)
+{
+	auto mes = GetMes(MES_TYPE::AGAIN);
+	if (static_cast<MES_TYPE>(mes.check.type) != MES_TYPE::AGAIN)
+	{
+		return;
+	}
+	mes = GetKeyBuf(static_cast<PlNum>(mes.again.plNum), mes.again.num);
+	if (static_cast<MES_TYPE>(mes.check.type) != MES_TYPE::NON)
+	{
+		AddSendMesList(mes);
+	}
+}
+
+bool NetWorkUnit::CheckMes(PlNum num, MES_TYPE type)
 {
 	if (_recMesList.size() == 0)
 	{
@@ -142,7 +184,7 @@ bool NetWorkUnit::CheckSyncMes(PlNum num)
 	}
 	for (auto data : _recMesList)
 	{
-		if (static_cast<MES_TYPE>(data.check.type) != MES_TYPE::SYNC)
+		if (static_cast<MES_TYPE>(data.check.type) != type)
 		{
 			continue;
 		}

@@ -43,6 +43,7 @@ public:
 	void GetKey(std::vector<MES>& buf,PlNum num );				// _recMesList‚©‚ç‚Ì·°î•ñ‚Ìæ‚èo‚µ
 	PlNum GetPlNum(void);										// Œ»İ‚Ì©•ª‚ÌPlNumæ“¾
 	void MakeKeyMes(KeyMap butan, StickState& stick);			// Key‰Ÿ‰ºî•ñÒ¯¾°¼Ş‰»
+	void MakeAgainMes(PlNum plNum ,unsigned int num);			// Ä‘—ˆË—ŠÒ¯¾°¼Şì¬
 	void MakeSyncMes(Vector2Dbl pos);							// “¯Šú—pÒ¯¾°¼Şì¬
 private:
 	struct NetWorkDeleter

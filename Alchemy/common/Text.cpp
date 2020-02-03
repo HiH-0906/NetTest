@@ -16,6 +16,7 @@ Text::~Text()
 
 void Text::MakeText(const std::string& str)
 {
+	_size = { FONT_SIZE_X * (static_cast<int>(str.size()) / 2), FONT_SIZE_Y };
 	_screen = MakeScreen(FONT_SIZE_X * (static_cast<int>(str.size()) / 2), FONT_SIZE_Y, true);
 	SetDrawScreen(_screen);
 	ClsDrawScreen();
@@ -35,6 +36,33 @@ void Text::MakeText(const std::string& str)
 		}
 		
 		DrawGraph(FONT_SIZE_X * i / 2, 0, _fontImg[y][x],true);
+	}
+
+	_isDraw = true;
+}
+
+void Text::MakeText(const std::string& str, int space)
+{
+	_size = { FONT_SIZE_X * (static_cast<int>(str.size()) / 2) - (space * (static_cast<int>(str.size()) / 2 - 1)), FONT_SIZE_Y };
+	_screen = MakeScreen(_size.x, _size.y, true);
+	SetDrawScreen(_screen);
+	ClsDrawScreen();
+
+	int x, y;
+	for (int i = 0; i < static_cast<int>(str.size()); i += 2)
+	{
+		if (str[i + 1] < 0)
+		{
+			x = static_cast<int>(str[i + 1] + 192) % FONT_DIV_CNT_X;
+			y = (static_cast<int>(str[i]) + 126) * 12 + ((static_cast<int>(str[i + 1]) + 192) / FONT_DIV_CNT_X);
+		}
+		else
+		{
+			x = static_cast<int>(str[i + 1] - 64) % FONT_DIV_CNT_X;
+			y = (static_cast<int>(str[i]) + 126) * 12 + ((static_cast<int>(str[i + 1]) - 64) / FONT_DIV_CNT_X);
+		}
+
+		DrawGraph((FONT_SIZE_X  + space )* i / 2, 0, _fontImg[y][x], true);
 	}
 
 	_isDraw = true;
@@ -61,4 +89,9 @@ void Text::LoadFontImg(void)
 int Text::screen(void)
 {
 	return _screen;
+}
+
+Vector2Int& Text::size(void)
+{
+	return _size;
 }

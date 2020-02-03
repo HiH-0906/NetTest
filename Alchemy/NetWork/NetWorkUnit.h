@@ -48,8 +48,8 @@ struct TYPE_INF
 
 // AGAIN情報用
 struct AGAIN_INF
-{	unsigned char type : 4;
-
+{
+	unsigned char type : 4;
 	unsigned char plNum : 2;
 	unsigned int num : 8;
 };
@@ -89,11 +89,15 @@ public:
 	virtual void RunMesList(void);								// ﾘｽﾄのﾃﾞｰﾀ送信
 	virtual void StartGame(void);								// ｹﾞｰﾑｽﾀｰﾄﾒｯｾｰｼﾞ作成関数
 	virtual void Update(void) = 0;
+	virtual void ReSetKeyBuf(void) = 0;							// keyBufのﾘｾｯﾄ
 	virtual bool GetData(void) = 0;								// Bufからのﾃﾞｰﾀ取得
-	bool CheckSyncMes(PlNum num);								// 同期ﾒｯｾｰｼﾞ届いているか
+	void AgainDataSend(void);									// AgainMesが来ていた場合そのMesを再送
+	bool CheckMes(PlNum num,MES_TYPE type);						// 指定ﾀｲﾌﾟのﾒｯｾｰｼﾞ届いているか
 	bool DataSend(int handle, MES mes);							// ﾃﾞｰﾀ送信
 	bool AddSendMesList(MES mes);								// 送信用ﾃﾞｰﾀ追加
 	bool AddRecMesList(MES mes);								// 受信ﾒｯｾｰｼﾞﾘｽﾄ
+	bool AddKeyBuf(MES mes);									// ｷｰbuf追加
+	MES GetKeyBuf(PlNum plNum, unsigned int num);				// 指定されたPlNum,numのkey情報取り出し
 	void DeleteBackUpMes(void);									// 一定以上のbackupMes削除
 	void ReSetRecMes(void);										// 受信ﾒｯｾｰｼﾞ削除
 	MES GetMes(PlNum num, MES_TYPE type);						// 指定されたPlNum,typeのﾒｯｾｰｼﾞ取得
@@ -102,6 +106,7 @@ public:
 	bool SetNetWorkHandle(int handle);							// _netWorkHandleの設定
 	const bool LinkFlag(void)const;								// 接続できているか確認
 protected:
+	std::vector<MES> _keyBuf;									// 送信ﾒｯｾｰｼﾞbuf
 	MES _mes;													// 受け取りﾒｯｾｰｼﾞ一時保存用
 	std::vector<MES> _sendMesList;								// 送信ﾒｯｾｰｼﾞﾘｽﾄ
 	std::vector<MES> _recMesList;								// 受信ﾒｯｾｰｼﾞﾘｽﾄ

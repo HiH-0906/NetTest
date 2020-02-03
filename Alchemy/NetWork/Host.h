@@ -6,6 +6,7 @@ class Host :
 public:
 	Host(int port);
 	~Host();
+	void ReSetKeyBuf(void)override;
 	bool GetData(void)override;
 	int netWorkHandle(PlNum num);
 	void Connect(void);

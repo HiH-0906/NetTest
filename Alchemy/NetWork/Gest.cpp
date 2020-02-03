@@ -14,6 +14,15 @@ Guest::~Guest()
 	CloseNetWork(netWorkHandle(_plNum));
 }
 
+void Guest::ReSetKeyBuf(void)
+{
+	if (_keyBuf.size() < 1024)
+	{
+		return;
+	}
+	_keyBuf.erase(_keyBuf.begin(), _keyBuf.begin() + 512);
+}
+
 IPDATA Guest::ip(PlNum num)
 {
 	try

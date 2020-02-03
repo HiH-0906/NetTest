@@ -2,7 +2,7 @@
 #include <memory>
 #include "Obj.h"
 #include "PlNum.h"
-#include <Text.h>
+#include <Message.h>
 
 class NetWork;
 struct FuncThrow;
@@ -41,7 +41,7 @@ private:
 	int _heartImg;
 	static int _playerIcon[4][2];	//
 	PlNum _plNum;
-	Text _text;
+	Message _mesBoard;
 	std::vector<sharedObj> _holdList;			// 現在持っているオブジェクト
 
 };
